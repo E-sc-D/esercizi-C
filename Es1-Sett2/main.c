@@ -49,6 +49,28 @@ int main() {
         printf("%d e minore o uguale %d\n", a, b);
     }
 
+    c = a;
+    c += c;
+    printf("%d += %d corrisponde a %d\n", a, a, c);
+
+    c = a;
+    c -= c;
+    printf("%d -= %d corrisponde a %d\n", a, a, c);
+
+    c = a;
+    c *= c;
+    printf("%d *= %d corrisponde a %d\n", a, a, c);
+
+    c = a;
+    c /= c;
+    printf("%d /= %d corrisponde a %d\n", a, a, c);
+
+    c = a;
+    c %= c;
+    printf("%d %= %d corrisponde a %d\n", a, a, c);
+
+
+
 
 
     return 0;
