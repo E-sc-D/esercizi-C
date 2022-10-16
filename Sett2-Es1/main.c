@@ -90,10 +90,10 @@ int main()
     printf("Con c = --a, prima viene tolto 1 ad a, poi il valore viene dato a c, infatti c = %d, a = %d\n", c, a);
 
     c = 2147483648;
-    printf("Superando il limite massimo di una variabile causiamo un overflow, in questo caso il numero che conterrà equivale al numero piu' basso + l'overflow ovvero %d\n", c);
+    printf("Superando il limite massimo di una variabile causiamo un overflow, la variabile conterrà quindi il limite minimo piu' il valore in eccesso ovvero %d\n", c);
 
     c = 10.1853f;
-    printf("Cercando di inserire il valore 10.1853 dentro una variabile intera otteniamo %d", c);
+    printf("Cercando di inserire il valore 10.1853 dentro una variabile intera otteniamo %d\n", c);
 
 
     // Funzioni di math.h
@@ -113,7 +113,7 @@ int main()
     printf("La funzione tan(1) restituisce %f\n", d);
 
     d = asin(0.7);
-    printf("La funzione asin(0.7)restituisce %f\n", d);
+    printf("La funzione asin(0.7) restituisce %f\n", d);
 
     d = acos(0.0);
     printf("La funzione acos(0) restituisce %f\n", d);
