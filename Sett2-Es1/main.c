@@ -127,8 +127,8 @@ int main()
     d = exp(1.0);
     printf("La funzione e(1) restituisce %f\n", d);
     
-    /*d = pow10(1.0);
-    printf("La funzione pow10(1) restituisce %f", d);*/
+    d = pow10(2.0);
+    printf("La funzione pow10(1) restituisce %f\n", d);
 
     d = log(1.0);
     printf("La funzione log(1) restituisce %f\n", d);
