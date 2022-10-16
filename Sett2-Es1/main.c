@@ -4,6 +4,7 @@
 int main() 
 {
     int a = 10, b = 5, c;
+    double d;
 
     // Operazioni base
 
@@ -101,8 +102,6 @@ int main()
 
 
     // Funzioni di math.h
-
-    double d;
 
     d = sqrt(4.0);
     printf("La funzione sqrt(4) restituisce %f\n", d);
