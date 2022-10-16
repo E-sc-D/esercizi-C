@@ -85,9 +85,13 @@ int main()
 
     c = a++;
     printf("Con c = a++, c ottiene il valore di a prima che gli venga sommato 1, infatti c = %d, a = %d\n", c, a);
-    
+    c = ++a;
+    printf("Con c = ++a, c ottiene il valore di a dopo che gli viene sommato 1, infatti c = %d, a = %d\n", c, a);
+
+    c = a--;
+    printf("Con c = a--, c ottiene il valore di a prima che gli venga sottratto 1, infatti c = %d, a = %d\n", c, a);
     c = --a;
-    printf("Con c = --a, prima viene tolto 1 ad a, poi il valore viene dato a c, infatti c = %d, a = %d\n", c, a);
+    printf("Con c = --a, c ottiene il valore di a dopo che gli viene sottratto 1, infatti c = %d, a = %d\n", c, a);
 
     c = 2147483648;
     printf("In caso di overflow la variabile conterrà il limite minimo piu' il valore in eccesso ovvero %d\n", c);
