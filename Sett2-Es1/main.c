@@ -90,7 +90,7 @@ int main()
     printf("Con c = --a, prima viene tolto 1 ad a, poi il valore viene dato a c, infatti c = %d, a = %d\n", c, a);
 
     c = 2147483648;
-    printf("Superando il limite massimo di una variabile causiamo un overflow, la variabile conterrà quindi il limite minimo piu' il valore in eccesso ovvero %d\n", c);
+    printf("In caso di overflow la variabile conterrà il limite minimo piu' il valore in eccesso ovvero %d\n", c);
 
     c = 10.1853f;
     printf("Cercando di inserire il valore 10.1853 dentro una variabile intera otteniamo %d\n", c);
