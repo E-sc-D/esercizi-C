@@ -81,7 +81,7 @@ int main()
 
     c = a;
     c %= c;
-    printf("%d %= %d corrisponde a %d\n", a, a, c);
+    printf("%d %%= %d corrisponde a %d\n", a, a, c);
 
 
     c = a++;
