@@ -24,6 +24,7 @@ int main()
     int contStampabile = 0; // Numero di caratteri stampabili (non di controllo)
     int contPunteggiatura = 0; // Numero caratteri di punteggiatura
     int contSpazi = 0; // Numero di caratteri spazio
+    int contCifreHex = 0; // Numero di caratteri cifre esadecimali
 
     printf("Inserisci un testo seguito da un '#' per indicarne la fine e ti stampero' le statistiche\n");
 
@@ -57,8 +58,8 @@ int main()
             contSpazi++;
         if (isupper(c))
             contMaiuscoli++;
-        //if (isxdigit(c))
-        //    contCifre++;
+        if (isxdigit(c))
+            contCifreHex++;
     }
     while (c != '#');
 
@@ -73,6 +74,7 @@ int main()
     printf("Il numero di caratteri stampabili (non di controllo) inseriti e' %d\n", contStampabile);
     printf("Il numero di caratteri di punteggiatura inseriti e' %d\n", contPunteggiatura);
     printf("Il numero di caratteri spazio inseriti e' %d\n", contSpazi);
+    printf("Il numero di caratteri cifra esadecimali inseriti e' %d\n", contCifreHex);
 
     return 0;
 }
