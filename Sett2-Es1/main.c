@@ -4,7 +4,7 @@
 int main() 
 {
     int a = 10, b = 5, c;
-    int binA = 1010, binB = 101, binC;
+    int binA = 1010, binB = 0101, binC;
     double d;
 
     // Operatori base
@@ -23,15 +23,15 @@ int main()
     binC = binA & binB;
     printf("Operatore AND: %d & %d = %d\n", binA, binB, binC);
     binC = binA | binB;
-    printf("Operatore OR: %d & %d = %d\n", binA, binB, binC);
+    printf("Operatore OR: %d | %d = %d\n", binA, binB, binC);
     binC = binA ^ binB;
-    printf("Operatore XOR: %d & %d = %d\n", binA, binB, binC);
+    printf("Operatore XOR: %d ^ %d = %d\n", binA, binB, binC);
     binC = ~binA;
     printf("Complemento ad 1: ~%d = %d\n", binA, binC);
     binC = binA << binB;
-    printf("Shift a sinistra: %d & %d = %d\n", binA, binB, binC);
+    printf("Shift a sinistra: %d << %d = %d\n", binA, binB, binC);
     binC = binA >> binB;
-    printf("Shift a destra: %d & %d = %d\n", binA, binB, binC);
+    printf("Shift a destra: %d >> %d = %d\n", binA, binB, binC);
 
     // Confronti
     if (a == b) 
