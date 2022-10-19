@@ -57,7 +57,7 @@ int ricercaBinariaConLimiti(int min, int max, int numeroMassimoTentativi) //funz
         fflush(stdin);
         scanf("%d", &flagIndovinato);
 
-        if(!flagIndovinato && numeroTentativi <= numeroMassimoTentativi)
+        if(!flagIndovinato && numeroTentativi < numeroMassimoTentativi)
         {
             printf("Il tuo numero e' \n0)minore\n1)maggiore\n");
             fflush(stdin);
@@ -73,7 +73,7 @@ int ricercaBinariaConLimiti(int min, int max, int numeroMassimoTentativi) //funz
             }
         }
     }
-    while(!flagIndovinato && numeroTentativi <= numeroMassimoTentativi); //rimane nel while finche' il numero non viene indovinato e il numero di tentativi non supera il massimo
+    while(!flagIndovinato && numeroTentativi < numeroMassimoTentativi); //rimane nel while finche' il numero non viene indovinato e il numero di tentativi non supera il massimo
 
     if(flagIndovinato)
     {
