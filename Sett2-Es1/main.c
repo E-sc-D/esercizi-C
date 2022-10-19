@@ -3,8 +3,7 @@
 
 int main() 
 {
-    int a = 10, b = 5, c;
-    int binA = 1010, binB = 0101, binC;
+    int a = 11, b = 9, c;
     double d;
 
     // Operatori base
@@ -20,18 +19,18 @@ int main()
     printf("Modulo: %d %% %d = %d\n", a, b, c);
 
     //Operatori bitwise
-    binC = binA & binB;
-    printf("Operatore AND: %d & %d = %d\n", binA, binB, binC);
-    binC = binA | binB;
-    printf("Operatore OR: %d | %d = %d\n", binA, binB, binC);
-    binC = binA ^ binB;
-    printf("Operatore XOR: %d ^ %d = %d\n", binA, binB, binC);
-    binC = ~binA;
-    printf("Complemento ad 1: ~%d = %d\n", binA, binC);
-    binC = binA << binB;
-    printf("Shift a sinistra: %d << %d = %d\n", binA, binB, binC);
-    binC = binA >> binB;
-    printf("Shift a destra: %d >> %d = %d\n", binA, binB, binC);
+    c = a & b;
+    printf("Operatore AND: %d & %d = %d\n", a, b, c);
+    c = a | b;
+    printf("Operatore OR: %d | %d = %d\n", a, b, c);
+    c = a ^ b;
+    printf("Operatore XOR: %d ^ %d = %d\n", a, b, c);
+    c = ~a;
+    printf("Complemento ad 1: ~%d = %d\n", a, c);
+    c = a << b;
+    printf("Shift a sinistra: %d << %d = %d\n", a, b, c);
+    c = a >> b;
+    printf("Shift a destra: %d >> %d = %d\n", a, b, c);
 
     // Confronti
     if (a == b) 
