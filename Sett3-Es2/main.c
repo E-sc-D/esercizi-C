@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <ctype.h>
 
-
+#ifdef _WIN32
+#include <conio.h>
+#endif
 
 int main()
 {
@@ -26,7 +28,13 @@ int main()
     printf("Inserisci un testo seguito da un '#' per indicarne la fine e ti stampero' le statistiche\n");
 
     do {
+
+#ifdef _WIN32
+        c = getch();
+#else
         c = getc(stdin);
+#endif
+
         contTotale++;
 
         if (isalnum(c))
