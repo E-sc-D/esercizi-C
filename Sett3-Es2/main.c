@@ -66,5 +66,18 @@ int main()
     } else {
         printf("Il carattere %c non e uno spazio", c);
     }
+
+    if (isupper(c)) {
+        printf("Il carattere %c e una maiuscola", c);
+    } else {
+        printf("Il carattere %c non e una maiuscola", c);
+    }
+
+    if (isxdigit(c)) {
+        printf("Il carattere %c e esadecimale", c);
+    } else {
+        printf("Il carattere %c non e esadecimale", c);
+    }
+
     return 0;
 }
