@@ -31,7 +31,7 @@ int main()
     do {
 
 #ifdef _WIN32
-        c = getch();
+        c = getche();
 #else
         c = getc(stdin);
 #endif
@@ -62,7 +62,7 @@ int main()
             contCifreHex++;
     }
     while (c != '#');
-
+    printf("\n");
     printf("Il numero totale di caratteri inseriti e' %d\n", contTotale);
     printf("Il numero di caratteri alfanumerici inseriti e' %d\n", contAlfaNum);
     printf("Il numero di caratteri alfabetici inseriti e' %d\n", contAlf);
