@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-int cellWidth = 4;
-int cellHeight = 1;
-
 struct Point
 {
     double x;
@@ -18,39 +15,45 @@ void delay(int seconds)
     while(clock() < startTime + milliseconds);
 }
 
-void CellTop(int columns,int cellwidth)
+void BuildTableLine(int columns, int cellWidth)
 {
     printf("+");
-        for(int j = 0;j<columns;j++)
+    for(int j = 0; j < columns; j++)
+    {
+        for(int f = 0; f < cellWidth; f++)
         {
-        
-           for(int f = 0;f<cellwidth;f++){ printf("-");}
-           printf("+");              
+            printf("-");
         }
-        printf("\n");
-}
-void CellBody(int columns, int cellheight,int cellwidth)
-{
-    for(int s = 0;s<cellheight;s++)
-        {
-            printf("|");
-            for(int t = 0;t<columns;t++)
-            {               
-                for(int f = 0;f<cellwidth;f++){ printf(" ");}
-                printf("|");              
-            } 
-            printf("\n"); 
-        } 
+        printf("+");              
+    }
+    printf("\n");
 }
 
-void battleship(int rows,int columns)
+void BuildTableCells(int columns, int cellHeight, int cellWidth)
 {
-    for(int i = 0; i<rows;i++)
+    for(int s = 0; s < cellHeight; s++)
     {
-       CellTop(columns,cellWidth);
-       CellBody(columns,cellHeight,cellWidth);     
+        printf("|");
+        for(int t = 0; t < columns; t++)
+        {               
+            for(int f = 0; f < cellWidth; f++)
+            {
+                printf(" ");
+            }
+            printf("|");              
+        } 
+        printf("\n"); 
+    } 
+}
+
+void BuildTable(int rows, int columns, int cellWidth, int cellHeight)
+{
+    for(int i = 0; i < rows; i++)
+    {
+       BuildTableLine(columns, cellWidth);
+       BuildTableCells(columns, cellHeight, cellWidth);     
     }
-    CellTop(columns,cellWidth);
+    BuildTableLine(columns, cellWidth);
 }
 
 
@@ -66,7 +69,9 @@ int main(void)
     coords.x = rand();
     coords.y = rand();
     fflush(stdout);
-    battleship(5,5);
+
+    BuildTable(5, 5, 4, 1);
+
     //delay(5);
     //sleep(5);
 
