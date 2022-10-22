@@ -2,19 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct Point
-{
-    double x;
-    double y;
-};
-
-void delay(int seconds)
-{
-    int milliseconds = 1000 * seconds;
-    clock_t startTime = clock();
-    while(clock() < startTime + milliseconds);
-}
-
 void BuildTableLine(int columns, int cellWidth)
 {
     printf("+");
@@ -65,14 +52,7 @@ int main(void)
 {
     srand(time(NULL));
 
-    struct Point coords;
-    coords.x = rand();
-    coords.y = rand();
     fflush(stdout);
 
     BuildTable(5, 5, 4, 1);
-
-    //delay(5);
-    //sleep(5);
-
 }
