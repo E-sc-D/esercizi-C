@@ -43,16 +43,34 @@ void BuildTable(int rows, int columns, int cellWidth, int cellHeight)
     BuildTableLine(columns, cellWidth);
 }
 
-
 // +----+
 // |    |
 // +----+
+
+void delay(int number_of_seconds)
+{
+    // Converting time into milli_seconds
+    int milli_seconds = 1000 * number_of_seconds;
+ 
+    // Storing start time
+    clock_t start_time = clock();
+ 
+    // looping till required time is not achieved
+    while (clock() < start_time + milli_seconds)
+        ;
+}
 
 int main(void)
 {
     srand(time(NULL));
 
+    printf("bruh");
     fflush(stdout);
+    //Stupid and inefficient way to delay execution, but the only effective one
+    for (int c = 1; c <= 30000; c++)
+       for (int d = 1; d <= 30000; d++)
+       {}
+    printf("\rHAHA\n");
 
     BuildTable(5, 5, 4, 1);
 }
