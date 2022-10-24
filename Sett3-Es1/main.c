@@ -2,61 +2,79 @@
 #include <stdlib.h>
 #include <time.h>
 
-void BuildTableLine(int columns, int cellWidth)
-{
-    printf("+");
-    for(int j = 0; j < columns; j++)
-    {
-        for(int f = 0; f < cellWidth; f++)
-        {
-            printf("-");
-        }
-        printf("+");              
-    }
-    printf("\n");
-}
-
-void BuildTableCells(int columns, int cellHeight, int cellWidth)
-{
-    for(int s = 0; s < cellHeight; s++)
-    {
-        printf("|");
-        for(int t = 0; t < columns; t++)
-        {               
-            for(int f = 0; f < cellWidth; f++)
-            {
-                printf(" ");
-            }
-            printf("|");              
-        } 
-        printf("\n"); 
-    } 
-}
-
-void BuildTable(int rows, int columns, int cellWidth, int cellHeight)
-{
-    for(int i = 0; i < rows; i++)
-    {
-       BuildTableLine(columns, cellWidth);
-       BuildTableCells(columns, cellHeight, cellWidth);     
-    }
-    BuildTableLine(columns, cellWidth);
-}
-
-// +----+
-// |    |
-// +----+
+#define SCORE_MAX 100
 
 int main(void)
 {
-    srand(time(NULL));
+    int continentTable[5][5] =
+    {
+        { 1, 1, 1, 3, 3 },
+        { 1, 1, 1, 3, 3 },
+        { 2, 2, 2, 3, 3 },
+        { 2, 2, 2, 3, 3 },
+        { 2, 2, 2, 3, 3 }
+    };
 
-    printf("bruh");
-    fflush(stdout);
-    time_t now = 0;
+    int tableWidth = sizeof(continentTable) / sizeof(continentTable[0]);
+    int tableHeight = sizeof(continentTable[0]) / sizeof(continentTable[0][0]);
 
-    for( ; clock() - now < 2*CLOCKS_PER_SEC ; );
-    printf("\rHAHA\n");
+    int randomX;
+    int randomY;
+    int iterations = 0;
+    int chosenContinent = 0;
+    char chosenContinue = 'n';
+    int score = 0;
 
-    BuildTable(5, 5, 4, 1);
+    printf("Legenda continenti\n1) Eurasia\n2) Estasia\n3) Oceania\n"); // Prints all possible continents with their number
+    printf("Prova ad indovinare in quale continente sono situate le coordinate!\n");
+    printf("Avrai un tempo limitato per visualizzarle, premi un tasto per continuare.");
+    getchar(); // Waits for user input
+
+    do
+    {
+        do
+        {
+            iterations++;
+
+            srand(time(NULL));
+            randomX = 1 + (rand() % tableWidth);
+            randomY = 1 + (rand() % tableHeight);
+
+            // Prints coordinates and saves number of printed chars
+            int coordsChars = printf("Coordinate: (%d, %d)", randomX, randomY);
+            fflush(stdout); // Flush stdout content to terminal
+
+            time_t now = clock();
+            for(; (clock() - now) < (3 * CLOCKS_PER_SEC) ;); // Waits for 3 seconds
+
+            printf("\r"); // Moves cursor to the beginning
+            int messageChars = printf("Il tempo e' finito, coordinate nascoste!"); // Prints a message on the coordinates and saves number of chars
+            for(int i = 0; i < coordsChars - messageChars; i++) // If message wasn't long enough, prints spaces
+            {
+                printf(" "); // Prints a "coordsChars - messageChars" number of spaces, if negative or zero doesn't print anything
+            }
+            printf("\n");
+            
+            do
+            {
+                printf("Continente [1, 2, 3]: ");
+                scanf("\n%d", &chosenContinent);
+
+                if(chosenContinent != 1 && chosenContinent != 2 && chosenContinent != 3)
+                {
+                    printf("Puoi inserire solo 1, 2 o 3!\n");
+                }
+            }
+            while(chosenContinent != 1 && chosenContinent != 2 && chosenContinent != 3);
+        }
+        while(continentTable[randomX - 1][randomY - 1] != chosenContinent);
+
+        printf("Congratulazioni, hai indovinato!\n");
+        score = SCORE_MAX / iterations;
+        printf("Il tuo punteggio e' %d.\n", score);
+    
+        printf("Premi un tasto per continuare [0 = non continuare]: ");
+        scanf("\n%c", &chosenContinue);
+    }
+    while(chosenContinue != '0');
 }
