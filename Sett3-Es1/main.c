@@ -53,10 +53,9 @@ int main(void)
 
     printf("bruh");
     fflush(stdout);
-    //Stupid and inefficient way to delay execution, but the only effective one
-    for (int c = 1; c <= 30000; c++)
-       for (int d = 1; d <= 30000; d++)
-       {}
+    time_t now = 0;
+
+    for( ; clock() - now < 2*CLOCKS_PER_SEC ; );
     printf("\rHAHA\n");
 
     BuildTable(5, 5, 4, 1);
