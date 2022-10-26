@@ -30,12 +30,25 @@ int main()
     // intersezione senza ripetizioni
     int arrayIntersezione[5];   // il numero di elementi è 5 perché facendo l'intersezione senza ripetizioni il numero massimo di possibili elementi in comune sarà sempre uguale alla lunghezza dell'array più piccolo (con meno elementi)
 
-    int verifica[5];
+    int k = 0;
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 10; j++) {
-
+            if (array1[i] == array2[j]) {
+                arrayIntersezione[k] = array1[i];
+                k++;
+                break;
+            }
         }
+    }
+    printf("\nArray intersezione: ");
+    for (int i = 0; i < 5; i++) {
+        printf("[%d]", arrayIntersezione[i]);
     }
 
     return 0;
+}
+
+
+void intersezione(int array1[], int array2[]) {
+
 }
