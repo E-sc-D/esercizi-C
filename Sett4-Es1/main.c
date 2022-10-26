@@ -13,14 +13,28 @@ int main()
     for (int i = 0; i < 5; i++) {
         scanf("%d", &array1[i]);
     }
-
-    printf("Array1:");
+    printf("Array1: ");
+    // Stampo gli elementi del primo array
     for (int i = 0; i < 5; i++) {
         printf("[%d]", array1[i]);
     }
 
-    for (int i = 0; i < 5; i++) {
+    printf("\nArray 2: ");
+    // Stampo e genero gli elementi del secondo array in maniera pseudo-casuale
+    for (int i = 0; i < 10; i++) {
         rnd = rand() % 100; // numero random compreso tra 0 e 99
+        array2[i] = rnd;
+        printf("[%d]", array2[i]);
+    }
+
+    // intersezione senza ripetizioni
+    int arrayIntersezione[5];   // il numero di elementi è 5 perché facendo l'intersezione senza ripetizioni il numero massimo di possibili elementi in comune sarà sempre uguale alla lunghezza dell'array più piccolo (con meno elementi)
+
+    int verifica[5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 10; j++) {
+
+        }
     }
 
     return 0;
