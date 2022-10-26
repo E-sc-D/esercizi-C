@@ -53,19 +53,19 @@ int main()
             cont++;
         }
     }
+    printf("\nCont: %d\nL'array di intersezione avra %d elementi", cont, cont);
 
     int arrayIntersezione[cont];
-
+    int k = 0;
     for (i = 0; i < 5; i++) {
-        for (j = 0; j < cont; j++){
-            if (verifica[i] >= 1) {
-                arrayIntersezione[j] = array1[i];
-            }
+        if (verifica[i] >= 1) {
+            arrayIntersezione[k] = array1[i];
+            k++;
         }
     }
 
     printf("\nArray intersezione: ");
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < cont; i++) {
         printf("[%d]", arrayIntersezione[i]);
     }
 
