@@ -71,9 +71,10 @@ void intersezione(int array1[], int array2[], int* size, int* array) {
 
     // Questi sono i valori di return (perche per lavorare sugli array devo anche sapere quanti elementi hanno per non sforare
     *size = cont;
-    *array = &arrayIntersezione;
+    *array = arrayIntersezione;
 
-    printf("\nIndirizzo memoria di arrayintersezione %d", &arrayIntersezione);
+    printf("\n*arrayIntersezione %d", *arrayIntersezione);
+    printf("\nIndirizzo memoria di arrayIntersezione %d", arrayIntersezione);
 }
 
 
@@ -104,11 +105,11 @@ int main()
     }
 
     int size;
-    int** p;
+    int* p;
     intersezione(array1, array2, &size, &p);
 
     printf("\nSize %d", size);
-    printf("\nPuntatore  %d", *p[0]);
+    printf("\nPuntatore  %d", *(p+1));
     //printArray(&p, size);
 
 
