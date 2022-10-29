@@ -10,6 +10,67 @@ void printArray(int array[], size_t n) {
     }
 }
 
+int * intersezione(int array1[], int array2[]) {
+    int i = 0, j = 0;
+    // intersezione senza ripetizioni
+    int contaIntersezioni[5];    // array che terrà conto di quante volte un elemento compare anche nell'altro array (intersezione)
+    for (i = 0; i < 5; i++) {
+        contaIntersezioni[i] = 0;    // per poter lavorare sugli elementi dell'array li inizializzo a 0
+        for (j = 0; j < 10; j++) {
+            if (array1[i] == array2[j])
+                contaIntersezioni[i]++;  // conto l'intersezione
+        }
+    }
+
+    // print di array contaIntersezioni
+    printf("\nArray contaIntersezioni: ");
+    printArray(contaIntersezioni, sizeof(contaIntersezioni) / sizeof(contaIntersezioni[0]));
+
+    // print di array contaIntersezioni
+    printf("\nArray contaIntersezioni: ");
+    printArray(contaIntersezioni, sizeof(contaIntersezioni) / sizeof(contaIntersezioni[0]));
+
+
+    int cont = 0;
+    int flag = 0;
+    // Scorro l'array di contaIntersezioni e conto il numero di elementi che fanno intersezione, per poter creare l'array finale che contiene solo elementi di intersezione senza ripetizioni
+    for (i = 0; i < 5; i++) {
+        if (contaIntersezioni[i] >= 1) {
+            flag = 0;
+            for (j = i - 1; j >= 0; j--){
+                if (array1[i] == array1[j]) {
+                    flag = 1;
+                }
+            }
+            if (flag == 0)
+                cont++;
+        }
+    }
+    printf("\nL'array di intersezione avra %d elementi", cont);
+
+    static int arrayIntersezione[cont];
+    int k = 0;
+    for (i = 0; i < 5; i++) {
+        if (contaIntersezioni[i] >= 1) {
+            flag = 0;
+            for (j = i - 1; j >= 0; j--){
+                if (array1[i] == array1[j]) {
+                    flag = 1;
+                }
+            }
+            if (flag == 0) {
+                arrayIntersezione[k] = array1[i];
+                k++;
+            }
+
+        }
+    }
+
+    return arrayIntersezione;
+
+}
+
+
 int main()
 {
     srand(time(NULL));
@@ -36,7 +97,10 @@ int main()
         printf("[%d]", array2[i]);
     }
 
-    // intersezione senza ripetizioni
+
+    int *p = intersezione(array1, array2);
+
+    /*// intersezione senza ripetizioni
     int contaIntersezioni[5];    // array che terrà conto di quante volte un elemento compare anche nell'altro array (intersezione)
     for (i = 0; i < 5; i++) {
         contaIntersezioni[i] = 0;    // per poter lavorare sugli elementi dell'array li inizializzo a 0
@@ -87,20 +151,9 @@ int main()
 
     printf("\nArray intersezione: ");
     printArray(arrayIntersezione, sizeof(arrayIntersezione)/sizeof(arrayIntersezione[0]));
-
+*/
     return 0;
 }
 
 
-int * intersezione(int array1[], int array2[]) {
-
-    static int arrayIntersezione;
-
-
-
-
-
-    return arrayIntersezione;
-
-}
 
