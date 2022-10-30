@@ -5,133 +5,164 @@
 #define N 10          //dimensione orizzontale e verticale della matrice
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 
+struct Coordinate
+{
+    int x;
+    int y;
+};
+
+char boundcheck(int matrixSize,int pseudoX, int pseudoY)//controlla che le nuove ipotetiche coordinate siano all'interno dei limiti
+{
+    if((pseudoX<matrixSize && pseudoY<matrixSize)&&(pseudoX>-1 && pseudoY>-1)) 
+    return "0";
+
+    return "1";
+}
+
+char performStep(int matrix[N][N],int direction, struct Coordinate coordinate,char lettera)
+{
+    int pseudoX = coordinate.x;
+    int pseudoY = coordinate.y;
+
+    char state;
+
+    switch (direction)//applica direction alle pseudo cordinate
+    {
+        case 0:// è un passo verso sinistra quindi -1 alla x 
+
+            pseudoX += -1;
+            break;
+
+        case 1:// è un passo verso il basso quindi -1 alla y
+
+            pseudoY += -1;
+            break;
+        
+        case 2:// è un passo verso destra quindi +1 alla x
+           
+            pseudoX += 1;
+            break;
+
+        case 3:// è un passo in altro quindi un +1 alla y
+
+            pseudoY += 1;
+            break;
+    }
+
+    if(boundcheck(N,pseudoX,pseudoY) == "0")//se è dentro i bordi
+    {
+
+        if(matrix[pseudoX][pseudoY] == "." )//se il posto è libero
+        {
+            matrix[pseudoX][pseudoY] = lettera;
+            coordinate.x = pseudoX;
+            coordinate.y = pseudoY; 
+            // lettera assegnata al posto
+            lettera++;// lettera sucessiva per il prossimo giro
+            state = "0"; // passo effettuato!
+        }
+        else{state = "1";}//il posto è occupato
+
+    }
+    else{state = "1";}//le coordinate non sono dentro i bordi
+
+    return state;
+}
+
+char DirectionChooser(int matrix[N][N],struct Coordinate coordinate,char lettera)
+{
+    char state;//lo stato indica se il passo è stato eseguito o no;  0:passo  eseguito, 1:passo non eseguito
+    int direction;
+    char directions[4]={"0","0","0","0"};//0 significa che la direzione non è stata ancora provata
+    int directionsCounter=0;//questo counter conta ogni volta che una strada diversa è stata provata
+                            //quando il contatore arriva a 4 è risulta che la strada scelta è bloccata il programma termina
+    do
+    {
+        direction=rand()%4; //generazione del passo 
+        if(directions[direction] == "0")//se non è ancora stato fatto
+        {
+            directionsCounter++;
+            directions[direction] = 1;
+            state = performStep(matrix,direction,coordinate,lettera) ;
+            if(state == "0")//vengono resettati gli eventuali tentativi e il counter
+            { 
+                directions[0] = "0";
+                directions[1] = "0";
+                directions[2] = "0";
+                directions[3] = "0";
+
+                directionsCounter = 0;
+            }
+            else{ state = "1"; }
+            
+        }
+    } 
+    while (state == "1" && directionsCounter < 4 );//se è bloccato e le direzioni non sono state provate tutte allora continua
+    
+    //viene generata la direzione
+    //si controlla che non è gia stata provata in directions
+    //se è gia stata provata si ripete il ciclo e lo stato viene messo a blocked
+    //altrimenti si segna il tentativo in directions e si aumenta il counter
+    //Se è possibile fare il passo allora lo stato passa a libero ed esce dal while
+    //a quel punto lo stato viene restituito
+    
+}
+
+void Update( struct Coordinate coordinate,char matrix[N][N],char lettera)//funzione loop
+{
+    do
+    {
+       RefreshScreen(matrix,"a");//stampo la matrice 
+    } 
+    while (DirectionChooser(matrix,coordinate,lettera) == "0" && lettera != "[" );
+    //il programma continua se il passo è stato fatto e le lettere non sono finite( il carattere dopo la Z è [ nell'asciicode)
+                                                                                  
+}
+
+
+void RefreshScreen(int matrix[N][N],char flag)
+{
+    if(flag=="R")
+    {
+        for(int x=0;x<N;x++)//rest della matrice e stampa
+        {      
+            printf("\n");     
+            for (int y=0;y<N;y++)
+            {
+                matrix[x][y]='.';
+                printf("%c ", matrix[x][y]);
+            }
+        }  
+        gotoxy(0,0);//porto il cursore alla posizione iniziale
+        return;
+    }
+
+    for(int x=0;x<N;x++)//stampa della matrice
+    {        
+        printf("\n");   
+        for(int y=0;y<N;y++)
+        {
+            printf("%c ", matrix[x][y]);
+        }
+    } 
+    gotoxy(0,0);//porto il cursore alla posizione iniziale
+}
+
 int main() 
 {
-    printf("\e[?25l");
-    system("cls");
-    char lettera='A'; /*variabile che serve a vistare le caselle visitate*/
-    char array[N][N]; //matrice
-    int riga, colonna, direzione;
-    int controlloDirezioni[4]={0,0,0,0}; //0=in alto, 1=a destra, 2=in basso, 3=a sinistra
 
-    srand(time(NULL));
+    printf("\e[?25l");//nascondo il cursore 
+    system("cls");//pulisco lo schermo
 
-    for(riga=0;riga<N;riga++)//popolo la matrice con il carattere '.' e la stampo
-    { 
-        printf("\n");
-        for (colonna=0;colonna<N;colonna++)
-        {
-            array[riga][colonna]='.';
-            printf("%c ", array[riga][colonna]);
-        }
-    }
+    char lettera='A'; 
+    char matrix[N][N]; //spazio di movimento
+    struct Coordinate coordinate;//posizione corrente dentro la matrice
+    srand(time(NULL));//selezione del seed per la generazione randomica
 
-    riga=rand()%N; //genero una posizione randomica per la casella iniziale e le assegno il valore 'A'
-    colonna=rand()%N;
-    array[riga][colonna]=lettera;
+    coordinate.x=rand()%N; //genero una posizione randomica per la casella iniziale e le assegno il valore 'A'
+    coordinate.y=rand()%N;
+    //matrix[coordinate.x][coordinate.y]=lettera; deprecato in quanto l'incremento della lettera avviene dopo
 
-    while(lettera<='Z')
-    {
-        if(controlloDirezioni[0]==1 && controlloDirezioni[1]==1 && controlloDirezioni[2]==1 && controlloDirezioni[3]==1) 
-        {
-            printf("Non è possibile continuare"); //se dalle iterazioni precedenti tutte le direzioni risultano bloccate il programma si ferma
-            break;
-        }
-        
-        sleep(1); //prende come argomento un unsigned int che indica il numero di secondi da aspettare prima di continuare a eseguire
-        gotoxy(0,0); //cancella tutto quello che c'è sullo schermo, funzione della libreria stdlib.h
-        for(int i=0;i<N;i++)//stampa della matrice
-        { 
-            printf("\n");
-
-            for (int j = 0; j < 10; j++) 
-            {
-                printf("%c ", array[i][j]);
-            }
-
-        }
-        direzione=rand()%4; //segue la regola precedente, quindi 0=in alto, 1=a destra, 2=in basso, 3=a sinistra
-
-        switch (direzione)        
-        {
-
-            case (0):
-
-                if (riga==0 || controlloDirezioni[0]==1 || array[riga-1][colonna]!='.' )//il primo controllo vede se è attaccata a una parete, il secondo se una iterazione precedente ha già provato ad andare lì
-                { 
-                    controlloDirezioni[0]=1;                                              //e il terzo vede se c'è una lettera nella posizione dove vuole andare
-                    continue;                                                            //se la direzione non è disponibile riprova l'iterazione senza aumentare la lettera
-                }
-                else
-                {
-                    for(int i=0;i<4;i++)//quando va avanti il controllo delle direzioni riparte da zero
-                    { 
-                        controlloDirezioni[i]=0;
-                    }
-                    lettera++;
-                    riga--;
-                    array[riga][colonna]=lettera;
-
-                }
-            break;
-
-            case (1):
-
-                if (colonna==9 || controlloDirezioni[1]==1 || array[riga][colonna+1]!='.')//tutti gli altri case funzionano esattamente come il primo, ma con tutte le altre direzioni
-                { 
-                    controlloDirezioni[1]=1;
-                    continue;
-                }
-                else
-                {
-                    for(int i=0;i<4;i++)
-                    {
-                        controlloDirezioni[i]=0;
-                    }
-                    lettera++;
-                    colonna++;
-                    array[riga][colonna]=lettera;
-                }
-            break;
-
-            case (2):
-
-                if (riga==9 || controlloDirezioni[2]==1 || array[riga+1][colonna]!='.' )
-                {
-                    controlloDirezioni[2]=1;
-                    continue;
-                }
-                else
-                {
-                    for(int i=0;i<4;i++)
-                    {
-                        controlloDirezioni[i]=0;
-                    }
-                    lettera++;
-                    riga++;
-                    array[riga][colonna]=lettera;
-                }
-            break;
-
-            case (3):
-
-                if (colonna==0 || controlloDirezioni[3]==1 || array[riga][colonna-1]!='.' )
-                {
-                    controlloDirezioni[1]=1;
-                    continue;
-                }
-                else
-                {
-                    for(int i=0;i<4;i++)
-                    {
-                        controlloDirezioni[i]=0;
-                    }
-                    lettera++;
-                    colonna++;
-                    array[riga][colonna]=lettera;
-                }
-            break;
-        }
-    }
-    return 0;
+    RefreshScreen(matrix,"R");//stampo la matrice azzerata
+    Update(coordinate,matrix,lettera);
 }
