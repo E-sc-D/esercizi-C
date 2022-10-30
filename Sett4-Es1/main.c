@@ -213,7 +213,7 @@ int main()
     
     coolerArrayResult = intersezioneSenzaRipetizioni(coolerArray1, coolerArray2); //, &size, &p);
     printf("Array intersezione senza ripetizioni (%d Bytes): ", sizeof(int) * coolerArrayResult.size);
-    printCoolerIntArrayWithAddresses(coolerArrayResult);
+    printCoolerIntArrayWithAddresses(coolerArrayResult);//perche gli indirizzi sono negativi!!!
     free(coolerArrayResult.array); // coolerArrayResult.array è stato creato originariamente con malloc,
                                    // quindi la memoria deve essere liberata manualmente
 

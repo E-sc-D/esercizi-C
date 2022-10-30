@@ -14,15 +14,15 @@ struct Coordinate
 char boundcheck(int matrixSize,int pseudoX, int pseudoY)//controlla che le nuove ipotetiche coordinate siano all'interno dei limiti
 {
     if((pseudoX<matrixSize && pseudoY<matrixSize)&&(pseudoX>-1 && pseudoY>-1)) 
-    return "0";
+    return '0';
 
-    return "1";
+    return '1';
 }
 
-char performStep(int matrix[N][N],int direction, struct Coordinate coordinate,char lettera)
+char performStep(char matrix[N][N],int direction, struct Coordinate* coordinate,char* lettera)
 {
-    int pseudoX = coordinate.x;
-    int pseudoY = coordinate.y;
+    int pseudoX = (*coordinate).x;
+    int pseudoY = (*coordinate).y;
 
     char state;
 
@@ -49,56 +49,57 @@ char performStep(int matrix[N][N],int direction, struct Coordinate coordinate,ch
             break;
     }
 
-    if(boundcheck(N,pseudoX,pseudoY) == "0")//se è dentro i bordi
+    if(boundcheck(N,pseudoX,pseudoY) == '0')//se è dentro i bordi
     {
 
-        if(matrix[pseudoX][pseudoY] == "." )//se il posto è libero
+        if(matrix[pseudoX][pseudoY] == '.' )//se il posto è libero
         {
-            matrix[pseudoX][pseudoY] = lettera;
-            coordinate.x = pseudoX;
-            coordinate.y = pseudoY; 
+            matrix[pseudoX][pseudoY] = *lettera;
+            (*coordinate).x = pseudoX;
+            (*coordinate).y = pseudoY; 
             // lettera assegnata al posto
-            lettera++;// lettera sucessiva per il prossimo giro
-            state = "0"; // passo effettuato!
+            (*lettera)++;// lettera sucessiva per il prossimo giro
+            state = '0'; // passo effettuato!
         }
-        else{state = "1";}//il posto è occupato
+        else{state = '1';}//il posto è occupato
 
     }
-    else{state = "1";}//le coordinate non sono dentro i bordi
+    else{state = '1';}//le coordinate non sono dentro i bordi
 
     return state;
 }
 
-char DirectionChooser(int matrix[N][N],struct Coordinate coordinate,char lettera)
+char DirectionChooser(char matrix[N][N], struct Coordinate* coordinate,char* lettera)
 {
     char state;//lo stato indica se il passo è stato eseguito o no;  0:passo  eseguito, 1:passo non eseguito
     int direction;
-    char directions[4]={"0","0","0","0"};//0 significa che la direzione non è stata ancora provata
-    int directionsCounter=0;//questo counter conta ogni volta che una strada diversa è stata provata
+    char directions[4] = {'0','0','0','0'};//0 significa che la direzione non è stata ancora provata
+    int directionsCounter = 0;//questo counter conta ogni volta che una strada diversa è stata provata
                             //quando il contatore arriva a 4 è risulta che la strada scelta è bloccata il programma termina
     do
     {
-        direction=rand()%4; //generazione del passo 
-        if(directions[direction] == "0")//se non è ancora stato fatto
+        direction=rand() % 4; //generazione del passo 
+        if(directions[direction] == '0')//se non è ancora stato fatto
         {
             directionsCounter++;
-            directions[direction] = 1;
+            directions[direction] = '1';
             state = performStep(matrix,direction,coordinate,lettera) ;
-            if(state == "0")//vengono resettati gli eventuali tentativi e il counter
+            if(state == '0')//vengono resettati gli eventuali tentativi e il counter
             { 
-                directions[0] = "0";
-                directions[1] = "0";
-                directions[2] = "0";
-                directions[3] = "0";
+                directions[0] = '0';
+                directions[1] = '0';
+                directions[2] = '0';
+                directions[3] = '0';
 
                 directionsCounter = 0;
             }
-            else{ state = "1"; }
+            else{ state = '1'; }
             
         }
     } 
-    while (state == "1" && directionsCounter < 4 );//se è bloccato e le direzioni non sono state provate tutte allora continua
+    while (state == '1' && directionsCounter < 4 );//se è bloccato e le direzioni non sono state provate tutte allora continua
     
+    return state;
     //viene generata la direzione
     //si controlla che non è gia stata provata in directions
     //se è gia stata provata si ripete il ciclo e lo stato viene messo a blocked
@@ -107,22 +108,9 @@ char DirectionChooser(int matrix[N][N],struct Coordinate coordinate,char lettera
     //a quel punto lo stato viene restituito
     
 }
-
-void Update( struct Coordinate coordinate,char matrix[N][N],char lettera)//funzione loop
+void RefreshScreen(char matrix[N][N],char flag)
 {
-    do
-    {
-       RefreshScreen(matrix,"a");//stampo la matrice 
-    } 
-    while (DirectionChooser(matrix,coordinate,lettera) == "0" && lettera != "[" );
-    //il programma continua se il passo è stato fatto e le lettere non sono finite( il carattere dopo la Z è [ nell'asciicode)
-                                                                                  
-}
-
-
-void RefreshScreen(int matrix[N][N],char flag)
-{
-    if(flag=="R")
+    if(flag=='R')
     {
         for(int x=0;x<N;x++)//rest della matrice e stampa
         {      
@@ -148,6 +136,20 @@ void RefreshScreen(int matrix[N][N],char flag)
     gotoxy(0,0);//porto il cursore alla posizione iniziale
 }
 
+void Update( struct Coordinate* coordinate,char matrix[N][N],char* lettera)//funzione loop
+{
+    do
+    {
+       RefreshScreen(matrix,'a');//stampo la matrice 
+       //sleep(1);
+    } 
+    while (DirectionChooser(matrix,coordinate,lettera) == '0' && *lettera != 92 );// il ciclo delle lettere è sfasato e termina 1 lettera dopo la Z ma va cmq quindi lol
+    //il programma continua se il passo è stato fatto e le lettere non sono finite( il carattere dopo la Z è [ nell'asciicode)
+                                                                                  
+}
+
+
+
 int main() 
 {
 
@@ -163,6 +165,6 @@ int main()
     coordinate.y=rand()%N;
     //matrix[coordinate.x][coordinate.y]=lettera; deprecato in quanto l'incremento della lettera avviene dopo
 
-    RefreshScreen(matrix,"R");//stampo la matrice azzerata
-    Update(coordinate,matrix,lettera);
+    RefreshScreen(matrix,'R');//stampo la matrice azzerata
+    Update(&coordinate,matrix,&lettera);
 }
