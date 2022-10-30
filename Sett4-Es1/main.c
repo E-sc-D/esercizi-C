@@ -122,7 +122,8 @@ int main()
     printf("\nArray intersezione: ");
     printArray(arrayIntersezione.array, arrayIntersezione.size);
 
-    free(arrayIntersezione.array); // arrayIntersezione è stato creato con malloc quindi deve essere de-allocato manualmente
+    free(arrayIntersezione.array); // arrayIntersezione è stato creato originariamente con malloc, quindi la memoria deve essere liberata manualmente
+    // Tuttavia il programma termina successivamente, quindi è facoltativo in questo caso, ma rimane una buona pratica.
     return 0;
 }
 
