@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct coolerIntArray //Array di int che tiene conto della propria lunghezza
-{
-    int size;
-    int* array;
-};
-
 void printArray(int array[], size_t size)
 {
     int i = 0;
@@ -17,6 +11,12 @@ void printArray(int array[], size_t size)
     }
     printf("\n");
 }
+
+struct coolerIntArray //Array di int che tiene conto della propria lunghezza
+{
+    int size;
+    int* array;
+};
 
 struct coolerIntArray intersezione(const int array1[], const int array2[]) // intersezione senza ripetizioni
 {
@@ -89,7 +89,6 @@ struct coolerIntArray intersezione(const int array1[], const int array2[]) // in
     return coolerArrayIntersezione;
 }
 
-
 int main()
 {
     srand(time(NULL));
@@ -126,6 +125,3 @@ int main()
     // Tuttavia il programma termina successivamente, quindi è facoltativo in questo caso, ma rimane una buona pratica.
     return 0;
 }
-
-
-
