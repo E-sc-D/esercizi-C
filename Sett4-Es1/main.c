@@ -8,22 +8,22 @@ struct coolerIntArray //Array di int che tiene conto della propria lunghezza
     int* array;
 };
 
-void printCoolerIntArray(const struct coolerIntArray arrayToPrint)
+void printCoolerIntArray(const struct coolerIntArray array)
 {
     int i = 0;
-    for (i = 0; i < arrayToPrint.size; i++)
+    for (i = 0; i < array.size; i++)
     {
-        printf("[%d]", arrayToPrint.array[i]);
+        printf("[%d]", array.array[i]);
     }
     printf("\n");
 }
 
-void printIntArray(const int arrayToPrint[], const size_t size)
+void printCoolerIntArrayWithAddresses(const struct coolerIntArray array)
 {
     int i = 0;
-    for (i = 0; i < size; i++)
+    for (i = 0; i < array.size; i++)
     {
-        printf("[%d]", arrayToPrint[i]);
+        printf("\n[%d] located at {%d}", array.array[i], &array.array[i]);
     }
     printf("\n");
 }
@@ -197,8 +197,8 @@ int main()
     {
         scanf("%d", &coolerArray1.array[i]);
     }
-    printf("Array1: ");
-    printCoolerIntArray(coolerArray1);   // Stampo gli elementi del primo array calcolandone il numero di elementi
+    printf("Array 1 (%d Bytes): ", sizeof(int) * coolerArray1.size);
+    printCoolerIntArray(coolerArray1);    // Stampo gli elementi del primo array
 
     // Genero gli elementi del secondo array in maniera pseudo-casuale
     for (i = 0; i < coolerArray2.size; i++)
@@ -206,25 +206,25 @@ int main()
         rnd = rand() % 10; // Numero random compreso tra 0 e 9
         coolerArray2.array[i] = rnd;
     }
-    printf("Array2: ");
-    printCoolerIntArray(coolerArray2); // Stampo gli elementi del secondo array
+    printf("Array 2 (%d Bytes): ", sizeof(int) * coolerArray2.size);
+    printCoolerIntArray(coolerArray2);    // Stampo gli elementi del secondo array
 
     struct coolerIntArray coolerArrayResult;
     
     coolerArrayResult = intersezioneSenzaRipetizioni(coolerArray1, coolerArray2); //, &size, &p);
-    printf("Array intersezione senza ripetizioni: ");
-    printCoolerIntArray(coolerArrayResult);
+    printf("Array intersezione senza ripetizioni (%d Bytes): ", sizeof(int) * coolerArrayResult.size);
+    printCoolerIntArrayWithAddresses(coolerArrayResult);
     free(coolerArrayResult.array); // coolerArrayResult.array è stato creato originariamente con malloc,
                                    // quindi la memoria deve essere liberata manualmente
 
     coolerArrayResult = intersezioneConRipetizioni(coolerArray1, coolerArray2);
-    printf("Array intersezione con ripetizioni: ");
-    printCoolerIntArray(coolerArrayResult);
+    printf("Array intersezione con ripetizioni (%d Bytes): ", sizeof(int) * coolerArrayResult.size);
+    printCoolerIntArrayWithAddresses(coolerArrayResult);
     free(coolerArrayResult.array);
 
     coolerArrayResult = unione(coolerArray1, coolerArray2);
-    printf("Array unione: ");
-    printCoolerIntArray(coolerArrayResult);
+    printf("Array unione (%d Bytes): ", sizeof(int) * coolerArrayResult.size);
+    printCoolerIntArrayWithAddresses(coolerArrayResult);
     free(coolerArrayResult.array);
 
     return 0;
