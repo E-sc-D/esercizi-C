@@ -11,11 +11,20 @@ float generaFloat(float min, float max) {
 }
 
 void FabargeEgg() {
+    float matrice[400][400];
+
+    int i = 0, j = 0;
     float pulsazione;
     float fasePhi, fasePsi;
     pulsazione = generaFloat(0.15, 0.80);
     fasePhi = generaFloat(0.0, 1.0);
     fasePsi = generaFloat(0.0, 1.0);
+
+    for (i = 0; i < 400; i++) {
+        for (j = 0; j < 400; j++) {
+            matrice[i,j] = 1 + 0.5
+        }
+    }
 
 
 }
