@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+
+// articolo https://muse.jhu.edu/article/607790/pdf
 float generaFloat(float min, float max) {
     float scale = rand() / (float) RAND_MAX;
 
@@ -22,7 +24,7 @@ void FabargeEgg() {
 
     for (i = 0; i < 400; i++) {
         for (j = 0; j < 400; j++) {
-            matrice[i,j] = 1 + 0.5
+            //matrice[i,j] = 1 + 0.5;
         }
     }
 
