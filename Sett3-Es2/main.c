@@ -31,10 +31,13 @@ int main()
     do {
 
 #ifdef _WIN32
-        c = getche();
+        c = getche(); 
 #else
         c = getc(stdin);
 #endif
+
+        if (c == '\r')
+            printf("\n");
 
         contTotale++;
 
@@ -60,6 +63,9 @@ int main()
             contMaiuscoli++;
         if (isxdigit(c))
             contCifreHex++;
+       
+        
+          
     }
     while (c != '#');
     printf("\n");

@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SCORE_MAX 100
-
 int main(void)
 {
     int continentTable[5][5] =
@@ -20,7 +18,6 @@ int main(void)
 
     int randomX;
     int randomY;
-    int iterations = 0;
     int chosenContinent = 0;
     char chosenContinue = 'n';
     int score = 0;
@@ -34,7 +31,7 @@ int main(void)
     {
         do
         {
-            iterations++;
+            score++;
 
             srand(time(NULL));
             randomX = 1 + (rand() % tableWidth);
@@ -67,10 +64,9 @@ int main(void)
             }
             while(chosenContinent != 1 && chosenContinent != 2 && chosenContinent != 3);
         }
-        while(continentTable[randomX - 1][randomY - 1] != chosenContinent);
+        while(continentTable[randomY - 1][randomX - 1] == chosenContinent);
 
-        printf("Congratulazioni, hai indovinato!\n");
-        score = SCORE_MAX / iterations;
+        printf("Congratulazioni, hai sbagliato!\n");
         printf("Il tuo punteggio e' %d.\n", score);
     
         printf("Premi un tasto per continuare [0 = non continuare]: ");

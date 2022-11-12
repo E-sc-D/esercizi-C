@@ -167,4 +167,5 @@ int main()
 
     RefreshScreen(matrix,'R');//stampo la matrice azzerata
     Update(&coordinate,matrix,&lettera);
+    gotoxy(0,(N*2)+1);
 }
