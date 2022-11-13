@@ -54,7 +54,7 @@ void CriptedlineSim(int stringlen,short *y,short *x)
             if( !iscntrl( randm = rand() % 256 ) )//randomizzo un numero da 0 a 255( codice ascii ) e verifico che non sia un carattere di 
             printf("%c",randm);             //controllo (\n \r ecc)
         } 
-        gotoxy(*x,*y);  
+        printf("\r");  
         
     } 
  
@@ -73,7 +73,7 @@ void RandomWriting(char *stringa,int stringlen,short *Y)
         {
             directionsCounter++;
             directions[direction] = '1'; 
-            gotoxy(direction + 1,*Y);
+            gotoxy(direction + 1,*Y + 1);
             printf("%c",stringa[direction]);   
             WaitSeconds(0.1f); 
         }
@@ -85,7 +85,7 @@ int main()
 {   
     short x,y;
     int len;
-    //printf("%d",GetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE)).Y);
+
     printf("\nInserisci la lunghezza massima della stringa\n");
     scanf("%d",&len);
     fflush(stdin);//il \n dell'enter rimane in buffer e causa la uscita prematura dalla funzione stringreader
@@ -93,6 +93,7 @@ int main()
     char stringa[len+1];//la lunghezza +1 serve per il carattere terminatore
 
     len = stringReader(len+1 , stringa);
+       
     CriptedlineSim(len, &y , &x);
     RandomWriting(stringa,len,&y);
     return 0;
