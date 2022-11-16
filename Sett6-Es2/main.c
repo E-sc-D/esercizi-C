@@ -138,3 +138,18 @@ void Game()
 
     
 }
+/*  //esempio con puntatori multipli
+
+    int value = 5;
+    int *pt1;
+    int **pt2;
+    int ***pt3;
+    
+    pt1 = &value;
+    pt2 = &pt1;
+    pt3 = &pt2;
+    printf("%d , %d , %d  ",*pt1,**pt2,***pt3);//valore di value
+    printf("%p , %p , %p", pt1,*pt2,**pt3);//indirizzo di value
+    
+*/
+    
