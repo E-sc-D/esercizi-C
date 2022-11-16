@@ -7,7 +7,7 @@
 void inizializza_gioco();
 int cambiaDifficolta();
 int** GeneraCampo(int,int);
-void StampaCampo(int,int,int**);
+void StampaCampo(int,int,int***);
 int main() 
 {
     /*srand(time(NULL));
@@ -38,15 +38,10 @@ int main()
         case 3: exit(0);
    } */
    
-   int **campoMinato = GeneraCampo(10, 5);//cerco di generare una matrice con malloc
-   printf("Campo generato\n");//ok va
-   //scanf("%d");//va
-   campoMinato[1][1] = 0;
-   printf("il valore alla pos 1,1 è %d",campoMinato[1][1]);//cazzo esplode 
-   //StampaCampo(10,5,campoMinato);//anche questo esplode
-   //fflush(stdin);//e salta questo
-   //scanf("%d");//questo
-   return 0;//forse anche questo boh
+   int **campoMinato = GeneraCampo(10, 5);//genero una matrice con malloc 
+   //generaMine(&campoMinato,5,10,4);
+   StampaCampo(10,5,&campoMinato);//la stampo(funziona quindi non serve)
+   return 0;
 }
 
 void inizializza_gioco(int difficolta)
@@ -77,7 +72,14 @@ void generaMine(int **matrix, int row, int column, int difficolta)
                 for (int j = i; j > 0; j--)     //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
                     if ((minePos[i][0] == minePos[j][0]) && (minePos[i][1] == minePos[j][1]))//se ne trovo una uguale... 
+                    {
                         flag = 1;
+                    }
+                    else
+                    {
+                        matrix[minePos[i][0]][minePos[i][0]] = -1;
+                    }
+                        
                 }
                     
             }
@@ -87,12 +89,12 @@ void generaMine(int **matrix, int row, int column, int difficolta)
     //piazzo le mine nel campo minato
 }
 
-int** GeneraCampo(int length,int width)
+int** GeneraCampo(int width,int height)
 {
-    int** campoMinato = (int**)malloc(width * sizeof(int*)); //alloco nella heap un array di puntatori
-    for(int i = 0 ; i < length ; i++)
+    int** campoMinato = (int**)malloc(height * sizeof(int*)); //alloco nella heap un array di puntatori
+    for(int i = 0 ; i < width ; i++)
     {
-        campoMinato[i] = (int*)malloc(length * sizeof(int));//dentro l'array di puntatori alloco degli array di interi
+        campoMinato[i] = (int*)malloc(width * sizeof(int));//dentro l'array di puntatori alloco degli array di interi
     }
     printf("campo generato in teoria...\n");
 
@@ -100,19 +102,18 @@ int** GeneraCampo(int length,int width)
    
 }
 
-void StampaCampo(int length,int width,int **campoMinato)
+void StampaCampo(int width,int height,int ***campoMinato)//non funziona
 {
-     for(int i = 0; i < width ; i++)
+     for(int i = 0; i < height ; i++)
     {
-        for(int j = 0; j < length ; j++)
+        for(int j = 0; j < width ; j++)
         {
-            campoMinato[i][j] = j;
-            printf("%d",campoMinato[i][j]);
+            *campoMinato[i][j] = j;
+            printf("%d",*campoMinato[i][j]);
         }
         printf("\n");
     }
     free(campoMinato);
-    printf("campo stampato?...");
 }
 
 int cambiaDifficolta(int difficolta) 
