@@ -114,7 +114,7 @@ void StampaCampo(int width,int height,int ***campoMinato)//non funziona
         printf("\n");
     }
     free(campoMinato);
-}
+}//secondo la prova effettuata sotto usare il simbolo * declassa il puntatore *** a ** rendendo concettualmente l'algoritmo uguale a quello precedente, ma non va.
 
 int cambiaDifficolta(int difficolta) 
 {
