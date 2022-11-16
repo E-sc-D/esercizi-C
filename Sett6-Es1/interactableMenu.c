@@ -27,6 +27,7 @@ struct Menu
 {
     char BorderChar;
     int Width;
+    int Height;
     int Margin[4]; // Like in CSS (top, right, bottom, left)
     int Padding[4]; // Same as above
     int OptionSpacing;
@@ -69,7 +70,6 @@ struct Menu NewMenu(int charactersWidth, int optionsNumber, struct MenuOption op
 {
     struct Menu menu;
     menu.BorderChar = DEFAULT_MENU_CHAR;
-    menu.Width = charactersWidth;
     menu.Margin[0] = DEFAULT_MENU_TOP_MARGIN;
     menu.Margin[1] = DEFAULT_MENU_RIGHT_MARGIN;
     menu.Margin[2] = DEFAULT_MENU_BOTTOM_MARGIN;
@@ -81,6 +81,9 @@ struct Menu NewMenu(int charactersWidth, int optionsNumber, struct MenuOption op
     menu.OptionSpacing = DEFAULT_MENU_OPTION_SPACING;
     menu.OptionsNumber = optionsNumber;
     menu.Options = options;
+    menu.Width = charactersWidth; // Maximum Width is defined by user
+    menu.Height = menu.OptionsNumber + menu.Margin[0] + menu.Margin[2] + menu.Padding[0] + menu.Padding[2] + ((menu.OptionsNumber - 1) * menu.OptionSpacing);
+    // Height is OptionsNumber plus top and bottom margin, top and bottom padding and the OptionSpacing multiplied by OptionsNumber minus 1
     return menu;
 }
 
@@ -92,9 +95,10 @@ struct MenuOption NewMenuOption(char optionText[], void (*optionFunction)())
     return option;
 }
 
-enum MenuComponent IdentifyComponent(const struct Menu *menu, int x, int y, int height)
+enum MenuComponent IdentifyComponent(const struct Menu *menu, int x, int y)
 {
     int width = menu->Width;
+    int height = menu->Height;
 
     if(x >= 0 && x < menu->Margin[1] && y >= 0 && y < menu->Margin[0])
         return TopLeftMargin;
@@ -128,15 +132,16 @@ enum MenuComponent IdentifyComponent(const struct Menu *menu, int x, int y, int 
         return BottomBorder;
     else if(x == menu->Margin[1])
         return LeftBorder;
+    else if(x > menu->Margin[1] && y > menu->Margin[0] && x <= menu->Margin[1] + menu->Padding[1] && y <= menu->Padding[0] + menu->Padding[0])
+        return TopLeftPadding;
+    else if(x > width - menu->Margin[1] && y > menu->Margin[3] && x <= menu->Margin[1] + menu->Padding[1] && y <= menu->Padding[3] + menu->Padding[3])
+        return TopRightPadding;
     else
         return Unknown;
 }
 
 void DrawMenu(const struct Menu *menu)
 {
-    int height = menu->OptionsNumber + menu->Margin[0] + menu->Margin[2] + menu->Padding[0] + menu->Padding[2] + ((menu->OptionsNumber - 1) * menu->OptionSpacing);
-    // height is OptionsNumber plus top and bottom margin, top and bottom padding and the OptionSpacing multiplied by OptionsNumber minus 1
-
     int realWidth = menu->Width - (2 + menu->Margin[1] + menu->Margin[3] + menu->Padding[1] + menu->Padding[3]);
     // realWidth is Width minus 2 (space occupied by border), the right and left margin and the right and left padding
     // This is the width available to the options labels
@@ -148,15 +153,17 @@ void DrawMenu(const struct Menu *menu)
     else
     {
         int i, j;
-        for(i = 0; i < height; i++)
+        for(i = 0; i < menu->Height; i++)
         {
             for(j = 0; j < menu->Width; j++)
             {
-                enum MenuComponent component = IdentifyComponent(menu, j, i, height);
-                if(component >= 0 && component <= 7)
+                enum MenuComponent component = IdentifyComponent(menu, j, i);
+                if(component >= TopMargin && component <= TopLeftMargin)
                     printf(".");
-                else if(component >= 16 && component <= 23)
+                else if(component >= TopBorder && component <= TopLeftBorder)
                     printf("#");
+                else if(component >= TopPadding && component <= TopLeftPadding)
+                    printf("-");
                 else
                     printf(" ");
                 
