@@ -40,8 +40,8 @@ int main()
    
    int **campoMinato = GeneraCampo(10, 5);//cerco di generare una matrice con malloc
    printf("Campo generato\n");//ok va
-   //scanf("%d");//va
-   printf("il valore alla pos 1,1 e' %d",campoMinato[1][1]);//cazzo esplode 
+   scanf("%d");//va
+   printf("il valore alla pos 1,1 è %d",campoMinato[1][1]);//cazzo esplode 
    //StampaCampo(10,5,campoMinato);//anche questo esplode
    //fflush(stdin);//e salta questo
    //scanf("%d");//questo
@@ -88,14 +88,13 @@ void generaMine(int **matrix, int row, int column, int difficolta)
 
 int** GeneraCampo(int length,int width)
 {
-    int** campoMinato = malloc(width * sizeof(*campoMinato)); //alloco nella heap un array di puntatori
+    int** campoMinato = (int**)malloc(width * sizeof(int*)); //alloco nella heap un array di puntatori
     for(int i = 0 ; i < length ; i++)
     {
-        campoMinato[i] = malloc(length * sizeof(**campoMinato));//dentro l'array di puntatori alloco degli array di interi
+        campoMinato[i] = (int*)malloc(length * sizeof(int));//dentro l'array di puntatori alloco degli array di interi
     }
     printf("campo generato in teoria...\n");
-
-    return campoMinato;
+   
 }
 
 void StampaCampo(int length,int width,int **campoMinato)
