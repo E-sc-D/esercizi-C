@@ -40,7 +40,7 @@ int main()
    
    int **campoMinato = GeneraCampo(10, 5);//cerco di generare una matrice con malloc
    printf("Campo generato\n");//ok va
-   scanf("%d");//va
+   //scanf("%d");//va
    printf("il valore alla pos 1,1 è %d",campoMinato[1][1]);//cazzo esplode 
    //StampaCampo(10,5,campoMinato);//anche questo esplode
    //fflush(stdin);//e salta questo
