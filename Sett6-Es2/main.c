@@ -6,7 +6,7 @@
 
 void inizializza_gioco();
 int cambiaDifficolta();
-void GeneraCampo(int,int,int**);
+int** GeneraCampo(int,int);
 void StampaCampo(int,int,int**);
 int main() 
 {
@@ -38,15 +38,13 @@ int main()
         case 3: exit(0);
    } */
    
-   int **campoMinato;
-   
-   GeneraCampo(10,5,campoMinato);//cerco di generare una matrice con malloc
+   int **campoMinato = GeneraCampo(10, 5);//cerco di generare una matrice con malloc
    printf("Campo generato\n");//ok va
-   scanf("%d");//va
-   printf("il valore alla pos 1,1 è %d",campoMinato[1][1]);//cazzo esplode 
+   //scanf("%d");//va
+   printf("il valore alla pos 1,1 e' %d",campoMinato[1][1]);//cazzo esplode 
    //StampaCampo(10,5,campoMinato);//anche questo esplode
-   fflush(stdin);//e salta questo
-   scanf("%d");//questo
+   //fflush(stdin);//e salta questo
+   //scanf("%d");//questo
    return 0;//forse anche questo boh
 }
 
@@ -88,17 +86,16 @@ void generaMine(int **matrix, int row, int column, int difficolta)
     //piazzo le mine nel campo minato
 }
 
-void GeneraCampo(int length,int width,int **campoMinato)
+int** GeneraCampo(int length,int width)
 {
-    
-    campoMinato = (int**)malloc(width * sizeof(int*)); //alloco nella heap un array di puntatori
-
+    int** campoMinato = malloc(width * sizeof(*campoMinato)); //alloco nella heap un array di puntatori
     for(int i = 0 ; i < length ; i++)
     {
-        campoMinato[i] = (int*)malloc(length * sizeof(int));//dentro l'array di puntatori alloco degli array di interi
+        campoMinato[i] = malloc(length * sizeof(**campoMinato));//dentro l'array di puntatori alloco degli array di interi
     }
     printf("campo generato in teoria...\n");
-   
+
+    return campoMinato;
 }
 
 void StampaCampo(int length,int width,int **campoMinato)
