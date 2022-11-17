@@ -8,14 +8,15 @@
 void inizializza_gioco();
 int cambiaDifficolta();
 int** GeneraCampo(int,int);
-void StampaCampo2(int,int,int**);
+void StampaCampo(int,int,int**);
 void GeneraMine(int,int,int,int**);
 
 
 
 int main() 
 {
-    /*srand(time(NULL));
+    srand(time(NULL));
+    /*
 
     int scelta = 0;
     int difficolta = 1;
@@ -44,9 +45,9 @@ int main()
     } */
    
    int **campoMinato = GeneraCampo(10, 5);//genero una matrice con malloc 
-   StampaCampo2(10,5,campoMinato);
+   StampaCampo(10,5,campoMinato);
    GeneraMine(3,10,5,campoMinato);
-   StampaCampo2(10,5,campoMinato);
+   StampaCampo(10,5,campoMinato);
 
    return 0;
 }
@@ -77,22 +78,26 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
                 flag = 0;
 
                 //genero una mina con coordinate casuali
-                minePos[i][0] = rand() % height;        //coordinata x
-                minePos[i][1] = rand() % width;         //coordinata y
 
-                for (int j = i - 1; j > 0; j--) // * giustificazione del -1    //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
+                minePos[i][0] = rand() % height;        // colonna
+                minePos[i][1] = rand() % width;         // riga
+
+                printf("\ni = %d Mine position: col = %d, row = %d", i, minePos[i][0], minePos[i][1]);
+                if (i == 0) // La prima mina generata non puo essere confrontata con altre (dato che non esistono), quindi possiamo prenderla per buona
+                    campoMinato[minePos[i][0]][minePos[i][1]] = -1;
+                for (int j = i; j > 0; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
-                    if ((minePos[i][0] == minePos[j][0]) && (minePos[i][1] == minePos[j][1]))//se ne trovo una uguale... 
+                    if ((minePos[j][0] == minePos[j - 1][0]) && (minePos[j][1] == minePos[j - 1][1]))//se ne trovo una uguale...
                     {
+                        printf("\nTrovata una mina gia generata. Ripetiamo la generazione");
                         flag = 1;
+                        break;
                     }
                     else
                     {
-                       // campoMinato[minePos[i][0]][minePos[i][1]] = -1;//piazzo le mine nel campo minato
+                       campoMinato[minePos[i][0]][minePos[i][1]] = -1;//piazzo le mine nel campo minato
                     }
-                    printf("%d\n",j);
                 }
-                    
             }
         while (flag == 1);  //...una nuova mina sovrascriverà questa ricominciando da capo
     }   
@@ -119,13 +124,14 @@ int** GeneraCampo(int width,int height)
    return campoMinato;
 }
 
-void StampaCampo2(int width,int height, int **campoMinato)//funziona, ma perche?
+void StampaCampo(int width,int height, int **campoMinato)//funziona, ma perche?
 {
-     for(int i = 0; i < height ; i++)
+    printf("\n");
+    for(int i = 0; i < height ; i++)
     {
         for(int j = 0; j < width ; j++)
         {
-            printf("%d",campoMinato[i][j]);
+            printf("\t%d",campoMinato[i][j]);
         }
         printf("\n");
     }
