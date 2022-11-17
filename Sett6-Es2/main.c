@@ -4,10 +4,15 @@
 #include <conio.h>
 #include <time.h>
 
+//prototipi
 void inizializza_gioco();
 int cambiaDifficolta();
 int** GeneraCampo(int,int);
-void StampaCampo(int,int,int***);
+void StampaCampo2(int,int,int**);
+void GeneraMine(int,int,int,int**);
+
+
+
 int main() 
 {
     /*srand(time(NULL));
@@ -36,11 +41,13 @@ int main()
     {
         case 1: gioca(difficolta);
         case 3: exit(0);
-   } */
+    } */
    
    int **campoMinato = GeneraCampo(10, 5);//genero una matrice con malloc 
-   //generaMine(&campoMinato,5,10,4);
-   StampaCampo(10,5,&campoMinato);//la stampo(funziona quindi non serve)
+   StampaCampo2(10,5,campoMinato);
+   GeneraMine(3,10,5,campoMinato);
+   StampaCampo2(10,5,campoMinato);
+
    return 0;
 }
 
@@ -51,7 +58,7 @@ void inizializza_gioco(int difficolta)
     int campo[row][column];
 }
 
-void generaMine(int **matrix, int row, int column, int difficolta) 
+void GeneraMine(int difficoltà,int width,int height,int **campoMinato) 
 {
     int numeroMine;     // quante mine ci saranno sul campo
     // assegnare il numeroMine in base alla difficolta
@@ -61,15 +68,21 @@ void generaMine(int **matrix, int row, int column, int difficolta)
     // assegno 2 colonne perché avrò la posizione x e la posizione y della mina
 
     int flag = 0;
-    for (int i = 0; i < numeroMine; i++) //ciclo che avanza nell'array di mine
+
+    minePos[0][0] = rand() % height;      
+    minePos[0][1] = rand() % width;    
+    //inizializzando la prima mina fuori do margine di controllo al for che altrimenti confronterebbe la prima mina con se stessa *
+    //entrando quindi in un loop infinito     
+    for (int i = 1; i < numeroMine; i++) //ciclo che avanza nell'array di mine
     {
         do {
                 flag = 0;
 
-                minePos[i][0] = rand() % row;   //genero una mina con coordinate casuali
-                minePos[i][1] = rand() % column;
+                //genero una mina con coordinate casuali
+                minePos[i][0] = rand() % height;        //coordinata x
+                minePos[i][1] = rand() % width;         //coordinata y
 
-                for (int j = i; j > 0; j--)     //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
+                for (int j = i - 1 ; j > 0; j--) // * giustificazione del -1    //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
                     if ((minePos[i][0] == minePos[j][0]) && (minePos[i][1] == minePos[j][1]))//se ne trovo una uguale... 
                     {
@@ -77,20 +90,19 @@ void generaMine(int **matrix, int row, int column, int difficolta)
                     }
                     else
                     {
-                        matrix[minePos[i][0]][minePos[i][0]] = -1;
+                       // campoMinato[minePos[i][0]][minePos[i][1]] = -1;//piazzo le mine nel campo minato
                     }
-                        
+                    printf("%d\n",j);
                 }
                     
             }
         while (flag == 1);  //...una nuova mina sovrascriverà questa ricominciando da capo
-    }
-
-    //piazzo le mine nel campo minato
+    }   
 }
 
 int** GeneraCampo(int width,int height)
 {
+
     int** campoMinato = (int**)malloc(height * sizeof(int*)); //alloco nella heap un array di puntatori
     for(int i = 0 ; i < width ; i++)
     {
@@ -98,23 +110,29 @@ int** GeneraCampo(int width,int height)
     }
     printf("campo generato in teoria...\n");
 
-    return campoMinato;
-   
+    for(int i = 0; i < height ; i++)//pulisce la matrice... si potrebbe usare calloc
+    {
+        for(int j = 0; j < width ; j++)
+        {
+            campoMinato[i][j] = 0;
+        }
+    }
+
+   return campoMinato;
 }
 
-void StampaCampo(int width,int height,int ***campoMinato)//non funziona
+void StampaCampo2(int width,int height, int **campoMinato)//funziona, ma perche?
 {
      for(int i = 0; i < height ; i++)
     {
         for(int j = 0; j < width ; j++)
         {
-            *campoMinato[i][j] = j;
-            printf("%d",*campoMinato[i][j]);
+            printf("%d",campoMinato[i][j]);
         }
         printf("\n");
     }
     free(campoMinato);
-}//secondo la prova effettuata sotto usare il simbolo * declassa il puntatore *** a ** rendendo concettualmente l'algoritmo uguale a quello precedente, ma non va.
+}
 
 int cambiaDifficolta(int difficolta) 
 {
@@ -148,8 +166,10 @@ void Game()
     pt1 = &value;
     pt2 = &pt1;
     pt3 = &pt2;
-    printf("%d , %d , %d  ",*pt1,**pt2,***pt3);//valore di value
-    printf("%p , %p , %p", pt1,*pt2,**pt3);//indirizzo di value
+    printf("%d , %d , %d valore di value \n",*pt1,**pt2,***pt3);//valore di value
+    printf("%p , %p , %p indirizzo di value\n", pt1,*pt2,**pt3);//indirizzo di value
+    printf("%p , %p  boh\n",&(*pt2),pt2); //chiamando il nome    
+    
     
 */
     
