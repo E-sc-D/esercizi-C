@@ -69,11 +69,9 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
 
     int flag = 0;
 
-    minePos[0][0] = rand() % height;      
-    minePos[0][1] = rand() % width;    
     //inizializzando la prima mina fuori do margine di controllo al for che altrimenti confronterebbe la prima mina con se stessa *
     //entrando quindi in un loop infinito     
-    for (int i = 1; i < numeroMine; i++) //ciclo che avanza nell'array di mine
+    for (int i = 0; i < numeroMine; i++) //ciclo che avanza nell'array di mine
     {
         do {
                 flag = 0;
@@ -82,7 +80,7 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
                 minePos[i][0] = rand() % height;        //coordinata x
                 minePos[i][1] = rand() % width;         //coordinata y
 
-                for (int j = i - 1 ; j > 0; j--) // * giustificazione del -1    //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
+                for (int j = i - 1; j > 0; j--) // * giustificazione del -1    //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
                     if ((minePos[i][0] == minePos[j][0]) && (minePos[i][1] == minePos[j][1]))//se ne trovo una uguale... 
                     {
@@ -131,7 +129,7 @@ void StampaCampo2(int width,int height, int **campoMinato)//funziona, ma perche?
         }
         printf("\n");
     }
-    free(campoMinato);
+    //free(campoMinato);
 }
 
 int cambiaDifficolta(int difficolta) 
