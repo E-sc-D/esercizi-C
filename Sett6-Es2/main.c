@@ -3,14 +3,16 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 
 //prototipi
 void inizializza_gioco();
 int cambiaDifficolta();
-int** GeneraCampo(int,int);
-void StampaCampo(int,int,int**);
-void GeneraMine(int,int,int,int**);
-
+char** GeneraCampo(int,int);
+void StampaCampo(int,int,char**);
+void GeneraMine(int,int,int,char**);
+char Movement(int*,int*);
+void Game();
 
 
 int main() 
@@ -44,11 +46,9 @@ int main()
         case 3: exit(0);
     } */
    
-   int **campoMinato = GeneraCampo(10, 5);//genero una matrice con malloc 
-   StampaCampo(10,5,campoMinato);
-   GeneraMine(3,10,5,campoMinato);
-   StampaCampo(10,5,campoMinato);
-
+  
+   Game();
+   printf("gioco finito");
    return 0;
 }
 
@@ -59,7 +59,7 @@ void inizializza_gioco(int difficolta)
     int campo[row][column];
 }
 
-void GeneraMine(int difficoltà,int width,int height,int **campoMinato) 
+void GeneraMine(int difficoltà,int width,int height,char **campoMinato) 
 {
     int numeroMine;     // quante mine ci saranno sul campo
     // assegnare il numeroMine in base alla difficolta
@@ -69,9 +69,7 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
     // assegno 2 colonne perché avrò la posizione x e la posizione y della mina
 
     int flag = 0;
-
-    //inizializzando la prima mina fuori do margine di controllo al for che altrimenti confronterebbe la prima mina con se stessa *
-    //entrando quindi in un loop infinito     
+  
     for (int i = 0; i < numeroMine; i++) //ciclo che avanza nell'array di mine
     {
         do {
@@ -83,8 +81,10 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
                 minePos[i][1] = rand() % width;         // riga
 
                 printf("\ni = %d Mine position: col = %d, row = %d", i, minePos[i][0], minePos[i][1]);
+
                 if (i == 0) // La prima mina generata non puo essere confrontata con altre (dato che non esistono), quindi possiamo prenderla per buona
-                    campoMinato[minePos[i][0]][minePos[i][1]] = -1;
+                    campoMinato[minePos[i][0]][minePos[i][1]] = '#';
+
                 for (int j = i; j > 0; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
                     if ((minePos[j][0] == minePos[j - 1][0]) && (minePos[j][1] == minePos[j - 1][1]))//se ne trovo una uguale...
@@ -95,7 +95,7 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
                     }
                     else
                     {
-                       campoMinato[minePos[i][0]][minePos[i][1]] = -1;//piazzo le mine nel campo minato
+                       campoMinato[minePos[i][0]][minePos[i][1]] = '#';//piazzo le mine nel campo minato
                     }
                 }
             }
@@ -103,13 +103,13 @@ void GeneraMine(int difficoltà,int width,int height,int **campoMinato)
     }   
 }
 
-int** GeneraCampo(int width,int height)
+char** GeneraCampo(int width,int height)
 {
 
-    int** campoMinato = (int**)malloc(height * sizeof(int*)); //alloco nella heap un array di puntatori
+    char** campoMinato = (char**)malloc(height * sizeof(char*)); //alloco nella heap un array di puntatori
     for(int i = 0 ; i < width ; i++)
     {
-        campoMinato[i] = (int*)malloc(width * sizeof(int));//dentro l'array di puntatori alloco degli array di interi
+        campoMinato[i] = (char*)malloc(width * sizeof(char));//dentro l'array di puntatori alloco degli array di interi
     }
     printf("campo generato in teoria...\n");
 
@@ -117,23 +117,23 @@ int** GeneraCampo(int width,int height)
     {
         for(int j = 0; j < width ; j++)
         {
-            campoMinato[i][j] = 0;
+            campoMinato[i][j] = 254;
         }
     }
 
    return campoMinato;
 }
 
-void StampaCampo(int width,int height, int **campoMinato)//funziona, ma perche?
+void StampaCampo(int width,int height, char **campoMinato)
 {
-    printf("\n");
+    printf("\n\n");
     for(int i = 0; i < height ; i++)
     {
         for(int j = 0; j < width ; j++)
         {
-            printf("\t%d",campoMinato[i][j]);
+            printf("  %c",campoMinato[i][j]);
         }
-        printf("\n");
+        printf("\n\n");
     }
     //free(campoMinato);
 }
@@ -148,6 +148,53 @@ int cambiaDifficolta(int difficolta)
     return difficolta;
 }
 
+void Refresh(int width,int height, char **campoMinato,int *x, int *y)
+{
+    gotoxy(0,0);
+    for(int i = 0; i < height ; i++)
+    {
+        for(int j = 0; j < width ; j++)
+        {
+            printf("  %c",campoMinato[i][j]);
+        }
+        printf("\n\n");
+    }
+    gotoxy(*x,*y);
+}
+
+char Movement(int *x,int *y)
+{ 
+    char inp;
+    while((inp = (char)getch()) != 't' && inp !='m')
+    {
+        switch (inp)
+        {
+
+            case 'w':
+            *y -= 2;
+            break;
+            
+            case 's':
+            *y += 2;
+            break;
+
+            case 'a':
+            *x -= 3;
+            break;
+
+            case 'd':
+            *x += 3;
+            break;
+        
+            default:
+            break;
+        }
+
+        gotoxy(*x,*y);
+        
+    }
+}
+
 void Game()
 {
     //inizializzo il campo minato 
@@ -156,10 +203,26 @@ void Game()
     //premendo una freccetta le coordinate devono variare in base a un enum
     //il carattere che simboleggia il prato deve essere colorato nella posizione dove ci troviamo
     
-    int **campoMinato;
+    char **campoMinato = GeneraCampo(5,5);
+    char **campoVisibile;
+    char input = 'w';
+    int x = 3,y = 1; //posizione del cursore 
+    GeneraMine(0,5,5,campoMinato);
+    system("cls");
 
+    while(input != 'm')//game loop
+    {
+        if(input == 't')
+        {
+            //scopri casella
+        }
+
+        Refresh(5,5,campoMinato,&x,&y);
+        input = Movement(&x,&y);
+    }
     
 }
+
 /*  //esempio con puntatori multipli
 
     int value = 5;
