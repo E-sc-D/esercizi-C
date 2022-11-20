@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include "Lista.c"
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 
 //prototipi
@@ -46,10 +47,23 @@ int main()
         case 3: exit(0);
     } */
    
-  
-   Game();
-   printf("gioco finito");
-   return 0;
+    List lista;//c# feeling!!!
+    struct Coordinata c = 
+    {
+        1,1
+    };
+
+    AddElement(&lista,emptyCoordinata);
+    //AddElement(&lista,c);
+    printf("niente eccezione potentissima");
+    printf("%d gigi\n",lista.Head->coordinata.x);
+    /*DeleteLastElement(&lista);
+    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
+    
+
+    Game();
+    printf("gioco finito");
+    return 0;*/
 }
 
 void inizializza_gioco(int difficolta)
@@ -195,6 +209,43 @@ char Movement(int *x,int *y)
     }
 }
 
+int Scout(int x,int y,char **campoMinato)
+{
+    int mines = 0;
+    int directions[8][2] =
+    {
+        {0,1},  //top
+        {1,1},  //top-right
+        {1,0},  //right
+        {1,-1}, //bottom-right
+        {0,-1}, //bottom
+        {-1,-1},//bottom-left
+        {-1,0}, //left
+        {-1,1}  //top-left
+    };
+
+    for(int i = 0 ; i < 8; i++)
+    {
+        if( campoMinato[x + directions[i][0]][y + directions[i][1]] == '#' )//controlla attorno la coordinata ricevuta se ce una mina
+        {
+            mines++;
+        }
+    }
+
+    return mines;
+}
+
+int Uncover(int *x,int *y,char **campoVisibile,char **campoMinato)
+{
+    int mineTrovate;
+
+    if(campoMinato[*x][*y] != '#')
+    {
+       // while() la pila con le coordinate da controllare è maggiore di zero
+    }
+    //return hai perso
+}
+
 void Game()
 {
     //inizializzo il campo minato 
@@ -204,21 +255,24 @@ void Game()
     //il carattere che simboleggia il prato deve essere colorato nella posizione dove ci troviamo
     
     char **campoMinato = GeneraCampo(5,5);
-    char **campoVisibile;
+    char **campoVisibile = GeneraCampo(5,5);
     char input = 'w';
     int x = 3,y = 1; //posizione del cursore 
+    int state = 0;
     GeneraMine(0,5,5,campoMinato);
     system("cls");
 
     while(input != 'm')//game loop
     {
-        if(input == 't')
-        {
-            //scopri casella
-        }
+        
 
-        Refresh(5,5,campoMinato,&x,&y);
-        input = Movement(&x,&y);
+        Refresh(5,5,campoMinato,&x,&y);//aggiorna il campoMinato
+        input = Movement(&x,&y);//ascolta per input del giocatore
+
+        if(input == 't')//scopri casella
+        {
+            
+        }
     }
     
 }
