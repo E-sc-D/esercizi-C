@@ -1,55 +1,82 @@
-#include <stdio.h>;
-#include <stdlib.h>;
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct List
 {
-    struct Coordinata coordinata;
-    struct List *lista
+    struct Nodo *Head;
+
 }List;
 
 struct Coordinata
 {
     int x;
     int y;
-}emptyCoordinata = {0,0},nullCoordinata = {}
+}emptyCoordinata = {0,0};
 
-void AddElement(struct List *lista,struct Coordinata coordinata)
+typedef struct Nodo
 {
-    struct List *navigator;
-    navigator = lista;
+    struct Coordinata coordinata;
+    struct Nodo *Nodo;
+}Nodo;
 
-    while((*navigator).lista != NULL)
+void AddElement( List *lista,struct Coordinata coordinata )
+{
+    
+    if(lista->Head == NULL)
     {
-        navigator = navigator->lista;
+      lista->Head = (Nodo*) malloc (sizeof(Nodo));
+      lista->Head->coordinata = coordinata;
+    }      
+    else
+    {
+        Nodo *navigator = lista->Head;
+        while (navigator->Nodo != NULL)
+        {
+            navigator = navigator->Nodo;
+        }
+
+        navigator->Nodo = (Nodo*) malloc (sizeof(Nodo));
+
+        navigator->Nodo->coordinata = coordinata;
     }
-
-
-    navigator->lista = ( struct List* )malloc( sizeof( struct List ) );//una volta trovato il puntatore vuoto lo riempe
-
-    navigator->lista->coordinata.x = coordinata.x;//gli mette la coordinata dentro
-    navigator->lista->coordinata.y = coordinata.y;
-
+   
 }
 
-struct Coordinata PopElement(struct List *lista)//restituisce il primo elemento e lo rimuove dalla lista
+Nodo* GetLastElement(struct List *lista)//restituisce il primo elemento e lo rimuove dalla lista
 {
-    struct List *navigator;
-    navigator = lista;
-    struct List *prec;
-    struct Coordinata coordinata;
+    if(lista->Head == NULL)
+        return NULL;
 
-    while((*navigator).lista != NULL)
+    Nodo *navigator = lista->Head;
+    
+    while (navigator->Nodo != NULL)
     {
-        prec = navigator;
-        navigator = navigator->lista;
+        navigator = navigator->Nodo;
     }
 
-    prec->lista = NULL;//una volta trovato il puntatore vuoto lo riempe
+    return navigator;
+}
 
-    coordinata.x = navigator->coordinata.x;
-    coordinata.y = navigator->coordinata.y;
-    
-    free(navigator);
-    return NULL;
+void DeleteLastElement(struct List *lista)
+{
+    if(lista->Head == NULL)
+        return;
+
+    if(lista->Head->Nodo == NULL)
+    {
+       free(lista->Head); 
+       lista->Head = NULL;
+       return;
+    }
+        
+    Nodo *navigator = lista->Head;
+    Nodo *prec;
+    while (navigator->Nodo->Nodo != NULL)
+    {
+        navigator = navigator->Nodo;
+    }
+    free(navigator->Nodo);
+    navigator->Nodo = NULL;
+
 }
 

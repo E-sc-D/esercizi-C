@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include "Lista.c"
+#include "List.c"
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 
 //prototipi
