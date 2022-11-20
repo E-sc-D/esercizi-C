@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include "List.c"
+#include "list.c"
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 
 //prototipi
@@ -47,19 +47,17 @@ int main()
         case 3: exit(0);
     } */
    
-    List lista;//c# feeling!!!
-    struct Coordinata c = 
-    {
-        1,1
-    };
+    List lista = NewList(); //c# feeling!!! // Il problema era che l'head della lista non è necessariamente settato a NULL, 
+    struct Coordinata coordinata = {5, 4};
 
-    AddElement(&lista,emptyCoordinata);
-    //AddElement(&lista,c);
-    printf("niente eccezione potentissima");
-    printf("%d gigi\n",lista.Head->coordinata.x);
-    /*DeleteLastElement(&lista);
+    printf("lol\n");
+    AddElement(&lista, emptyCoordinata);
     printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
-    
+    AddElement(&lista,coordinata);
+    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
+    DeleteLastElement(&lista);
+    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
+    /*
 
     Game();
     printf("gioco finito");

@@ -4,42 +4,48 @@
 typedef struct List
 {
     struct Nodo *Head;
-
-}List;
+} List;
 
 struct Coordinata
 {
     int x;
     int y;
-}emptyCoordinata = {0,0};
+} emptyCoordinata = {0, 0};
 
 typedef struct Nodo
 {
     struct Coordinata coordinata;
     struct Nodo *Nodo;
-}Nodo;
+} Nodo;
 
-void AddElement( List *lista,struct Coordinata coordinata )
+List NewList() // Metodo simil-costruttore per settare a NULL l'Head della lista
 {
-    
-    if(lista->Head == NULL)
+    List newList;
+    newList.Head = NULL;
+    return newList;
+}
+
+void AddElement( List *lista, struct Coordinata coordinata )
+{
+    if(lista->Head == NULL) // QUESTO NON SI TRIGGERAVA PERCHE' UNA NUOVA LISTA CON 0 ELEMENTI
+                            // NON HA IL PUNTATORE NECESSARIAMENTE A NULL MA AD UN VALORE RANDOM
     {
-      lista->Head = (Nodo*) malloc (sizeof(Nodo));
+      lista->Head = malloc(sizeof(Nodo));
+      lista->Head->Nodo = NULL; // Setta il puntatore del Nodo successivo a NULL
       lista->Head->coordinata = coordinata;
     }      
     else
     {
         Nodo *navigator = lista->Head;
-        while (navigator->Nodo != NULL)
+        while (navigator->Nodo != NULL) // STESSA COSA QUI!
         {
             navigator = navigator->Nodo;
         }
 
-        navigator->Nodo = (Nodo*) malloc (sizeof(Nodo));
-
+        navigator->Nodo = malloc (sizeof(Nodo));
+        navigator->Nodo->Nodo = NULL; // Setta il puntatore del Nodo successivo a NULL
         navigator->Nodo->coordinata = coordinata;
     }
-   
 }
 
 Nodo* GetLastElement(struct List *lista)//restituisce il primo elemento e lo rimuove dalla lista
