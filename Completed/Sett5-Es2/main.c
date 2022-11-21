@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 #include <Windows.h>
 #include <ctype.h>
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))//funziona solo su windows terminal (windows 11)
