@@ -12,7 +12,7 @@ int cambiaDifficolta();
 char** GeneraCampo(int,int);
 void StampaCampo(int,int,char**);
 void GeneraMine(int,int,int,char**);
-char Movement(int*,int*);
+char Movement(int*,int*,int*,int*,int,int);
 void Game();
 
 
@@ -174,7 +174,7 @@ void Refresh(int width,int height, char **campoMinato,int *x, int *y)
     gotoxy(*x,*y);
 }
 
-char Movement(int *x,int *y)
+char Movement(int *x,int *y,int *X,int *Y,int width,int height)//!fare un convertitore da coordinate normali a coordinate per la console
 { 
     char inp;
     while((inp = (char)getch()) != 't' && inp !='m')
@@ -183,19 +183,37 @@ char Movement(int *x,int *y)
         {
 
             case 'w':
-            *y -= 2;
+            if(*Y > 0)
+            {
+                *y -= 2;
+                *Y -= 1; 
+            } 
             break;
             
             case 's':
-            *y += 2;
+            if( *Y < height - 1)
+            {
+                *y += 2;
+                *Y += 1;
+            }
             break;
 
             case 'a':
-            *x -= 3;
+             if(*X > 0)
+            {
+                *x -= 3;
+                *X -= 1; 
+            } 
+            
             break;
 
             case 'd':
-            *x += 3;
+             if( *X < width - 1)
+            {
+                *x += 3;
+                *X += 1; 
+            }
+            
             break;
         
             default:
@@ -207,7 +225,7 @@ char Movement(int *x,int *y)
     }
 }
 
-int Scout(int x,int y,char **campoMinato)
+int Scout(int X,int Y,char **campoMinato,int width,int height)//x è y , y è x ricordare che direction[x][1] è per le y
 {
     int mines = 0;
     int directions[8][2] =
@@ -224,36 +242,41 @@ int Scout(int x,int y,char **campoMinato)
 
     for(int i = 0 ; i < 8; i++)
     {
-        if( campoMinato[x + directions[i][0]][y + directions[i][1]] == '#' )//controlla attorno la coordinata ricevuta se ce una mina
+        if((X + directions[i][1] > -1 && X + directions[i][1] < width) && (Y + directions[i][0] > -1 && Y + directions[i][0] < height))//controllo per verificare che il punto sia dentro il campo
         {
-            mines++;
+            if( campoMinato[X + directions[i][1]][Y + directions[i][0]] == '#' )//controlla attorno la coordinata ricevuta se ce una mina
+            {
+                mines++;
+            }
         }
     }
 
     return mines;
 }
 
-int Uncover(int *x,int *y,char **campoVisibile,char **campoMinato)
+int Uncover(int *X,int *Y,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
 {
     int mineTrovate;
     List lista;
-    if(campoMinato[*x][*y] != '#')
+    if(campoMinato[*Y][*X] != '#')
     {
         struct Coordinata coord;
-        coord.x = *x;
-        coord.y = *y;
+        coord.x = *X;
+        coord.y = *Y;
         AddElement(&lista,coord);
-        int mineTrovate;
        
-           mineTrovate = Scout(*x,*y,campoMinato);
+           mineTrovate = Scout(*Y,*X,campoMinato,5,5);//!da convertire a lista.nodo->coordinate al posto di x,y
            if( mineTrovate > 0)
            {
-               printf("%d",mineTrovate);
+               campoMinato[*Y][*X] = '0' + mineTrovate;//conversione da int a char 
+               gotoxy(0,20);
+               printf("%d,%d\n",*X,*Y);
+               
            }
        
     }
     //return hai perso
-}
+} 
 
 void Game()
 {
@@ -267,6 +290,7 @@ void Game()
     char **campoVisibile = GeneraCampo(5,5);
     char input = 'w';
     int x = 3,y = 1; //posizione del cursore 
+    int X = 0,Y = 0;
     int state = 0;
     GeneraMine(0,5,5,campoMinato);
     system("cls");
@@ -275,12 +299,12 @@ void Game()
     {
         
 
-        Refresh(5,5,campoMinato,&x,&y);//aggiorna il campoMinato
-        input = Movement(&x,&y);//ascolta per input del giocatore
+        Refresh(5,5,campoMinato,&x,&y);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
+        input = Movement(&x,&y,&X,&Y,5,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
 
         if(input == 't')//scopri casella
         {
-            Uncover()
+            Uncover(&X,&Y,campoVisibile,campoMinato);
         }
     }
     
