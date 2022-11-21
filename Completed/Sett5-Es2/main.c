@@ -1,23 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <Windows.h>
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
-
-COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
-{
-    CONSOLE_SCREEN_BUFFER_INFO cbsi;
-    if (GetConsoleScreenBufferInfo(hConsoleOutput, &cbsi))
-    {
-        return cbsi.dwCursorPosition;
-    }
-    else
-    {
-        // The function failed. Call GetLastError() for details.
-        COORD invalid = { 0, 0 };
-        return invalid;
-    }
-}
 
 void WaitSeconds(float secondi)
 {
@@ -37,13 +21,11 @@ int stringReader(int lenght,char *stringa)
     return i;//gli effettivi caratteri scritti nell'array
 }
 
-void CriptedlineSim(int stringlen,short *y,short *x)
+void CriptedlineSim(int stringlen)
 {
 
     srand(time(NULL));//nuovo seme per la generazione di numeri casuali
     time_t now = clock();
-    *y = GetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE)).Y;//posizione corrente del cursore
-    *x = GetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE)).X;
     char randm;
 
     for(; (clock() - now) < (3 * CLOCKS_PER_SEC) ;) // Waits for 3 seconds 
@@ -94,7 +76,7 @@ int main()
 
     len = stringReader(len+1 , stringa);
        
-    CriptedlineSim(len, &y , &x);
+    CriptedlineSim(len);
     RandomWriting(stringa,len,&y);
     return 0;
 }
