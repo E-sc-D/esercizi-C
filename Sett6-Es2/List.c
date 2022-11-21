@@ -86,3 +86,22 @@ void DeleteLastElement(struct List *lista)
 
 }
 
+int length(List *lista)
+{
+    int counter = 0;
+    if(lista->Head == NULL)
+        return counter;
+
+    counter++;
+    
+    Nodo *navigator = lista->Head;
+    
+    while (navigator->Nodo != NULL)
+    {
+        navigator = navigator->Nodo;
+        counter++;
+    }
+    
+    return counter;
+}
+

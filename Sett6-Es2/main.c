@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <unistd.h>
+
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
@@ -49,19 +49,19 @@ int main()
    
     List lista = NewList(); //c# feeling!!! // Il problema era che l'head della lista non è necessariamente settato a NULL, 
     struct Coordinata coordinata = {5, 4};
-
+/*
     printf("lol\n");
     AddElement(&lista, emptyCoordinata);
-    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
+    printf("%d lala %d\n",GetLastElement(&lista)->coordinata.x,length(&lista));
     AddElement(&lista,coordinata);
-    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
+    printf("%d lala %d\n",GetLastElement(&lista)->coordinata.x,length(&lista));
     DeleteLastElement(&lista);
     printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
-    /*
-
+    
+*/
     Game();
     printf("gioco finito");
-    return 0;*/
+    return 0;
 }
 
 void inizializza_gioco(int difficolta)
@@ -71,7 +71,7 @@ void inizializza_gioco(int difficolta)
     int campo[row][column];
 }
 
-void GeneraMine(int difficoltà,int width,int height,char **campoMinato) 
+void GeneraMine(int difficolta,int width,int height,char **campoMinato) 
 {
     int numeroMine;     // quante mine ci saranno sul campo
     // assegnare il numeroMine in base alla difficolta
@@ -236,10 +236,21 @@ int Scout(int x,int y,char **campoMinato)
 int Uncover(int *x,int *y,char **campoVisibile,char **campoMinato)
 {
     int mineTrovate;
-
+    List lista;
     if(campoMinato[*x][*y] != '#')
     {
-       // while() la pila con le coordinate da controllare è maggiore di zero
+        struct Coordinata coord;
+        coord.x = *x;
+        coord.y = *y;
+        AddElement(&lista,coord);
+        int mineTrovate;
+       
+           mineTrovate = Scout(*x,*y,campoMinato);
+           if( mineTrovate > 0)
+           {
+               printf("%d",mineTrovate);
+           }
+       
     }
     //return hai perso
 }
@@ -269,7 +280,7 @@ void Game()
 
         if(input == 't')//scopri casella
         {
-            
+            Uncover()
         }
     }
     

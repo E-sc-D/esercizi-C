@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <Windows.h>
-#define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
-
+#include <ctype.h>
+#define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))//funziona solo su windows terminal (windows 11)
+                                                    //funziona su cmd ma su windows 10
 COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
 {
     CONSOLE_SCREEN_BUFFER_INFO cbsi;
