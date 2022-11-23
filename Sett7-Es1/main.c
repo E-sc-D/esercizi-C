@@ -5,6 +5,7 @@
 void robConnect();
 int robConfig();
 int verificaDuplicato();
+void azzeraStruct();
 struct Stanza {
     char nome[20];
     int larghezza;
@@ -21,6 +22,10 @@ int main() {
     //int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
 
     struct Stanza *ptrStanza = (struct Stanza *) malloc(numero_stanze * sizeof(struct Stanza));
+
+    azzeraStruct(ptrStanza, numero_stanze);
+
+
 
 
     return 0;
@@ -84,8 +89,16 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
 
 }
 
-void mostraInfoStanza(char nomeStanza[]) {
+void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) {
+    int i = 0;
+    for(i = 0; i < numero_stanze; i++) {
+        if (strcmp(nomeStanza, ptrStanza[i].nome) == 0){
+            break;
+        }
+    }
 
+    printf("\nStanza numero: %d", i);
+    printf("\nNome: %s", ptrStanza[i].nome);
 }
 
 int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) {
@@ -97,4 +110,15 @@ int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) 
     }
 
     return 0;   // non ci sono duplicati
+}
+
+void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {
+    for (int i = 0; i < numero_stanze; i++) {
+        strcpy(ptrStanza[i].nome, "");  // corrisponde a ptrStanza[i].nome = ""; che pero non si puo fare
+        ptrStanza[i].larghezza = 0;
+        ptrStanza[i].lunghezza = 0;
+        ptrStanza[i].area = 0;
+        ptrStanza[i].ostacoli = 0;
+        ptrStanza[i].priorita = 0;
+    }
 }
