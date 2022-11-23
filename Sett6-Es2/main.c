@@ -266,7 +266,6 @@ int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **ca
                campoVisibile[colonna][riga] = '0' + mineTrovate;//conversione da int a char    
            }      
 
-       
     }
     else{ return 1;}
     //return hai perso
