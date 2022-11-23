@@ -169,5 +169,5 @@ void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {
 void robDisconnect(){
     system("cls");
     printf("Disconnessione avvenuta con successo.");
-    exit(0);
+    exit(0); //programma terminato correttamente
 }
