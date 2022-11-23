@@ -19,7 +19,7 @@ struct Stanza {
 int main() {
 
     int numero_stanze = 5;
-    //robConnect();    // connettiti al robot (loading)
+    robConnect();    // connettiti al robot (loading)
     //int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
 
     struct Stanza *ptrStanza = (struct Stanza *) malloc(numero_stanze * sizeof(struct Stanza));
