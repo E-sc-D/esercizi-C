@@ -87,7 +87,7 @@ int main()
 {   
     short x,y;
     int len;
-
+    printf("il comando gotoxy() non f")
     printf("\nInserisci la lunghezza massima della stringa\n");
     scanf("%d",&len);
     fflush(stdin);//il \n dell'enter rimane in buffer e causa la uscita prematura dalla funzione stringreader

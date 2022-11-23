@@ -12,7 +12,7 @@ int cambiaDifficolta();
 char** GeneraCampo(int,int);
 void StampaCampo(int,int,char**);
 void GeneraMine(int,int,int,char**);
-char Movement(struct Coordinata*,struct Coordinata*,int,int);
+char Movement(struct Coordinata*,int,int);
 void Game();
 
 
@@ -64,14 +64,14 @@ int main()
     return 0;
 }
 
-struct Coordinata Dilatazione(struct Coordinata *coordinata,int colonnaOffset,int rigaOffset)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
+struct Coordinata Dilatazione(struct Coordinata *coordinata,int colonnaOffset,
+int rigaOffset,int colonnaMoltiplicatore,int rigaMoltiplicatore)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
 {
     struct Coordinata coordinataCursore = {colonnaOffset,rigaOffset};
-    coordinataCursore.colonna *= coordinata->colonna;
-    coordinataCursore.riga *= coordinata->riga;
+    coordinataCursore.colonna += colonnaMoltiplicatore*coordinata->colonna;
+    coordinataCursore.riga += rigaMoltiplicatore*coordinata->riga;
 
     return coordinataCursore;
-
 }
 
 void inizializza_gioco(int difficolta)
@@ -170,7 +170,7 @@ int cambiaDifficolta(int difficolta)
     return difficolta;
 }
 
-void Refresh(int colonne,int righe, char **campoMinato,struct Coordinata *coordinataCursore)//aggiungere offsett per generalizzare la stampa
+void Refresh(int colonne,int righe, char **campoMinato,struct Coordinata coordinataCursore)//aggiungere offsett per generalizzare la stampa
 {
     gotoxy(0,0);
     for(int i = 0; i < righe ; i++)
@@ -181,21 +181,21 @@ void Refresh(int colonne,int righe, char **campoMinato,struct Coordinata *coordi
         }
         printf("\n\n");
     }
-    gotoxy(coordinataCursore->colonna,coordinataCursore->riga);
+    gotoxy(coordinataCursore.colonna,coordinataCursore.riga);
 }
 
-char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinataMatrice,int colonne,int righe)
+char Movement(struct Coordinata *coordinataMatrice,int colonne,int righe)
 { 
-    char inp;
-    while((inp = (char)getch()) != 't' && inp !='m')
+    char input;
+    struct Coordinata coordinataCursore;
+    while((input = (char)getch()) != 't' && input !='m')
     {
-        switch (inp)
+        switch (input)
         {
 
             case 'w':
             if(coordinataMatrice->riga > 0)
             {
-                coordinataCursore->riga -= 2;
                 coordinataMatrice->riga -= 1; 
             } 
             break;
@@ -203,7 +203,6 @@ char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinat
             case 's':
             if( coordinataMatrice->riga < righe - 1)
             {
-                coordinataCursore->riga += 2;
                 coordinataMatrice->riga += 1;
             }
             break;
@@ -211,7 +210,6 @@ char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinat
             case 'a':
              if(coordinataMatrice -> colonna > 0)
             {
-                coordinataCursore->colonna -= 3;
                 coordinataMatrice->colonna -= 1; 
             } 
             
@@ -220,7 +218,6 @@ char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinat
             case 'd':
              if( coordinataMatrice->colonna < colonne - 1)
             {
-                coordinataCursore->colonna += 3;
                 coordinataMatrice->colonna += 1; 
             }
             
@@ -230,7 +227,8 @@ char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinat
             break;
         }
 
-        gotoxy(coordinataCursore->colonna,coordinataCursore->riga);
+        coordinataCursore =  Dilatazione(coordinataMatrice,3,1,3,2);
+        gotoxy(coordinataCursore.colonna,coordinataCursore.riga);
         
     }
 }
@@ -284,7 +282,7 @@ int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **ca
                campoMinato[colonna][riga] = '0' + mineTrovate;//conversione da int a char 
                gotoxy(0,20);
               // Dilatazione(coordinataMatrice,3,1);
-               printf("%d,%d\n",Dilatazione(coordinataMatrice,3,1).colonna,Dilatazione(coordinataMatrice,3,1).riga);   
+               printf("%d,%d\n",Dilatazione(coordinataMatrice,3,1,3,2).colonna,Dilatazione(coordinataMatrice,3,1,3,2).riga);   
            }      
 
        
@@ -309,14 +307,14 @@ void Game()
     GeneraMine(0,6,5,campoMinato);
     system("cls");
     //campoMinato[4][0] = '7';
-    Refresh(6,5,campoMinato,&coordinataCursore);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
+    Refresh(6,5,campoMinato,Dilatazione(coordinataMatrice,3,1,3,2));//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
 
     while(input != 'm')//game loop
     {
         
 
         Refresh(6,5,campoMinato,&coordinataCursore);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
-        input = Movement(&coordinataCursore,&coordinataMatrice,6,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
+        input = Movement(&coordinataMatrice,6,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
 
         if(input == 't')//scopri casella
         {
