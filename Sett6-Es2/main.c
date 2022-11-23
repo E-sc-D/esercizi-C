@@ -63,6 +63,10 @@ int main()
     printf("gioco finito");
     return 0;
 }
+/* struct Coordinata Dilatazione(struct Coordinata coordinata,int xoffset,int y offset)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
+{
+
+} */
 
 void inizializza_gioco(int difficolta)
 {
@@ -160,7 +164,7 @@ int cambiaDifficolta(int difficolta)
     return difficolta;
 }
 
-void Refresh(int width,int height, char **campoMinato,int *x, int *y)
+void Refresh(int width,int height, char **campoMinato,int *x, int *y)//aggiungere offsett per generalizzare la stampa
 {
     gotoxy(0,0);
     for(int i = 0; i < height ; i++)
@@ -174,7 +178,7 @@ void Refresh(int width,int height, char **campoMinato,int *x, int *y)
     gotoxy(*x,*y);
 }
 
-char Movement(int *x,int *y,int *X,int *Y,int width,int height)//!fare un convertitore da coordinate normali a coordinate per la console
+char Movement(int *x,int *y,int *X,int *Y,int width,int height)
 { 
     char inp;
     while((inp = (char)getch()) != 't' && inp !='m')
