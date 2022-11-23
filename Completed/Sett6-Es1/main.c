@@ -1,20 +1,39 @@
 #include <stdio.h>
-#include "rubrica.c"
 
-#define KEYWORD_MAX_LENGTH 50
+// Un-comment for the alternate version with a jagged array instead of an array of structs
+//#define RUBRICA_FRASTAGLIATA
+
+#ifdef RUBRICA_FRASTAGLIATA
+    #include "rubricaFrastagliata.c"
+#else
+    #include "rubricaBella.c"
+#endif
+
+#define INPUT_MAX_LENGTH 50
 
 void AggiungiNuovoContatto(struct Rubrica* rubrica)
 {
-    struct Contatto nuovoContatto;
+
+    char nome[INPUT_MAX_LENGTH];
+    char cognome[INPUT_MAX_LENGTH];
+    char numeroTelefonico[INPUT_MAX_LENGTH];
 
     printf("\nAggiunta nuovo contatto\n");
-    printf("Inserisci il nome (max %d caratteri): ", NOME_MAX_LENGTH);
-    scanf("%s", &nuovoContatto.Nome);
-    printf("Inserisci il cognome (max %d caratteri): ", COGNOME_MAX_LENGTH);
-    scanf("%s", &nuovoContatto.Cognome);
-    printf("Inserisci il numero telefonico (max %d caratteri): ", NUMERO_TELEFONICO_MAX_LENGTH);
-    scanf("%s", &nuovoContatto.NumeroTelefonico);
+    printf("Inserisci il nome (max %d caratteri): ", INPUT_MAX_LENGTH);
+    scanf("%s", &nome);
+    printf("Inserisci il cognome (max %d caratteri): ", INPUT_MAX_LENGTH);
+    scanf("%s", &cognome);
+    printf("Inserisci il numero telefonico (max %d caratteri): ", INPUT_MAX_LENGTH);
+    scanf("%s", &numeroTelefonico);
 
+#ifdef RUBRICA_FRASTAGLIATA
+    char* nuovoContatto[3] = { nome, cognome, numeroTelefonico };
+#else
+    struct Contatto nuovoContatto;
+    strcpy(nuovoContatto.Nome, nome);
+    strcpy(nuovoContatto.Cognome, cognome);
+    strcpy(nuovoContatto.NumeroTelefonico, numeroTelefonico);
+#endif
     if(AddContatto(rubrica, nuovoContatto))
         printf("Contatto aggiunto con successo!\n");
     else
@@ -23,10 +42,10 @@ void AggiungiNuovoContatto(struct Rubrica* rubrica)
 
 void RicercaEsattaContatto(const struct Rubrica* rubrica)
 {
-    char keyword[KEYWORD_MAX_LENGTH];
+    char keyword[INPUT_MAX_LENGTH];
 
     printf("\nRicerca esatta contatto\n");
-    printf("Inserisci il termine da cercare (max %d caratteri): ", KEYWORD_MAX_LENGTH);
+    printf("Inserisci il termine da cercare (max %d caratteri): ", INPUT_MAX_LENGTH);
     scanf("%s", &keyword);
 
     int index = SearchContatto(rubrica, keyword, true);
@@ -38,10 +57,10 @@ void RicercaEsattaContatto(const struct Rubrica* rubrica)
 
 void RicercaApprossimataContatto(const struct Rubrica* rubrica)
 {
-    char keyword[KEYWORD_MAX_LENGTH];
+    char keyword[INPUT_MAX_LENGTH];
 
     printf("\nRicerca approssimata contatto\n");
-    printf("Inserisci il termine da cercare (max %d caratteri): ", KEYWORD_MAX_LENGTH);
+    printf("Inserisci il termine da cercare (max %d caratteri): ", INPUT_MAX_LENGTH);
     scanf("%s", &keyword);
 
     int index = SearchContatto(rubrica, keyword, false);
@@ -56,13 +75,23 @@ void StampaCompletaRubrica(const struct Rubrica* rubrica)
 
 int main()
 {
+
+#ifdef RUBRICA_FRASTAGLIATA
+    struct Rubrica rubrica;
+    InitializeRubrica(&rubrica);
+#else
     struct Rubrica rubrica = NewRubrica(); // Technically needed, but apparently not (more details in "rubrica.c")
+#endif
 
     char choice = '0';
     do
     {
         printf("\n");
-        printf("Menu principale\n");
+#ifdef RUBRICA_FRASTAGLIATA
+        printf("Menu principale (rubrica frastagliata)\n");
+#else
+        printf("Menu principale (rubrica struct)\n");
+#endif
         printf("1) Aggiungi nuova voce in rubrica\n");
         printf("2) Ricerca esatta\n");
         printf("3) Ricerca approssimata\n");
