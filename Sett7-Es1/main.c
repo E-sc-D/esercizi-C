@@ -8,6 +8,7 @@ int verificaDuplicato();
 void azzeraStruct();
 void mostraInfoStanza();
 void aggiungiStanza();
+void robDisconnect();
 struct Stanza {
     char nome[20];
     int larghezza;
@@ -18,6 +19,7 @@ struct Stanza {
 };
 
 int main() {
+
     int numero_stanze = 5;
     //robConnect();    // connettiti al robot (loading)
     //int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
@@ -127,13 +129,14 @@ void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_st
         }
     }
 
-    if (flag == 0) {    //
+    if (flag == 0) {
         printf("\nNon e stata trovata una stanza con il nome inserito");
         return;
     }
 
     printf("\nNome: %s", ptrStanza[i].nome);
     printf("\nStanza numero: %d", i);
+    printf("\nNome: %s", ptrStanza[i].nome);
     printf("\nLarghezza: %d", ptrStanza[i].larghezza);
     printf("\nLunghezza: %d", ptrStanza[i].lunghezza);
     printf("\nArea: %d", ptrStanza[i].area);
@@ -161,4 +164,10 @@ void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {
         ptrStanza[i].ostacoli = 0;
         ptrStanza[i].priorita = 0;
     }
+}
+
+void robDisconnect(){
+    system("cls");
+    printf("Disconnessione avvenuta con successo.");
+    exit(0);
 }
