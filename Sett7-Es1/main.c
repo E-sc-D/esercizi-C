@@ -6,6 +6,7 @@ void robConnect();
 int robConfig();
 int verificaDuplicato();
 void azzeraStruct();
+void mostraInfoStanza();
 struct Stanza {
     char nome[20];
     int larghezza;
@@ -24,6 +25,8 @@ int main() {
     struct Stanza *ptrStanza = (struct Stanza *) malloc(numero_stanze * sizeof(struct Stanza));
 
     azzeraStruct(ptrStanza, numero_stanze);
+
+    mostraInfoStanza("", *ptrStanza, numero_stanze);
 
 
 
@@ -91,14 +94,28 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
 
 void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) {
     int i = 0;
+    int flag = 0;
     for(i = 0; i < numero_stanze; i++) {
-        if (strcmp(nomeStanza, ptrStanza[i].nome) == 0){
+        if (strcmp(nomeStanza, ptrStanza[i].nome) == 0){    // Cerco la stanza con il nome inserito dall'utente
+            flag = 1;
             break;
         }
     }
 
+    if (flag == 0) {
+        printf("\nNon e stata trovata una stanza con il nome inserito");
+        return;
+    }
+
+
+
     printf("\nStanza numero: %d", i);
     printf("\nNome: %s", ptrStanza[i].nome);
+    printf("\nLarghezza: %d", ptrStanza[i].larghezza);
+    printf("\nLunghezza: %d", ptrStanza[i].lunghezza);
+    printf("\nArea: %d", ptrStanza[i].area);
+    printf("\nOstacoli: %d", ptrStanza[i].ostacoli);
+    printf("\nPriorita: %d", ptrStanza[i].priorita);
 }
 
 int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) {
