@@ -85,7 +85,7 @@ void GeneraMine(int difficolta,int width,int height,char **campoMinato)
     // assegno 2 colonne perché avrò la posizione x e la posizione y della mina
 
     int flag = 0;
-  
+
     for (int i = 0; i < numeroMine; i++) //ciclo che avanza nell'array di mine
     {
         do {
@@ -267,8 +267,8 @@ int Uncover(int *X,int *Y,char **campoVisibile,char **campoMinato)//!sostituire 
         struct Coordinata coord;
         coord.x = *X;
         coord.y = *Y;
-        AddElement(&lista,coord);
-       
+/*         AddElement(&lista,coord);
+ */       
            mineTrovate = Scout(*Y,*X,campoMinato,5,5);//!da convertire a lista.nodo->coordinate al posto di x,y
            if( mineTrovate > 0)
            {
