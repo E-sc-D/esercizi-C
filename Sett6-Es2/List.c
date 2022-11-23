@@ -8,8 +8,8 @@ typedef struct List
 
 struct Coordinata
 {
-    int x;
-    int y;
+    int colonna;
+    int riga;
 } emptyCoordinata = {0, 0};
 
 typedef struct Nodo

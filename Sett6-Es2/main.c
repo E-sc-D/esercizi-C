@@ -12,7 +12,7 @@ int cambiaDifficolta();
 char** GeneraCampo(int,int);
 void StampaCampo(int,int,char**);
 void GeneraMine(int,int,int,char**);
-char Movement(int*,int*,int*,int*,int,int);
+char Movement(struct Coordinata*,struct Coordinata*,int,int);
 void Game();
 
 
@@ -63,10 +63,16 @@ int main()
     printf("gioco finito");
     return 0;
 }
-/* struct Coordinata Dilatazione(struct Coordinata coordinata,int xoffset,int y offset)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
-{
 
-} */
+struct Coordinata Dilatazione(struct Coordinata *coordinata,int colonnaOffset,int rigaOffset)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
+{
+    struct Coordinata coordinataCursore = {colonnaOffset,rigaOffset};
+    coordinataCursore.colonna *= coordinata->colonna;
+    coordinataCursore.riga *= coordinata->riga;
+
+    return coordinataCursore;
+
+}
 
 void inizializza_gioco(int difficolta)
 {
@@ -75,14 +81,14 @@ void inizializza_gioco(int difficolta)
     int campo[row][column];
 }
 
-void GeneraMine(int difficolta,int width,int height,char **campoMinato) 
+void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato) 
 {
     int numeroMine;     // quante mine ci saranno sul campo
     // assegnare il numeroMine in base alla difficolta
     numeroMine = 5; // per adesso assegno 5 (statico)
 
     int minePos[numeroMine][2]; // array che contiene la posizione di ogni mina
-    // assegno 2 colonne perché avrò la posizione x e la posizione y della mina
+    // assegno 2 colonne perché avrò la posizione x e la posizioneriga della mina
 
     int flag = 0;
 
@@ -93,8 +99,8 @@ void GeneraMine(int difficolta,int width,int height,char **campoMinato)
 
                 //genero una mina con coordinate casuali
 
-                minePos[i][0] = rand() % height;        // colonna
-                minePos[i][1] = rand() % width;         // riga
+                minePos[i][0] = rand() % righe;        // colonna
+                minePos[i][1] = rand() % colonne;         // riga
 
                 printf("\ni = %d Mine position: col = %d, row = %d", i, minePos[i][0], minePos[i][1]);
 
@@ -119,19 +125,19 @@ void GeneraMine(int difficolta,int width,int height,char **campoMinato)
     }   
 }
 
-char** GeneraCampo(int width,int height)
+char** GeneraCampo(int colonne,int righe)
 {
 
-    char** campoMinato = (char**)malloc(height * sizeof(char*)); //alloco nella heap un array di puntatori
-    for(int i = 0 ; i < width ; i++)
+    char** campoMinato = (char**)malloc(colonne * sizeof(char*)); //alloco nella heap un array di puntatori
+    for(int i = 0 ; i < colonne ; i++)
     {
-        campoMinato[i] = (char*)malloc(width * sizeof(char));//dentro l'array di puntatori alloco degli array di interi
+        campoMinato[i] = (char*)malloc(righe * sizeof(char));//dentro l'array di puntatori alloco degli array di interi
     }
     printf("campo generato in teoria...\n");
 
-    for(int i = 0; i < height ; i++)//pulisce la matrice... si potrebbe usare calloc
+    for(int i = 0; i < colonne ; i++)//pulisce la matrice... si potrebbe usare calloc
     {
-        for(int j = 0; j < width ; j++)
+        for(int j = 0; j < righe ; j++)
         {
             campoMinato[i][j] = 254;
         }
@@ -140,19 +146,19 @@ char** GeneraCampo(int width,int height)
    return campoMinato;
 }
 
-void StampaCampo(int width,int height, char **campoMinato)
+/* void StampaCampo(int colonne,int righe, char **campoMinato)
 {
     printf("\n\n");
-    for(int i = 0; i < height ; i++)
+    for(int i = 0; i < righe ; i++)
     {
-        for(int j = 0; j < width ; j++)
+        for(int j = 0; j < colonne ; j++)
         {
             printf("  %c",campoMinato[i][j]);
         }
         printf("\n\n");
     }
     //free(campoMinato);
-}
+} */
 
 int cambiaDifficolta(int difficolta) 
 {
@@ -164,21 +170,21 @@ int cambiaDifficolta(int difficolta)
     return difficolta;
 }
 
-void Refresh(int width,int height, char **campoMinato,int *x, int *y)//aggiungere offsett per generalizzare la stampa
+void Refresh(int colonne,int righe, char **campoMinato,struct Coordinata *coordinataCursore)//aggiungere offsett per generalizzare la stampa
 {
     gotoxy(0,0);
-    for(int i = 0; i < height ; i++)
+    for(int i = 0; i < righe ; i++)
     {
-        for(int j = 0; j < width ; j++)
+        for(int j = 0; j < colonne ; j++)
         {
-            printf("  %c",campoMinato[i][j]);
+            printf("  %c",campoMinato[j][i]);
         }
         printf("\n\n");
     }
-    gotoxy(*x,*y);
+    gotoxy(coordinataCursore->colonna,coordinataCursore->riga);
 }
 
-char Movement(int *x,int *y,int *X,int *Y,int width,int height)
+char Movement(struct Coordinata *coordinataCursore, struct Coordinata *coordinataMatrice,int colonne,int righe)
 { 
     char inp;
     while((inp = (char)getch()) != 't' && inp !='m')
@@ -187,35 +193,35 @@ char Movement(int *x,int *y,int *X,int *Y,int width,int height)
         {
 
             case 'w':
-            if(*Y > 0)
+            if(coordinataMatrice->riga > 0)
             {
-                *y -= 2;
-                *Y -= 1; 
+                coordinataCursore->riga -= 2;
+                coordinataMatrice->riga -= 1; 
             } 
             break;
             
             case 's':
-            if( *Y < height - 1)
+            if( coordinataMatrice->riga < righe - 1)
             {
-                *y += 2;
-                *Y += 1;
+                coordinataCursore->riga += 2;
+                coordinataMatrice->riga += 1;
             }
             break;
 
             case 'a':
-             if(*X > 0)
+             if(coordinataMatrice -> colonna > 0)
             {
-                *x -= 3;
-                *X -= 1; 
+                coordinataCursore->colonna -= 3;
+                coordinataMatrice->colonna -= 1; 
             } 
             
             break;
 
             case 'd':
-             if( *X < width - 1)
+             if( coordinataMatrice->colonna < colonne - 1)
             {
-                *x += 3;
-                *X += 1; 
+                coordinataCursore->colonna += 3;
+                coordinataMatrice->colonna += 1; 
             }
             
             break;
@@ -224,14 +230,16 @@ char Movement(int *x,int *y,int *X,int *Y,int width,int height)
             break;
         }
 
-        gotoxy(*x,*y);
+        gotoxy(coordinataCursore->colonna,coordinataCursore->riga);
         
     }
 }
 
-int Scout(int X,int Y,char **campoMinato,int width,int height)//x è y , y è x ricordare che direction[x][1] è per le y
+int Scout(struct Coordinata *coordinataMatrice ,char **campoMinato,int colonne,int righe)//x è riga ,riga è x ricordare che direction[x][1] è per leriga
 {
     int mines = 0;
+    int colonna = coordinataMatrice->colonna;
+    int riga = coordinataMatrice->riga; 
     int directions[8][2] =
     {
         {0,1},  //top
@@ -246,9 +254,9 @@ int Scout(int X,int Y,char **campoMinato,int width,int height)//x è y , y è x 
 
     for(int i = 0 ; i < 8; i++)
     {
-        if((X + directions[i][1] > -1 && X + directions[i][1] < width) && (Y + directions[i][0] > -1 && Y + directions[i][0] < height))//controllo per verificare che il punto sia dentro il campo
+        if((riga + directions[i][1] > -1 && riga + directions[i][1] < righe) && (colonna + directions[i][0] > -1 && colonna + directions[i][0] < colonne))//controllo per verificare che il punto sia dentro il campo
         {
-            if( campoMinato[X + directions[i][1]][Y + directions[i][0]] == '#' )//controlla attorno la coordinata ricevuta se ce una mina
+            if( campoMinato[colonna + directions[i][0]][riga + directions[i][1]] == '#' )//controlla attorno la coordinata ricevuta se ce una mina
             {
                 mines++;
             }
@@ -258,25 +266,27 @@ int Scout(int X,int Y,char **campoMinato,int width,int height)//x è y , y è x 
     return mines;
 }
 
-int Uncover(int *X,int *Y,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
+int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
 {
     int mineTrovate;
-    List lista;
-    if(campoMinato[*Y][*X] != '#')
+    List lista = NewList();
+    int colonna = coordinataMatrice->colonna;
+    int riga = coordinataMatrice->riga;
+
+    if(campoMinato[colonna][riga] != '#')
     {
         struct Coordinata coord;
-        coord.x = *X;
-        coord.y = *Y;
-/*         AddElement(&lista,coord);
- */       
-           mineTrovate = Scout(*Y,*X,campoMinato,5,5);//!da convertire a lista.nodo->coordinate al posto di x,y
+        AddElement(&lista,*coordinataMatrice);
+       
+           mineTrovate = Scout(coordinataMatrice,campoMinato,5,6);//!da convertire a lista.nodo->coordinate al posto di x,y
            if( mineTrovate > 0)
            {
-               campoMinato[*Y][*X] = '0' + mineTrovate;//conversione da int a char 
+               campoMinato[colonna][riga] = '0' + mineTrovate;//conversione da int a char 
                gotoxy(0,20);
-               printf("%d,%d\n",*X,*Y);
-               
-           }
+              // Dilatazione(coordinataMatrice,3,1);
+               printf("%d,%d\n",Dilatazione(coordinataMatrice,3,1).colonna,Dilatazione(coordinataMatrice,3,1).riga);   
+           }      
+
        
     }
     //return hai perso
@@ -290,25 +300,27 @@ void Game()
     //premendo una freccetta le coordinate devono variare in base a un enum
     //il carattere che simboleggia il prato deve essere colorato nella posizione dove ci troviamo
     
-    char **campoMinato = GeneraCampo(5,5);
-    char **campoVisibile = GeneraCampo(5,5);
+    char **campoMinato = GeneraCampo(6,5);
+    char **campoVisibile = GeneraCampo(6,5);
     char input = 'w';
-    int x = 3,y = 1; //posizione del cursore 
-    int X = 0,Y = 0;
+    struct Coordinata coordinataCursore = {3,1};
+    struct Coordinata coordinataMatrice = {0,0};
     int state = 0;
-    GeneraMine(0,5,5,campoMinato);
+    GeneraMine(0,6,5,campoMinato);
     system("cls");
+    //campoMinato[4][0] = '7';
+    Refresh(6,5,campoMinato,&coordinataCursore);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
 
     while(input != 'm')//game loop
     {
         
 
-        Refresh(5,5,campoMinato,&x,&y);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
-        input = Movement(&x,&y,&X,&Y,5,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
+        Refresh(6,5,campoMinato,&coordinataCursore);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
+        input = Movement(&coordinataCursore,&coordinataMatrice,6,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
 
         if(input == 't')//scopri casella
         {
-            Uncover(&X,&Y,campoVisibile,campoMinato);
+            Uncover(&coordinataMatrice,campoVisibile,campoMinato);
         }
     }
     
