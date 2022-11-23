@@ -60,7 +60,6 @@ int main()
     
 */
     Game();
-    printf("gioco finito");
     return 0;
 }
 
@@ -104,9 +103,10 @@ void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato)
                      campoMinato[minePos[i][0]][minePos[i][1]] = '#';
                 }
                         
-                for (int j = i; j > -1; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
+                for (int j = i - 1; j > -1; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
-                    if ((minePos[j][0] == minePos[j - 1][0]) && (minePos[j][1] == minePos[j - 1][1]))//se ne trovo una uguale...
+                    
+                    if ((minePos[i][0] == minePos[j][0]) && (minePos[i][1] == minePos[j][1]))//se ne trovo una uguale...
                     {
                        flag = 1;//si continua il while
                        j = -1;
@@ -116,7 +116,7 @@ void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato)
                 if(flag == 0)
                 {
                     campoMinato[minePos[i][0]][minePos[i][1]] = '#';//piazzo le mine nel campo minato
-                    printf("\n mina piazzata %d, %d",minePos[i][0],minePos[i][1]);
+                    printf("\n mina piazzata %d, %d",minePos[i][1],minePos[i][0]);
                 }
                 
             }
@@ -279,11 +279,12 @@ void Game()
     char input = 'w';
     struct Coordinata coordinataMatrice = {0,0};
     int state = 0;
-
+    gotoxy(0,20);
     GeneraMine(0,6,5,campoMinato);
-   /*  system("cls");
-    Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
-
+    gotoxy(0,0);
+    //system("cls");
+    Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2)); 
+/*
     while(input != 'm')//game loop
     { 
         Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
