@@ -263,11 +263,12 @@ int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **ca
            mineTrovate = Scout(coordinataMatrice,campoMinato,6,5);//!da convertire a lista.nodo->coordinate al posto di x,y
            if( mineTrovate > 0)
            {
-               campoMinato[colonna][riga] = '0' + mineTrovate;//conversione da int a char    
+               campoVisibile[colonna][riga] = '0' + mineTrovate;//conversione da int a char    
            }      
 
        
     }
+    else{ return 1;}
     //return hai perso
 } 
 
@@ -282,19 +283,26 @@ void Game()
     gotoxy(0,20);
     GeneraMine(0,6,5,campoMinato);
     gotoxy(0,0);
-    //system("cls");
-    Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2)); 
-/*
+    system("cls");
+    Refresh(6,5,campoVisibile,Dilatazione(&coordinataMatrice,3,1,3,2)); 
+
     while(input != 'm')//game loop
     { 
-        Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
+        Refresh(6,5,campoVisibile,Dilatazione(&coordinataMatrice,3,1,3,2));
         input = Movement(&coordinataMatrice,6,5);
 
         if(input == 't')
         {
-            Uncover(&coordinataMatrice,campoVisibile,campoMinato);
+            state = Uncover(&coordinataMatrice,campoVisibile,campoMinato);
         }
-    } */
+        if(state == 1)
+        {
+            input = 'm';
+            Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
+            gotoxy(0,20);
+            printf("GAMEOVER");
+        }
+    }
     
 }
 
