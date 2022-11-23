@@ -64,8 +64,9 @@ int main()
     return 0;
 }
 
+//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice )
 struct Coordinata Dilatazione(struct Coordinata *coordinata,int colonnaOffset,
-int rigaOffset,int colonnaMoltiplicatore,int rigaMoltiplicatore)//converte le cordinate matriciali in coordinate per la stampa in console( consente spazi tra gli elementi della matrice)
+int rigaOffset,int colonnaMoltiplicatore,int rigaMoltiplicatore)
 {
     struct Coordinata coordinataCursore = {colonnaOffset,rigaOffset};
     coordinataCursore.colonna += colonnaMoltiplicatore*coordinata->colonna;
@@ -83,13 +84,9 @@ void inizializza_gioco(int difficolta)
 
 void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato) 
 {
-    int numeroMine;     // quante mine ci saranno sul campo
-    // assegnare il numeroMine in base alla difficolta
-    numeroMine = 5; // per adesso assegno 5 (statico)
-
+    int numeroMine;     
+    numeroMine = 10; 
     int minePos[numeroMine][2]; // array che contiene la posizione di ogni mina
-    // assegno 2 colonne perché avrò la posizione x e la posizioneriga della mina
-
     int flag = 0;
 
     for (int i = 0; i < numeroMine; i++) //ciclo che avanza nell'array di mine
@@ -99,27 +96,29 @@ void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato)
 
                 //genero una mina con coordinate casuali
 
-                minePos[i][0] = rand() % righe;        // colonna
-                minePos[i][1] = rand() % colonne;         // riga
-
-                printf("\ni = %d Mine position: col = %d, row = %d", i, minePos[i][0], minePos[i][1]);
+                minePos[i][0] = rand() % righe;        
+                minePos[i][1] = rand() % colonne;         
 
                 if (i == 0) // La prima mina generata non puo essere confrontata con altre (dato che non esistono), quindi possiamo prenderla per buona
-                    campoMinato[minePos[i][0]][minePos[i][1]] = '#';
-
-                for (int j = i; j > 0; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
+                {
+                     campoMinato[minePos[i][0]][minePos[i][1]] = '#';
+                }
+                        
+                for (int j = i; j > -1; j--) //torno indietro nell'array di mine per controllare se ho delle mine con la stessa posizione
                 {   
                     if ((minePos[j][0] == minePos[j - 1][0]) && (minePos[j][1] == minePos[j - 1][1]))//se ne trovo una uguale...
                     {
-                        printf("\nTrovata una mina gia generata. Ripetiamo la generazione");
-                        flag = 1;
-                        break;
+                       flag = 1;//si continua il while
+                       j = -1;
                     }
-                    else
-                    {
-                       campoMinato[minePos[i][0]][minePos[i][1]] = '#';//piazzo le mine nel campo minato
-                    }
+                    
                 }
+                if(flag == 0)
+                {
+                    campoMinato[minePos[i][0]][minePos[i][1]] = '#';//piazzo le mine nel campo minato
+                    printf("\n mina piazzata %d, %d",minePos[i][0],minePos[i][1]);
+                }
+                
             }
         while (flag == 1);  //...una nuova mina sovrascriverà questa ricominciando da capo
     }   
@@ -145,20 +144,6 @@ char** GeneraCampo(int colonne,int righe)
 
    return campoMinato;
 }
-
-/* void StampaCampo(int colonne,int righe, char **campoMinato)
-{
-    printf("\n\n");
-    for(int i = 0; i < righe ; i++)
-    {
-        for(int j = 0; j < colonne ; j++)
-        {
-            printf("  %c",campoMinato[i][j]);
-        }
-        printf("\n\n");
-    }
-    //free(campoMinato);
-} */
 
 int cambiaDifficolta(int difficolta) 
 {
@@ -188,39 +173,38 @@ char Movement(struct Coordinata *coordinataMatrice,int colonne,int righe)
 { 
     char input;
     struct Coordinata coordinataCursore;
+
     while((input = (char)getch()) != 't' && input !='m')
     {
         switch (input)
         {
 
             case 'w':
-            if(coordinataMatrice->riga > 0)
-            {
-                coordinataMatrice->riga -= 1; 
-            } 
+                if(coordinataMatrice->riga > 0)
+                {
+                    coordinataMatrice->riga -= 1; 
+                } 
             break;
             
             case 's':
-            if( coordinataMatrice->riga < righe - 1)
-            {
-                coordinataMatrice->riga += 1;
-            }
+                if( coordinataMatrice->riga < righe - 1)
+                {
+                    coordinataMatrice->riga += 1;
+                }
             break;
 
             case 'a':
-             if(coordinataMatrice -> colonna > 0)
-            {
-                coordinataMatrice->colonna -= 1; 
-            } 
-            
+                if(coordinataMatrice -> colonna > 0)
+                {
+                    coordinataMatrice->colonna -= 1; 
+                } 
             break;
 
             case 'd':
-             if( coordinataMatrice->colonna < colonne - 1)
-            {
-                coordinataMatrice->colonna += 1; 
-            }
-            
+                if( coordinataMatrice->colonna < colonne - 1)
+                {
+                    coordinataMatrice->colonna += 1; 
+                }  
             break;
         
             default:
@@ -276,13 +260,10 @@ int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **ca
         struct Coordinata coord;
         AddElement(&lista,*coordinataMatrice);
        
-           mineTrovate = Scout(coordinataMatrice,campoMinato,5,6);//!da convertire a lista.nodo->coordinate al posto di x,y
+           mineTrovate = Scout(coordinataMatrice,campoMinato,6,5);//!da convertire a lista.nodo->coordinate al posto di x,y
            if( mineTrovate > 0)
            {
-               campoMinato[colonna][riga] = '0' + mineTrovate;//conversione da int a char 
-               gotoxy(0,20);
-              // Dilatazione(coordinataMatrice,3,1);
-               printf("%d,%d\n",Dilatazione(coordinataMatrice,3,1,3,2).colonna,Dilatazione(coordinataMatrice,3,1,3,2).riga);   
+               campoMinato[colonna][riga] = '0' + mineTrovate;//conversione da int a char    
            }      
 
        
@@ -292,35 +273,27 @@ int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **ca
 
 void Game()
 {
-    //inizializzo il campo minato 
-    //inizializzo la posizione del cursore a zero e le relative coordinate
-    //ascolto per le freccette e per enter
-    //premendo una freccetta le coordinate devono variare in base a un enum
-    //il carattere che simboleggia il prato deve essere colorato nella posizione dove ci troviamo
     
     char **campoMinato = GeneraCampo(6,5);
     char **campoVisibile = GeneraCampo(6,5);
     char input = 'w';
-    struct Coordinata coordinataCursore = {3,1};
     struct Coordinata coordinataMatrice = {0,0};
     int state = 0;
+
     GeneraMine(0,6,5,campoMinato);
-    system("cls");
-    //campoMinato[4][0] = '7';
-    Refresh(6,5,campoMinato,Dilatazione(coordinataMatrice,3,1,3,2));//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
+   /*  system("cls");
+    Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
 
     while(input != 'm')//game loop
-    {
-        
+    { 
+        Refresh(6,5,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2));
+        input = Movement(&coordinataMatrice,6,5);
 
-        Refresh(6,5,campoMinato,&coordinataCursore);//aggiorna il campoMinato, ha bigogno delle coordinate per la stampa
-        input = Movement(&coordinataMatrice,6,5);//ascolta per input del giocatore gli servono le coordinate per muovere il cursore e per aggiornare le coordinate della matrice
-
-        if(input == 't')//scopri casella
+        if(input == 't')
         {
             Uncover(&coordinataMatrice,campoVisibile,campoMinato);
         }
-    }
+    } */
     
 }
 
