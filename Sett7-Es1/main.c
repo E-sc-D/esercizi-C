@@ -7,6 +7,7 @@ int robConfig();
 int verificaDuplicato();
 void azzeraStruct();
 void mostraInfoStanza();
+void robDisconnect();
 struct Stanza {
     char nome[20];
     int larghezza;
@@ -53,7 +54,7 @@ void robConnect() { // Funzione che simula l'effetto di caricamento
        
        percentage += 5;
        
-       usleep(500 * 1000);    // 500 millisecondi (50*1000 microsecondi)
+       usleep(50 * 1000);    // 50 millisecondi (50*1000 microsecondi)
        system("cls");
    }
 }
@@ -145,4 +146,10 @@ void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {
         ptrStanza[i].ostacoli = 0;
         ptrStanza[i].priorita = 0;
     }
+}
+
+void robDisconnect(){
+    system("cls");
+    printf("Disconnessione avvenuta con successo.");
+    exit(0);
 }
