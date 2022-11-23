@@ -32,20 +32,27 @@ int main() {
 }
 
 void robConnect() { // Funzione che simula l'effetto di caricamento
-    printf("\t\tConnessione a Rob8");
-    printf("\n\t\t");
-
+    
     int percentage = 0;
     char loading[] = "--------------------";
-    printf("%s %d%%", loading, percentage);
-    for(int i = 0; i < strlen(loading); i++) {
-        //printf("\33[2K\r");
-        loading[i] = 'o';
-        percentage = (i + 1) * 5;
-        printf("\n\t\t");
-        printf("%s %d%%", loading, percentage);
-        usleep(50*1000);    // 50 milisecondi (50*1000 microsecondi)
-    }
+    
+   while (percentage <= 100) {
+       printf("\t\tConnessione a Rob8");
+       printf("\n\t\t");
+
+       for (int i = 0; i < strlen(loading); i++) {
+           printf("%c", loading[i]);
+       }
+       
+       loading[percentage/5] = 'o';
+       
+       printf(" %d%%", percentage);
+       
+       percentage += 5;
+       
+       usleep(500 * 1000);    // 500 millisecondi (50*1000 microsecondi)
+       system("cls");
+   }
 }
 
 int robConfig() {   // Funzione che chiede all'utente quante stanze ci sono nella casa e torna il loro numero
