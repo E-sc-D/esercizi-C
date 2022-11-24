@@ -84,7 +84,7 @@ void inizializza_gioco(int difficolta)
 void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato) 
 {
     int numeroMine;     
-    numeroMine = 10; 
+    numeroMine = 5; 
     int minePos[numeroMine][2]; // array che contiene la posizione di ogni mina
     int flag = 0;
 
@@ -217,11 +217,12 @@ char Movement(struct Coordinata *coordinataMatrice,int colonne,int righe)
     }
 }
 
-int Scout(struct Coordinata *coordinataMatrice ,char **campoMinato,int colonne,int righe)//x è riga ,riga è x ricordare che direction[x][1] è per leriga
+int Scout(struct Coordinata coordinataMatrice ,char **campoMinato,int colonne,int righe,List *lista)//x è riga ,riga è x ricordare che direction[x][1] è per leriga
 {
+    struct Coordinata coordinata;
     int mines = 0;
-    int colonna = coordinataMatrice->colonna;
-    int riga = coordinataMatrice->riga; 
+    int colonna = coordinataMatrice.colonna;
+    int riga = coordinataMatrice.riga; 
     int directions[8][2] =
     {
         {0,1},  //top
@@ -242,30 +243,48 @@ int Scout(struct Coordinata *coordinataMatrice ,char **campoMinato,int colonne,i
             {
                 mines++;
             }
+            else
+            {
+                coordinata.colonna = colonna + directions[i][0];
+                coordinata.riga = riga + directions[i][1];
+                AddElement(lista,coordinata);
+            }
         }
     }
 
     return mines;
 }
 
-int Uncover(struct Coordinata *coordinataMatrice ,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
+int Uncover(struct Coordinata coordinataMatrice ,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
 {
     int mineTrovate;
     List lista = NewList();
-    int colonna = coordinataMatrice->colonna;
-    int riga = coordinataMatrice->riga;
-
-    if(campoMinato[colonna][riga] != '#')
+    
+    if(campoMinato[coordinataMatrice.colonna][coordinataMatrice.riga] != '#')
     {
-        struct Coordinata coord;
-        AddElement(&lista,*coordinataMatrice);
-       
-           mineTrovate = Scout(coordinataMatrice,campoMinato,6,5);//!da convertire a lista.nodo->coordinate al posto di x,y
-           if( mineTrovate > 0)
-           {
-               campoVisibile[colonna][riga] = '0' + mineTrovate;//conversione da int a char    
-           }      
-
+        AddElement(&lista,coordinataMatrice);
+        while(lista.Head != NULL)
+        {
+            coordinataMatrice = GetLastElement(&lista)->coordinata;
+            mineTrovate = Scout(coordinataMatrice,campoMinato, 6, 5, &lista);//!da convertire a lista.nodo->coordinate al posto di x,y
+            if( mineTrovate > 0)
+            {
+                campoVisibile[coordinataMatrice.colonna][coordinataMatrice.riga] = '0' + mineTrovate;//conversione da int a char   
+                DeleteLastElement(&lista); 
+                gotoxy(0,20);
+                printf("%d",length(&lista));
+                gotoxy(0,0);
+            }  
+            else
+            {
+                campoVisibile[coordinataMatrice.colonna][coordinataMatrice.riga] = ' ';//conversione da int a char 
+                DeleteLastElement(&lista);
+                gotoxy(0,20);
+                printf("%d",length(&lista));
+                gotoxy(0,0);
+            }
+        }
+               
     }
     else{ return 1;}
     //return hai perso
@@ -292,7 +311,7 @@ void Game()
 
         if(input == 't')
         {
-            state = Uncover(&coordinataMatrice,campoVisibile,campoMinato);
+            state = Uncover(coordinataMatrice,campoVisibile,campoMinato);
         }
         if(state == 1)
         {

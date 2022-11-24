@@ -76,7 +76,6 @@ void DeleteLastElement(struct List *lista)
     }
         
     Nodo *navigator = lista->Head;
-    Nodo *prec;
     while (navigator->Nodo->Nodo != NULL)
     {
         navigator = navigator->Nodo;
