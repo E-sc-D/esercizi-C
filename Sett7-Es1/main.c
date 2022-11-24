@@ -8,6 +8,8 @@ int verificaDuplicato();
 void azzeraStruct();
 void mostraInfoStanza();
 void aggiungiStanza();
+void modificaStanza();
+void calcolaPercorso();
 void robDisconnect();
 struct Stanza {
     char nome[20];
@@ -29,7 +31,8 @@ int main() {
 
 
     aggiungiStanza(ptrStanza, numero_stanze);
-    mostraInfoStanza("Paolo", ptrStanza, numero_stanze);
+
+    modificaStanza("Paolo", ptrStanza, numero_stanze);
     return 0;
 }
 
@@ -57,12 +60,48 @@ void robConnect() { // Funzione che simula l'effetto di caricamento
    }
 }
 
+void menu(struct Stanza *ptrStanza, int numero_stanze) {
+    int scelta;
+    do {
+        printf("Benvenuto nel menu principale di Rob8");
+        printf("\nScegli una opzione inserendo il numero corrispondente a sinistra di ogni opzione");
+        printf("\n\n");
+        printf("0. Aggiungi una stanza");
+        printf("\n1. Mostra informazioni di una stanza");
+        printf("\n2. Modifica una stanza");
+        printf("\n3.Calcola il percorso");
+        printf("\n\n4. Disconnettiti dal Rob8\r\n");
+
+        scanf("%d", &scelta);
+
+        switch(scelta) {
+            case 4:
+                robDisconnect();
+                break;
+            case 0:
+                aggiungiStanza(ptrStanza, numero_stanze);
+                break;
+            case 1:
+                mostraInfoStanza(ptrStanza, numero_stanze);
+                break;
+            case 2:
+                modificaStanza(ptrStanza, numero_stanze);
+                break;
+            case 3:
+                calcolaPercorso();
+                break;
+        }
+    }
+    while(1);
+}
+
 int robConfig() {   // Funzione che chiede all'utente quante stanze ci sono nella casa e torna il loro numero
     int numero_stanze;
 
     printf("\nBenvenuto nella pagina di configurazione");
     printf("\nInserisci il numero di stanze presenti nella tua casa");
     scanf("%d", &numero_stanze);
+    system("cls");
 
 
     return numero_stanze;
@@ -114,7 +153,13 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
 
 }
 
-void modificaStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) {
+void modificaStanza(struct Stanza *ptrStanza, int numero_stanze) {   // Funzione che dato il nome della stanza consente di modificare le informazioni di essa
+    char nomeStanza[20];
+
+    system("cls");
+    printf("Inserisci il nome della stanza della quale vuoi stampare le informazioni\r\n");
+    scanf("%s", &nomeStanza);
+
     int indiceStanza = 0;
     int flag = 0;
     for(indiceStanza = 0; indiceStanza < numero_stanze; indiceStanza++) {
@@ -131,6 +176,7 @@ void modificaStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stan
 
     int scelta = 0;
     do {
+        system("cls");
         printf("Modifica le informazioni della stanza inserendo il numero corrispondente a sinistra");
 
         printf("\n0. Nome: %s", ptrStanza[indiceStanza].nome);
@@ -144,41 +190,50 @@ void modificaStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stan
 
         scanf("%d", &scelta);
 
+        system("cls");
         switch(scelta) {
             case 6: // Se la scelta è 6, torna direttamente nel menu principale
                 return;
             case 0:
                 printf("Inserisci il nome della stanza\r\n");
-                scanf("%s", ptrStanza[indiceStanza].nome);
+                scanf("%s", &ptrStanza[indiceStanza].nome);
                 break;
             case 1:
                 printf("Inserisci la larghezza della stanza\r\n");
-                scanf("%d", ptrStanza[indiceStanza].larghezza);
+                scanf("%d", &ptrStanza[indiceStanza].larghezza);
                 break;
             case 2:
                 printf("Inserisci la lunghezza della stanza\r\n");
-                scanf("%d", ptrStanza[indiceStanza].lunghezza);
+                scanf("%d", &ptrStanza[indiceStanza].lunghezza);
                 break;
             case 3:
                 printf("Inserisci l'area della stanza\r\n");
-                scanf("%d", ptrStanza[indiceStanza].area);
+                scanf("%d", &ptrStanza[indiceStanza].area);
                 break;
             case 4:
                 printf("Inserisci il numero di ostacoli nella stanza\r\n");
-                scanf("%d", ptrStanza[indiceStanza].ostacoli);
+                scanf("%d", &ptrStanza[indiceStanza].ostacoli);
                 break;
             case 5:
                 printf("Inserisci la priorita della stanza\r\n");
-                scanf("%d", ptrStanza[indiceStanza].priorita);
+                scanf("%d", &ptrStanza[indiceStanza].priorita);
                 break;
             default:
                 return;
         }
+
+        printf("Sono uscito dal switch");
     }
-    while (scelta > 6 || scelta < 0);
+    while(1);
 }
 
-void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) { // Funzione che stampa le informazioni di una stanza dato il nome (nomeStanza[])
+void mostraInfoStanza(struct Stanza *ptrStanza, int numero_stanze) { // Funzione che stampa le informazioni di una stanza dato il nome
+    char nomeStanza[20];
+
+    system("cls");
+    printf("Inserisci il nome della stanza della quale vuoi stampare le informazioni\r\n");
+    scanf("%s", &nomeStanza);
+
     int indiceStanza = 0;
     int flag = 0;
     for(indiceStanza = 0; indiceStanza < numero_stanze; indiceStanza++) {
@@ -192,7 +247,7 @@ void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_st
         printf("\nNon e stata trovata una stanza con il nome inserito");
         return;
     }
-
+    system("cls");
     printf("\nNome: %s", ptrStanza[indiceStanza].nome);
     printf("\nStanza numero: %d", indiceStanza);
     printf("\nLarghezza: %d", ptrStanza[indiceStanza].larghezza);
@@ -200,6 +255,10 @@ void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_st
     printf("\nArea: %d", ptrStanza[indiceStanza].area);
     printf("\nOstacoli: %d", ptrStanza[indiceStanza].ostacoli);
     printf("\nPriorita: %d", ptrStanza[indiceStanza].priorita);
+}
+
+void calcolaPercorso() {
+
 }
 
 int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) {   // Funzione che dato il nome della stanza controlla se ci sono duplicati
