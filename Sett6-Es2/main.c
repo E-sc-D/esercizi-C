@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <ctype.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
@@ -243,27 +243,40 @@ int Scout(struct Coordinata coordinataMatrice ,char **campoMinato,int colonne,in
             {
                 mines++;
             }
-            else
-            {
-                coordinata.colonna = colonna + directions[i][0];
-                coordinata.riga = riga + directions[i][1];
-                AddElement(lista,coordinata);
-            }
+                              
         }
     }
+
+    if(mines == 0)
+    {
+        for(int i = 0 ; i < 8; i++)
+        {
+            if((riga + directions[i][1] > -1 && riga + directions[i][1] < righe) && (colonna + directions[i][0] > -1 && colonna + directions[i][0] < colonne))//controllo per verificare che il punto sia dentro il campo
+            {
+                if(!isdigit(campoMinato[colonna + directions[i][0]][riga + directions[i][1]]))
+                {
+                    coordinata.colonna = colonna + directions[i][0];
+                    coordinata.riga = riga + directions[i][1];
+                    AddUniqueElement(lista,coordinata);  
+                }               
+            }
+        } 
+    }
+    
+
 
     return mines;
 }
 
 int Uncover(struct Coordinata coordinataMatrice ,char **campoVisibile,char **campoMinato)//!sostituire x,y con coordinate
 {
-    int mineTrovate;
+    int mineTrovate = 0;
     List lista = NewList();
     
-    if(campoMinato[coordinataMatrice.colonna][coordinataMatrice.riga] != '#')
+    if(campoMinato[coordinataMatrice.colonna][coordinataMatrice.riga] == 254)
     {
-        AddElement(&lista,coordinataMatrice);
-        while(lista.Head != NULL)
+        AddUniqueElement(&lista,coordinataMatrice);
+        while(lista.Head != NULL)//la condizione del while è soddisfabile
         {
             coordinataMatrice = GetLastElement(&lista)->coordinata;
             mineTrovate = Scout(coordinataMatrice,campoMinato, 6, 5, &lista);//!da convertire a lista.nodo->coordinate al posto di x,y
@@ -283,10 +296,9 @@ int Uncover(struct Coordinata coordinataMatrice ,char **campoVisibile,char **cam
                 printf("%d",length(&lista));
                 gotoxy(0,0);
             }
-        }
-               
+        }        
     }
-    else{ return 1;}
+    
     //return hai perso
 } 
 
@@ -298,9 +310,7 @@ void Game()
     char input = 'w';
     struct Coordinata coordinataMatrice = {0,0};
     int state = 0;
-    gotoxy(0,20);
     GeneraMine(0,6,5,campoMinato);
-    gotoxy(0,0);
     system("cls");
     Refresh(6,5,campoVisibile,Dilatazione(&coordinataMatrice,3,1,3,2)); 
 

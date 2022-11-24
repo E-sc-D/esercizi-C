@@ -87,7 +87,7 @@ int main()
 {   
     short x,y;
     int len;
-    printf("il comando gotoxy() non f")
+    printf("\nil comando gotoxy() non funziona nelle recenti versioni del cmd di windows 10 e 11, funziona su powershell e su windows terminal \n");
     printf("\nInserisci la lunghezza massima della stringa\n");
     scanf("%d",&len);
     fflush(stdin);//il \n dell'enter rimane in buffer e causa la uscita prematura dalla funzione stringreader
