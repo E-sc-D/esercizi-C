@@ -25,16 +25,11 @@ int main() {
     //int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
 
     struct Stanza *ptrStanza = (struct Stanza *) malloc(numero_stanze * sizeof(struct Stanza));
-
     azzeraStruct(ptrStanza, numero_stanze);
 
 
     aggiungiStanza(ptrStanza, numero_stanze);
     mostraInfoStanza("Paolo", ptrStanza, numero_stanze);
-
-
-
-
     return 0;
 }
 
@@ -90,7 +85,7 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
     }
 
     struct Stanza s;
-    printf("Inserisci il nome della stanza");
+    printf("Inserisci il nome della stanza\n\r");
     scanf("%s", &s.nome);
 
     if (verificaDuplicato(*ptrStanza, numero_stanze, s.nome) == 1){
@@ -98,19 +93,19 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
         return;
     }
 
-    printf("\nInserisci la larghezza della stanza");
+    printf("\nInserisci la larghezza della stanza\n\r");
     scanf("%d", &s.larghezza);
 
-    printf("\nInserisci la lunghezza della stanza");
+    printf("\nInserisci la lunghezza della stanza\n\r");
     scanf("%d", &s.lunghezza);
 
-    printf("\nInserisci l'area della stanza");
+    printf("\nInserisci l'area della stanza\n\r");
     scanf("%d", &s.area);
 
-    printf("\nInserisci il numero di ostacoli della stanza");
+    printf("\nInserisci il numero di ostacoli della stanza\n\r");
     scanf("%d", &s.ostacoli);
 
-    printf("\nInserisci la priorita di pulizia della stanza");
+    printf("\nInserisci la priorita di pulizia della stanza\n\r");
     scanf("%d", &s.priorita);
 
     ptrStanza[i] = s;   // i è l'indice della struttura non occupata
@@ -119,12 +114,12 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
 
 }
 
-void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) { // Funzione che stampa le informazioni di una stanza dato il nome
-    int i = 0;
+void modificaStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) {
+    int indiceStanza = 0;
     int flag = 0;
-    for(i = 0; i < numero_stanze; i++) {
-        if (strcmp(nomeStanza, ptrStanza[i].nome) == 0){    // Cerco la stanza con il nome inserito dall'utente
-            flag = 1;   // è stata trovata una stanza con il nome insterito
+    for(indiceStanza = 0; indiceStanza < numero_stanze; indiceStanza++) {
+        if (strcmp(nomeStanza, ptrStanza[indiceStanza].nome) == 0){    // Cerco la stanza con il nome inserito dall'utente
+            flag = 1;   // è stata trovata una stanza di indiceStanza con il nome inserito
             break;
         }
     }
@@ -134,14 +129,77 @@ void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_st
         return;
     }
 
-    printf("\nNome: %s", ptrStanza[i].nome);
-    printf("\nStanza numero: %d", i);
-    printf("\nNome: %s", ptrStanza[i].nome);
-    printf("\nLarghezza: %d", ptrStanza[i].larghezza);
-    printf("\nLunghezza: %d", ptrStanza[i].lunghezza);
-    printf("\nArea: %d", ptrStanza[i].area);
-    printf("\nOstacoli: %d", ptrStanza[i].ostacoli);
-    printf("\nPriorita: %d", ptrStanza[i].priorita);
+    int scelta = 0;
+    do {
+        printf("Modifica le informazioni della stanza inserendo il numero corrispondente a sinistra");
+
+        printf("\n0. Nome: %s", ptrStanza[indiceStanza].nome);
+        printf("\n1. Larghezza: %d", ptrStanza[indiceStanza].larghezza);
+        printf("\n2. Lunghezza: %d", ptrStanza[indiceStanza].lunghezza);
+        printf("\n3. Area: %d", ptrStanza[indiceStanza].area);
+        printf("\n4. Ostacoli: %d", ptrStanza[indiceStanza].ostacoli);
+        printf("\n5. Priorita: %d", ptrStanza[indiceStanza].priorita);
+
+        printf("\n\n6. Torna nel menu principale\r\n");
+
+        scanf("%d", &scelta);
+
+        switch(scelta) {
+            case 6: // Se la scelta è 6, torna direttamente nel menu principale
+                return;
+            case 0:
+                printf("Inserisci il nome della stanza\r\n");
+                scanf("%s", ptrStanza[indiceStanza].nome);
+                break;
+            case 1:
+                printf("Inserisci la larghezza della stanza\r\n");
+                scanf("%d", ptrStanza[indiceStanza].larghezza);
+                break;
+            case 2:
+                printf("Inserisci la lunghezza della stanza\r\n");
+                scanf("%d", ptrStanza[indiceStanza].lunghezza);
+                break;
+            case 3:
+                printf("Inserisci l'area della stanza\r\n");
+                scanf("%d", ptrStanza[indiceStanza].area);
+                break;
+            case 4:
+                printf("Inserisci il numero di ostacoli nella stanza\r\n");
+                scanf("%d", ptrStanza[indiceStanza].ostacoli);
+                break;
+            case 5:
+                printf("Inserisci la priorita della stanza\r\n");
+                scanf("%d", ptrStanza[indiceStanza].priorita);
+                break;
+            default:
+                return;
+        }
+    }
+    while (scelta > 6 || scelta < 0);
+}
+
+void mostraInfoStanza(char nomeStanza[], struct Stanza *ptrStanza, int numero_stanze) { // Funzione che stampa le informazioni di una stanza dato il nome (nomeStanza[])
+    int indiceStanza = 0;
+    int flag = 0;
+    for(indiceStanza = 0; indiceStanza < numero_stanze; indiceStanza++) {
+        if (strcmp(nomeStanza, ptrStanza[indiceStanza].nome) == 0){    // Cerco la stanza con il nome inserito dall'utente
+            flag = 1;   // è stata trovata una stanza di indice i con il nome inserito
+            break;
+        }
+    }
+
+    if (flag == 0) {
+        printf("\nNon e stata trovata una stanza con il nome inserito");
+        return;
+    }
+
+    printf("\nNome: %s", ptrStanza[indiceStanza].nome);
+    printf("\nStanza numero: %d", indiceStanza);
+    printf("\nLarghezza: %d", ptrStanza[indiceStanza].larghezza);
+    printf("\nLunghezza: %d", ptrStanza[indiceStanza].lunghezza);
+    printf("\nArea: %d", ptrStanza[indiceStanza].area);
+    printf("\nOstacoli: %d", ptrStanza[indiceStanza].ostacoli);
+    printf("\nPriorita: %d", ptrStanza[indiceStanza].priorita);
 }
 
 int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) {   // Funzione che dato il nome della stanza controlla se ci sono duplicati
@@ -155,7 +213,7 @@ int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) 
     return 0;   // non ci sono duplicati
 }
 
-void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {
+void azzeraStruct(struct Stanza *ptrStanza, int numero_stanze) {    // mette a 0 tutti gli elementi nella struct ("" per le stringhe)
     for (int i = 0; i < numero_stanze; i++) {
         strcpy(ptrStanza[i].nome, "");  // corrisponde a ptrStanza[i].nome = ""; che pero non si puo fare
         ptrStanza[i].larghezza = 0;
