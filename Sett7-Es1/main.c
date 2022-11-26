@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <conio.h>
+#include <ctype.h>
+void menu();
 void robConnect();
 int robConfig();
 int verificaDuplicato();
@@ -22,17 +25,16 @@ struct Stanza {
 
 int main() {
 
-    int numero_stanze = 5;
+    //int numero_stanze = 5;
     //robConnect();    // connettiti al robot (loading)
-    //int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
+    int numero_stanze = robConfig(); // uso robConfig() per chiedere all'utente il numero di stanze
 
     struct Stanza *ptrStanza = (struct Stanza *) malloc(numero_stanze * sizeof(struct Stanza));
     azzeraStruct(ptrStanza, numero_stanze);
 
+    menu(ptrStanza, numero_stanze);
 
-    aggiungiStanza(ptrStanza, numero_stanze);
 
-    modificaStanza("Paolo", ptrStanza, numero_stanze);
     return 0;
 }
 
@@ -63,13 +65,14 @@ void robConnect() { // Funzione che simula l'effetto di caricamento
 void menu(struct Stanza *ptrStanza, int numero_stanze) {
     int scelta;
     do {
-        printf("Benvenuto nel menu principale di Rob8");
+        system("cls");
+        printf("------ Menu principale di Rob8 ------");
         printf("\nScegli una opzione inserendo il numero corrispondente a sinistra di ogni opzione");
         printf("\n\n");
         printf("0. Aggiungi una stanza");
         printf("\n1. Mostra informazioni di una stanza");
         printf("\n2. Modifica una stanza");
-        printf("\n3.Calcola il percorso");
+        printf("\n3. Calcola il percorso");
         printf("\n\n4. Disconnettiti dal Rob8\r\n");
 
         scanf("%d", &scelta);
@@ -98,8 +101,8 @@ void menu(struct Stanza *ptrStanza, int numero_stanze) {
 int robConfig() {   // Funzione che chiede all'utente quante stanze ci sono nella casa e torna il loro numero
     int numero_stanze;
 
-    printf("\nBenvenuto nella pagina di configurazione");
-    printf("\nInserisci il numero di stanze presenti nella tua casa");
+    printf("Benvenuto nella pagina di configurazione di Rob8");
+    printf("\nInserisci il numero di stanze presenti nella tua casa\r\n");
     scanf("%d", &numero_stanze);
     system("cls");
 
@@ -107,8 +110,8 @@ int robConfig() {   // Funzione che chiede all'utente quante stanze ci sono nell
     return numero_stanze;
 }
 
-
 void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
+    system("cls");
     int flag = 0;
     int i = 0;
     for (i = 0; i < numero_stanze; i++) {
@@ -118,8 +121,10 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
         }
     }
 
-    if (flag = 0) {
+    if (flag == 0) {
         printf("Attenzione: il vettore di stanze e completo. Non si possono aggiungere ulteriori stanze");
+        printf("\nPremi invio per tornare al menu principale");
+        getch();
         return;
     }
 
@@ -148,6 +153,10 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
     scanf("%d", &s.priorita);
 
     ptrStanza[i] = s;   // i è l'indice della struttura non occupata
+
+    system("cls");
+    printf("L'inserimento della stanza e avvenuto con successo. Premi invio per tornare al menu principale\n\r");
+    getch();
 
     //calcolaPriorita?
 
@@ -221,8 +230,6 @@ void modificaStanza(struct Stanza *ptrStanza, int numero_stanze) {   // Funzione
             default:
                 return;
         }
-
-        printf("Sono uscito dal switch");
     }
     while(1);
 }
@@ -244,7 +251,7 @@ void mostraInfoStanza(struct Stanza *ptrStanza, int numero_stanze) { // Funzione
     }
 
     if (flag == 0) {
-        printf("\nNon e stata trovata una stanza con il nome inserito");
+        printf("\nNon e stata trovata una stanza con il nome inserito\r\n");
         return;
     }
     system("cls");
@@ -255,6 +262,11 @@ void mostraInfoStanza(struct Stanza *ptrStanza, int numero_stanze) { // Funzione
     printf("\nArea: %d", ptrStanza[indiceStanza].area);
     printf("\nOstacoli: %d", ptrStanza[indiceStanza].ostacoli);
     printf("\nPriorita: %d", ptrStanza[indiceStanza].priorita);
+
+    printf("\n\rPremi invio per tornare al menu principale\n\r");
+    getch();
+
+
 }
 
 void calcolaPercorso() {
