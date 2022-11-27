@@ -19,10 +19,13 @@ void Game();
 int main() 
 {
     srand(time(NULL));
-    /*
+
 
     int scelta = 0;
     int difficolta = 1;
+
+    List lista = NewList(); //c# feeling!!! // Il problema era che l'head della lista non è necessariamente settato a NULL,
+    struct Coordinata coordinata = {5, 4};
 
     do {
         system("cls");
@@ -33,7 +36,7 @@ int main()
 
         scanf("%d", &scelta);
 
-        if (scelta == 2) 
+        if (scelta == 2)
         {
             difficolta = cambiaDifficolta(difficolta);
             scelta = 0;
@@ -41,25 +44,11 @@ int main()
     }
     while (scelta > 3 || scelta < 1);
 
-    switch (scelta) 
+    switch (scelta)
     {
-        case 1: gioca(difficolta);
+        case 1: Game(difficolta);
         case 3: exit(0);
-    } */
-   
-    List lista = NewList(); //c# feeling!!! // Il problema era che l'head della lista non è necessariamente settato a NULL, 
-    struct Coordinata coordinata = {5, 4};
-/*
-    printf("lol\n");
-    AddElement(&lista, emptyCoordinata);
-    printf("%d lala %d\n",GetLastElement(&lista)->coordinata.x,length(&lista));
-    AddElement(&lista,coordinata);
-    printf("%d lala %d\n",GetLastElement(&lista)->coordinata.x,length(&lista));
-    DeleteLastElement(&lista);
-    printf("%d lala \n",GetLastElement(&lista)->coordinata.x);
-    
-*/
-    Game();
+    }
     return 0;
 }
 
@@ -84,7 +73,7 @@ void inizializza_gioco(int difficolta)
 void GeneraMine(int difficolta,int colonne,int righe,char **campoMinato) 
 {
     int numeroMine;     
-    numeroMine = 5; 
+    numeroMine = difficolta;
     int minePos[numeroMine][2]; // array che contiene la posizione di ogni mina
     int flag = 0;
     gotoxy(0,20);  
@@ -343,7 +332,7 @@ int ControllaVittoria(char **campoVisibile,int mine,int colonne,int righe)
         return 1;
 }
 
-void Game()
+void Game(int difficolta)
 {
     
     char **campoMinato = GeneraCampo(6,5);
@@ -351,7 +340,7 @@ void Game()
     char input = 'w';
     struct Coordinata coordinataMatrice = {0,0};
     int state = 1;  
-    GeneraMine(0,6,5,campoMinato);
+    GeneraMine(difficolta,6,5,campoMinato);
     system("cls");
     while(input != 'm' && state == 1)//game loop
     { 
