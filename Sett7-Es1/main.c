@@ -62,7 +62,7 @@ void robConnect() { // Funzione che simula l'effetto di caricamento
    }
 }
 
-void menu(struct Stanza *ptrStanza, int numero_stanze) {
+void menu(struct Stanza *ptrStanza, int numero_stanze) {    // Menù principale che consente all'utente di scegliere tra le varie opzioni di rob8
     int scelta;
     do {
         system("cls");
@@ -179,7 +179,8 @@ void modificaStanza(struct Stanza *ptrStanza, int numero_stanze) {   // Funzione
     }
 
     if (flag == 0) {
-        printf("\nNon e stata trovata una stanza con il nome inserito");
+        printf("\nNon e stata trovata una stanza con il nome inserito. Premi invio per continuare\r\n");
+        getch();
         return;
     }
 
@@ -251,7 +252,8 @@ void mostraInfoStanza(struct Stanza *ptrStanza, int numero_stanze) { // Funzione
     }
 
     if (flag == 0) {
-        printf("\nNon e stata trovata una stanza con il nome inserito\r\n");
+        printf("\nNon e stata trovata una stanza con il nome inserito. Premi invio per continuare\r\n");
+        getch();
         return;
     }
     system("cls");
