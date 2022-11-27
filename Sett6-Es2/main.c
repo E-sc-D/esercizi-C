@@ -29,7 +29,8 @@ int main()
 
     do {
         system("cls");
-        printf("1) Gioca");
+        printf("----Comandi: Premi 't' per svelare una casella. Usa WASD per muoverti -----");
+        printf("\n1) Gioca");
         printf("\n\tDifficolta: %d", difficolta);
         printf("\n2) Cambia difficolta");
         printf("\n3) Esci\r\n");
