@@ -314,7 +314,7 @@ int Uncover(struct Coordinata coordinataMatrice ,char **campoVisibile,char **cam
     return 1;
 } 
 
-int ControllaVittoria(char **campoVisibile,int mine,int colonne,int righe)
+int ControllaVittoria(char **campoVisibile,int mine,int colonne,int righe,int defalt)
 {
     int counter = 0;
     for(int i = 0; i < righe ; i++)
@@ -322,15 +322,19 @@ int ControllaVittoria(char **campoVisibile,int mine,int colonne,int righe)
         for(int j = 0; j < colonne ; j++)
         {
             if(campoVisibile[j][i] == -2)
+            {
                 counter++;
+            }
+                
            
         }
        
     }
     if(counter == mine)
         return 2;
-    else
-        return 1;
+    
+    return defalt;
+    
 }
 
 void Game(int difficolta)
@@ -343,15 +347,20 @@ void Game(int difficolta)
     int state = 1;  
     GeneraMine(difficolta,6,5,campoMinato);
     system("cls");
+    Refresh(6,5,campoVisibile,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2),1);
+    ControllaVittoria(campoVisibile,difficolta,6,5,state);
     while(input != 'm' && state == 1)//game loop
     { 
-        Refresh(6,5,campoVisibile,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2),1);
+        
         input = Movement(&coordinataMatrice,6,5);
-        state = ControllaVittoria(campoVisibile,difficolta,6,5);
         if(input == 't')
         {
             state = Uncover(coordinataMatrice,campoVisibile,campoMinato);
+            Refresh(6,5,campoVisibile,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2),1);
+            state = ControllaVittoria(campoVisibile,difficolta,6,5,state);
+            
         }
+        
           
     }
 
