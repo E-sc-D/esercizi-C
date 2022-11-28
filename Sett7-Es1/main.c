@@ -13,6 +13,8 @@ void mostraInfoStanza();
 void aggiungiStanza();
 void modificaStanza();
 void calcolaPercorso();
+void selectionSort();
+void swap();
 void robDisconnect();
 struct Stanza {
     char nome[20];
@@ -91,7 +93,7 @@ void menu(struct Stanza *ptrStanza, int numero_stanze) {    // Menù principale 
                 modificaStanza(ptrStanza, numero_stanze);
                 break;
             case 3:
-                calcolaPercorso();
+                calcolaPercorso(ptrStanza, numero_stanze);
                 break;
         }
     }
@@ -271,9 +273,45 @@ void mostraInfoStanza(struct Stanza *ptrStanza, int numero_stanze) { // Funzione
 
 }
 
-void calcolaPercorso() {
+void calcolaPercorso(struct Stanza *ptrStanza, int numero_stanze) {
+    selectionSort(ptrStanza, numero_stanze);
 
+    system("cls");
+    printf("Percorso di pulizia");
+    for(int i = 0; i < numero_stanze; i++) {
+        if(strcmp(ptrStanza[i].nome, "") != 0)
+            printf("\n--> Stanza: %s\tPriorita: %d -->", ptrStanza[i].nome, ptrStanza[i].priorita);
+    }
+
+    printf("\nPremi invio per tornare al menu principale.");
+    getch();
 }
+
+void selectionSort(struct Stanza *ptrStanza, int numero_stanze) {
+    int i, j, min_idx;
+
+    // One by one move boundary of unsorted subarray
+    for (i = 0; i < numero_stanze - 1; i++)
+    {
+        // Find the minimum element in unsorted array
+        min_idx = i;
+        for (j = i+1; j < numero_stanze; j++)
+            if (ptrStanza[j].priorita < ptrStanza[min_idx].priorita)
+                min_idx = j;
+
+        // Swap the found minimum element with the first element
+        if(min_idx != i)
+            swap(&ptrStanza[min_idx], &ptrStanza[i]);
+    }
+}
+
+void swap(struct Stanza *s1, struct Stanza *s2) {
+    struct Stanza temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
+}
+
+
 
 int verificaDuplicato(struct Stanza *ptrStanza, int numero_stanze, char nome[]) {   // Funzione che dato il nome della stanza controlla se ci sono duplicati
     int flag = 0;
