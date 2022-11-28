@@ -347,7 +347,7 @@ void Game(int difficolta)
     { 
         Refresh(6,5,campoVisibile,campoMinato,Dilatazione(&coordinataMatrice,3,1,3,2),1);
         input = Movement(&coordinataMatrice,6,5);
-        state = ControllaVittoria(campoVisibile,5,6,5);
+        state = ControllaVittoria(campoVisibile,difficolta,6,5);
         if(input == 't')
         {
             state = Uncover(coordinataMatrice,campoVisibile,campoMinato);
