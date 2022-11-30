@@ -9,6 +9,7 @@ void aggiungiStudente();
 void mostraInfoStudente();
 int verificaDuplicatoStudente();
 void azzeraStructStudente();
+void generaInsegnamenti();
 
 struct Studente {
     // Non usare 0 come numero matricola!!
@@ -36,14 +37,20 @@ struct PianoStudi {  // rivedere forse il nome di questa struct
 };
 
 int main () {
+    int numero_insegnamenti;
+    struct Insegnamento *ptrInsegnamento;
+    generaInsegnamenti(&numero_insegnamenti, &ptrInsegnamento);
+
 
     int numero_studenti = 10;
 
-    struct Studente *ptrStudente = (struct Studente *) malloc(numero_studenti * sizeof(struct Studente));
+    struct Studente *ptrStudente = (struct Studente *) malloc(numero_studenti * sizeof(struct Studente));   // creo un array di numero_studenti strutture
+
+
+
+    ptrInsegnamento[0].codice_insegnamento = 0;
 
     azzeraStructStudente(ptrStudente, numero_studenti);
-
-
 
     return 0;
 }
@@ -147,4 +154,27 @@ void azzeraStructStudente(struct Studente *ptrStudente, int numero_studenti) {
     for(int i = 0; i < numero_studenti; i++) {
         memset(&ptrStudente[i], 0, sizeof(struct Studente));
     }
+}
+
+void generaInsegnamenti(int *numero, int *struttura) {  // passando gli indirizzi delle variabili, questo metodo le riempie con rispettivamente il numero di insegnamenti e l'array di strutture insegnamenti
+    int numero_insegnamenti = 3;
+    struct Insegnamento *ptrInsegnamento = (struct Insegnamento *) malloc(numero_insegnamenti * sizeof(struct Insegnamento));
+
+    ptrInsegnamento[0].codice_insegnamento = 1;
+    strcpy(ptrInsegnamento[0].descrizione, "Analisi 1");
+    ptrInsegnamento[0].anno_somministrazione = 2022;
+    ptrInsegnamento[0].crediti = 6;
+
+    ptrInsegnamento[1].codice_insegnamento = 2;
+    strcpy(ptrInsegnamento[1].descrizione, "Programmazione");
+    ptrInsegnamento[1].anno_somministrazione = 2022;
+    ptrInsegnamento[1].crediti = 6;
+
+    ptrInsegnamento[2].codice_insegnamento = 3;
+    strcpy(ptrInsegnamento[2].descrizione, "Sistemi operativi");
+    ptrInsegnamento[2].anno_somministrazione = 2022;
+    ptrInsegnamento[2].crediti = 6;
+
+    *numero = numero_insegnamenti;
+    *struttura = ptrInsegnamento;
 }
