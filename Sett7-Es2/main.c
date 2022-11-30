@@ -10,6 +10,7 @@ void mostraInfoStudente();
 int verificaDuplicatoStudente();
 void azzeraStructStudente();
 void generaInsegnamenti();
+void aggiungiPianoStudi();
 
 struct Studente {
     // Non usare 0 come numero matricola!!
@@ -39,23 +40,23 @@ struct PianoStudi {  // rivedere forse il nome di questa struct
 int main () {
     int numero_insegnamenti;
     struct Insegnamento *ptrInsegnamento;
-    generaInsegnamenti(&numero_insegnamenti, &ptrInsegnamento);
+    generaInsegnamenti(&numero_insegnamenti, &ptrInsegnamento); // inserisco in ptrInsegnamento un array di insegnamenti default (vedi metodo)
 
 
     int numero_studenti = 10;
-
     struct Studente *ptrStudente = (struct Studente *) malloc(numero_studenti * sizeof(struct Studente));   // creo un array di numero_studenti strutture
 
-
-
-    ptrInsegnamento[0].codice_insegnamento = 0;
-
     azzeraStructStudente(ptrStudente, numero_studenti);
+
+    printf("%d", *ptrStudente);
+    printf("\n%d", ptrStudente);
+
+    aggiungiStudente(ptrStudente, numero_studenti, ptrInsegnamento, numero_insegnamenti);
 
     return 0;
 }
 
-void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti) {
+void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti, struct Insegnamento *ptrInsegnamento, int numero_insegnamenti) {
     int indiceStudente = 0;
     int flag = 0;
     for (indiceStudente = 0; indiceStudente < numero_studenti; indiceStudente++) {
@@ -74,16 +75,16 @@ void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti) {
 
     struct Studente s;
     printf("Inserisci il numero matricola dello studente\n\r");
-    scanf("%d", s.numero_matricola);
+    scanf("%d", &s.numero_matricola);
 
     while(s.numero_matricola == 0) {
         printf("\nAttenzione! Non puoi inserire 0 come numero matricola. Riprova"); // 0 corrisponde a null
 
         printf("Inserisci il numero matricola dello studente\n\r");
-        scanf("%d", s.numero_matricola);
+        scanf("%d", &s.numero_matricola);
     }
 
-    if (verificaDuplicatoStudente(*ptrStudente, numero_studenti, s.numero_matricola) == 1) {
+    if (verificaDuplicatoStudente(ptrStudente, numero_studenti, s.numero_matricola) == 1) {
         printf("\nErrore: lo studente inserito e gia presente! Premi invio per tornare al menu principale");
         getch();
         return;
@@ -102,6 +103,7 @@ void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti) {
     scanf("%d", &s.numero_esami);
 
     s.ptrPianoStudi = (struct PianoStudi *) malloc(s.numero_esami * sizeof(struct PianoStudi));
+    aggiungiPianoStudi(s.ptrPianoStudi, s.numero_esami, ptrInsegnamento, numero_insegnamenti);
 
 
 
@@ -111,7 +113,19 @@ void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti) {
 
 
 
+}
 
+void aggiungiPianoStudi(struct PianoStudi *ptrPianoStudi, int numero_esami, struct Insegnamento *ptrInsegnamento, int numero_insegnamenti) {
+    system("cls");
+    printf("Piano studi:");
+
+    printf("Scegli l'insegnamento:");
+    for (int i = 0; i < numero_insegnamenti; i++) {
+        printf("\n%d. %s", ptrInsegnamento[i].codice_insegnamento, ptrInsegnamento[i].descrizione);   // esempio: 1. Analisi 1 \n 2. Programmazione \n 3. Sistemi Operativi
+    }
+
+    int scelta;
+    scanf("%d", &scelta);
 
 }
 
@@ -152,7 +166,14 @@ int verificaDuplicatoStudente(struct Studente *ptrStudente, int numero_studenti,
 
 void azzeraStructStudente(struct Studente *ptrStudente, int numero_studenti) {
     for(int i = 0; i < numero_studenti; i++) {
-        memset(&ptrStudente[i], 0, sizeof(struct Studente));
+        //memset(&ptrStudente[i], 0, sizeof(struct Studente));
+        //ptrStudente[i] = (struct Studente){0};
+        ptrStudente[i].numero_matricola = 0;
+        strcpy(ptrStudente[i].nome, "");
+        strcpy(ptrStudente[i].cognome, "");
+        ptrStudente[i].anno_immatricolazione = 0;
+        ptrStudente[i].numero_esami = 0;
+        ptrStudente[i].ptrPianoStudi = 0;
     }
 }
 
