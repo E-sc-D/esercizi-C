@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 // Un-comment for the alternate version with a jagged array instead of an array of structs
-//#define RUBRICA_FRASTAGLIATA
+#define RUBRICA_FRASTAGLIATA
 
 #ifdef RUBRICA_FRASTAGLIATA
     #include "rubricaFrastagliata.c"
@@ -27,7 +27,10 @@ void AggiungiNuovoContatto(struct Rubrica* rubrica)
     scanf("%s", &numeroTelefonico);
 
 #ifdef RUBRICA_FRASTAGLIATA
-    char* nuovoContatto[3] = { nome, cognome, numeroTelefonico };
+    char nuovoContatto[3][FIELD_MAX_LENGTH];
+    strcpy(nuovoContatto[0], nome);
+    strcpy(nuovoContatto[1], cognome);
+    strcpy(nuovoContatto[2], numeroTelefonico);
 #else
     struct Contatto nuovoContatto;
     strcpy(nuovoContatto.Nome, nome);
@@ -40,7 +43,7 @@ void AggiungiNuovoContatto(struct Rubrica* rubrica)
         printf("Si e' verificato un errore\n");
 }
 
-void RicercaEsattaContatto(const struct Rubrica* rubrica)
+void RicercaEsattaContatto(struct Rubrica* rubrica)
 {
     char keyword[INPUT_MAX_LENGTH];
 
@@ -50,12 +53,12 @@ void RicercaEsattaContatto(const struct Rubrica* rubrica)
 
     int index = SearchContatto(rubrica, keyword, true);
     if(index != -1)
-        printf("Contatto trovato:\n%s\n", ContattoToString(&rubrica->Contatti[index]));
+        printf("Contatto trovato:\n%s\n", ContattoToString(rubrica->Contatti[index]));
     else
         printf("Nessun risultato trovato\n");
 }
 
-void RicercaApprossimataContatto(const struct Rubrica* rubrica)
+void RicercaApprossimataContatto(struct Rubrica* rubrica)
 {
     char keyword[INPUT_MAX_LENGTH];
 
@@ -64,10 +67,10 @@ void RicercaApprossimataContatto(const struct Rubrica* rubrica)
     scanf("%s", &keyword);
 
     int index = SearchContatto(rubrica, keyword, false);
-    printf("Contatto trovato:\n%s\n", ContattoToString(&rubrica->Contatti[index]));
+    printf("Contatto trovato:\n%s\n", ContattoToString(rubrica->Contatti[index]));
 }
 
-void StampaCompletaRubrica(const struct Rubrica* rubrica)
+void StampaCompletaRubrica(struct Rubrica* rubrica)
 {
     printf("\nStampa completa della rubrica\n");
     printf("%s", RubricaToString(rubrica));
