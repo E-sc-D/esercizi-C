@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
+#include <string.h>
 struct consoleBuffer
 {
     int count;
@@ -42,7 +43,6 @@ void StringCopy(char *source, char *dest, int i, int j)//copia dall'elemento i a
     {
         dest[f] = source[i];
     }
-    dest[3] = '\0';
 }
 
 void SeparetorUnifier(char *string)
@@ -50,35 +50,29 @@ void SeparetorUnifier(char *string)
     int i = 0;
     int j = 0;
     char *string2;
+    char *stringoutput;
     char spacer = '\n';
 
     do
     {
 
-        if(string[i] != ' ' && isalpha(string[i]))//se non inclontriamo un carattere spaziatore
+        if(string[i] != ' ' && isalpha(string[i]) && string[i] != '\0')//se non inclontriamo un carattere spaziatore
         {
             
-            j = i;//salviamo l'inizio della prima parola
-            if(i>0)
-                spacer = string[i-1];//salviamo il carattere spaziatore
-            while (string[i] != ' ' && isalpha(string[i]) && string[i] != '\0')//avanziamo fino alla fine della parola o al carattere terminatore
-            {
-                i++;
-            }
-            if(i>0)
-            string2 = malloc(sizeof(char)*((i -1 ) - j));//quando il while finisce i si ferma 1 carattere oltre la parola per questo -1
-            StringCopy(string,string2,j,i);
-            printf("%d",i-j);
-            //StringEditor(&string2,i-j);
-            //stampa della stringa modificata
-            free(string2);
+           //dopo che l'if ha girato abbiamo raggiunto l'inizio della prima frase quindi salviamo
+           //l'inizio nella variabile j
+
+           //a questo punto dobbiamo far avanzare la variabile i fino a quando non arriviamo alla fine della parola.
+
+           //copiamo ora la parola selezionata dentro uno spazio per poterla lavorare
+
+           //una volta lavorata usiamo realloc per ingrandire la frase di output e ci mettiamo in fondo la frase modificata
 
         }
-        else{i++;}
+        else{i++;}//ogni volta che il programma va qua significa che abbiamo incontrato un carattere di spazio quindi lo 
+                 //trasferiamo direttamente dentro l'array di output( prima va ridimensionato )
         
-       //separeates the phrases with !isalpha characters and white spaces 
-       //with the i counter take a portion of array an edit in an external funcion
-       //return the new phrase edited and concatenaite it to the final string 
+       
     } 
     while (string[i] != '\0');
 }
