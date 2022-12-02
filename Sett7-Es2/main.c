@@ -5,13 +5,6 @@
 #include <conio.h>
 #include <ctype.h>
 
-void aggiungiStudente();
-void mostraInfoStudente();
-int verificaDuplicatoStudente();
-void azzeraStructStudente();
-void generaInsegnamenti();
-void aggiungiPianoStudi();
-
 struct Studente
 {
     // Non usare 0 come numero matricola!!
@@ -40,35 +33,67 @@ struct PianoStudi // rivedere forse il nome di questa struct
     int voto;
 };
 
-int main ()
+struct Studente * cercaStudente(int numero_studenti, struct Studente *studenti, int numero_matricola)
 {
-    struct Insegnamento insegnamenti[3] =
-    {
-        { 1, "Analisi 1", 2022, 6 },
-        { 2, "Programmazione", 2022, 6 },
-        { 3, "Sistemi operativi", 2022, 6 }
-    };
-
-    int numero_studenti = 10;
-    struct Studente *ptrStudente = (struct Studente *) malloc(numero_studenti * sizeof(struct Studente));   // creo un array di numero_studenti strutture
-
-    azzeraStructStudente(ptrStudente, numero_studenti);
-
-    printf("%d\n", *ptrStudente);
-    printf("%d\n", ptrStudente);
-
-    aggiungiStudente(ptrStudente, numero_studenti, sizeof(insegnamenti) / sizeof(struct Insegnamento), insegnamenti);
-
-    return 0;
+    for(int i = 0; i < numero_studenti; i++)
+        if(studenti[i].numero_matricola == numero_matricola)
+            return &(studenti[i]);
+    return NULL;
 }
 
-void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti, int numero_insegnamenti, struct Insegnamento insegnamenti[numero_insegnamenti])
+void generaPianoStudi(struct Studente *studente, int numero_insegnamenti, struct Insegnamento *insegnamenti)
+{
+    system("cls");
+    printf("Piano studi:\n");
+
+    printf("Insegnamenti disponibili");
+    for (int i = 0; i < numero_insegnamenti; i++)
+        printf("\n%d. %s", insegnamenti[i].codice_insegnamento, insegnamenti[i].descrizione);   // esempio: 1. Analisi 1 \n 2. Programmazione \n 3. Sistemi Operativi
+
+    printf("\n");
+
+    studente->ptrPianoStudi = (struct PianoStudi *) malloc(studente->numero_esami * sizeof(struct PianoStudi));
+    int i = 0;
+    int uscita = 0;
+    while(i < studente->numero_esami && uscita == 0)
+    {
+        printf("\nIterazione n. %d", i);
+        int scelta;
+        do
+        {
+            printf("\nSeleziona un insegnamento da aggiungere al piano studi\n\r");
+            printf("(range valori accettabili: [1, %d])\n\r", numero_insegnamenti);
+            scanf("%d", &scelta);
+        }
+        while(scelta < 1 || scelta > numero_insegnamenti);
+
+        int voto;
+        do
+        {
+            printf("\nInserisci il voto da aggiungere per %s (0 se non ancora svolto)\n\r", insegnamenti[scelta - 1].descrizione);
+            printf("(range valore accettabili: [0, 30])\n\r");
+            scanf("%d", &voto);
+        }
+        while(voto < 0 || voto > 30);
+
+        studente->ptrPianoStudi[i].codice_insegnamento = insegnamenti[scelta - 1].codice_insegnamento;
+        studente->ptrPianoStudi[i].voto = voto;
+
+        i++;
+
+        printf("\nVuoi continuare a modificare il piano di studi? (0 per continuare)\n\r", insegnamenti[scelta - 1].descrizione);
+        printf("(rimangono %d posti disponibili nel tuo piano di studi)\n\r", studente->numero_esami - i);
+        scanf("%d", &uscita);
+    }
+}
+
+void aggiungiStudente(struct Studente *studenti, int numero_studenti, int numero_insegnamenti, struct Insegnamento *insegnamenti)
 {
     int indiceStudente = 0;
     int flag = 0;
     for (indiceStudente = 0; indiceStudente < numero_studenti; indiceStudente++)
     {
-        if (ptrStudente[indiceStudente].numero_matricola == 0)
+        if (studenti[indiceStudente].numero_matricola == 0)
         {
             flag = 1;   // trovato un posto libero di indice "indiceStudente"
             break;
@@ -95,7 +120,7 @@ void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti, int num
         scanf("%d", &s.numero_matricola);
     }
 
-    if (verificaDuplicatoStudente(ptrStudente, numero_studenti, s.numero_matricola) == 1)
+    if (cercaStudente(numero_studenti, studenti, s.numero_matricola) != NULL)
     {
         printf("\nErrore: lo studente inserito e gia presente! Premi invio per tornare al menu principale");
         getch();
@@ -114,101 +139,92 @@ void aggiungiStudente(struct Studente *ptrStudente, int numero_studenti, int num
     printf("\nInserisci il numero di esami dello studente\n\r");
     scanf("%d", &s.numero_esami);
 
-    aggiungiPianoStudi(&s, numero_insegnamenti, insegnamenti);
+    generaPianoStudi(&s, numero_insegnamenti, insegnamenti);
 
+    studenti[indiceStudente] = s;
     printf("\nStudente aggiunto correttamente!");
 }
 
-void aggiungiPianoStudi(struct Studente *studente, int numero_insegnamenti, struct Insegnamento insegnamenti[numero_insegnamenti])
+void aggiungiVotoAPianoStudi(struct Studente *studente, int numero_insegnamenti, struct Insegnamento *insegnamenti)
 {
-    system("cls");
-    printf("Piano studi:\n");
-
-    printf("Insegnamenti disponibili");
-    for (int i = 0; i < numero_insegnamenti; i++)
-        printf("\n%d. %s", insegnamenti[i].codice_insegnamento, insegnamenti[i].descrizione);   // esempio: 1. Analisi 1 \n 2. Programmazione \n 3. Sistemi Operativi
-
-    printf("\n");
-
-    studente->ptrPianoStudi = (struct PianoStudi *) malloc(studente->numero_esami * sizeof(struct PianoStudi));
-    int i = 0;
-    while(i < studente->numero_esami)
+    if (studente == NULL)
+        return;
+    
+    int scelta;
+    do
     {
-        printf("\nIterazione n. %d", i);
-        int scelta;
-        do
-        {
-            printf("\nSeleziona un insegnamento da aggiungere al piano studi\n\r");
-            printf("(range valori accettabili: [1, %d])\n\r", numero_insegnamenti);
-            scanf("%d", &scelta);
-        }
-        while(scelta < 1 || scelta > numero_insegnamenti);
-
-        int voto;
-        do
-        {
-            printf("\nInserisci il voto da aggiungere per %s (0 se non ancora svolto)\n\r", insegnamenti[scelta - 1].descrizione);
-            printf("(range valore accettabili: [0, 30])\n\r");
-            scanf("%d", &voto);
-        }
-        while(voto < 0 || voto > 30);
-
-        studente->ptrPianoStudi[i].codice_insegnamento = insegnamenti[scelta - 1].codice_insegnamento;
-        studente->ptrPianoStudi[i].voto = voto;
-
-        i++;
+        printf("\nSeleziona un insegnamento da aggiungere al piano studi\n\r");
+        printf("(range valori accettabili: [1, %d])\n\r", numero_insegnamenti);
+        scanf("%d", &scelta);
     }
+    while(scelta < 1 || scelta > numero_insegnamenti);
+
+    int voto;
+    do
+    {
+        printf("\nInserisci il voto da aggiungere per %s (0 se non ancora svolto)\n\r", insegnamenti[scelta - 1].descrizione);
+        printf("(range valore accettabili: [0, 30])\n\r");
+        scanf("%d", &voto);
+    }
+    while(voto < 0 || voto > 30);
+
+    int i = 0;
+    
+
+    studente->ptrPianoStudi[i].codice_insegnamento = insegnamenti[scelta - 1].codice_insegnamento;
+    studente->ptrPianoStudi[i].voto = voto;
+
 }
 
-void mostraInfoStudente(struct Studente *ptrStudente, int numero_studenti, int numero_matricola)
+void mostraInfoStudente(struct Studente *studente)
 {
-    int indiceStudente = 0;
-    int flag = 0;
-    for (indiceStudente = 0; indiceStudente < numero_studenti; indiceStudente++)
-    {
-        if (ptrStudente[indiceStudente].numero_matricola == numero_matricola)
-        {
-            flag = 1;
-            break;
-        }
-    }
-
-    if (flag == 0)
-    {
-        printf("Non e stato trovato uno studente con il numero di matricola inserito. Premi invio per continuare\r\n");
-        getch();
+    if (studente == NULL)
         return;
-    }
+
     system("cls");
-    printf("\nNumero matricola: %d", ptrStudente[indiceStudente].numero_matricola);
-    printf("\nNome: %s", ptrStudente[indiceStudente].nome);
-    printf("\nCognome: %s", ptrStudente[indiceStudente].cognome);
-    printf("\nAnno di immatricolazione: %d", ptrStudente[indiceStudente].anno_immatricolazione);
+    printf("\nNumero matricola: %d", studente->numero_matricola);
+    printf("\nNome: %s", studente->nome);
+    printf("\nCognome: %s", studente->cognome);
+    printf("\nAnno di immatricolazione: %d", studente->anno_immatricolazione);
 
     printf("\n\rPremi invio per tornare al menu principale\n\r");
     getch();
 }
 
-int verificaDuplicatoStudente(struct Studente *ptrStudente, int numero_studenti, int numero_matricola)
+void azzeraStudente(struct Studente *studente)
 {
-    for (int i = 0; i < numero_studenti; i++)
-        if (ptrStudente[i].numero_matricola == numero_matricola)
-            return 1;   // esiste un duplicato
-
-    return 0;   // non ci sono duplicati
+    studente->numero_matricola = 0;
+    strcpy(studente->nome, "");
+    strcpy(studente->cognome, "");
+    studente->anno_immatricolazione = 0;
+    studente->numero_esami = 0;
+    studente->ptrPianoStudi = NULL;
 }
 
-void azzeraStructStudente(struct Studente *ptrStudente, int numero_studenti)
+void azzeraStudenti(int numero_studenti, struct Studente *studenti)
 {
     for(int i = 0; i < numero_studenti; i++)
+        azzeraStudente(&(studenti[i]));
+}
+
+int main ()
+{
+    struct Insegnamento insegnamenti[3] =
     {
-        //memset(&ptrStudente[i], 0, sizeof(struct Studente));
-        //ptrStudente[i] = (struct Studente){0};
-        ptrStudente[i].numero_matricola = 0;
-        strcpy(ptrStudente[i].nome, "");
-        strcpy(ptrStudente[i].cognome, "");
-        ptrStudente[i].anno_immatricolazione = 0;
-        ptrStudente[i].numero_esami = 0;
-        ptrStudente[i].ptrPianoStudi = 0;
-    }
+        { 1, "Analisi 1", 2022, 6 },
+        { 2, "Programmazione", 2022, 6 },
+        { 3, "Sistemi operativi", 2022, 6 }
+    };
+
+    int numero_studenti = 10;
+    struct Studente *studenti = (struct Studente *) malloc(numero_studenti * sizeof(struct Studente));   // creo un array di numero_studenti strutture
+
+    azzeraStudenti(numero_studenti, studenti);
+
+    printf("%d\n", *studenti);
+    printf("%d\n", studenti);
+
+    aggiungiStudente(studenti, numero_studenti, sizeof(insegnamenti) / sizeof(struct Insegnamento), insegnamenti);
+
+    return 0;
 }
