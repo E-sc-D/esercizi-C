@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <ctype.h>
 #include <string.h>
+#include <string.h>
 struct consoleBuffer
 {
     int count;
