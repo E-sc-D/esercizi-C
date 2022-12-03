@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
+#include <string.h>
 struct consoleBuffer
 {
     int count;
     char buffer[100];
 };
+struct Array
+{
+    char* array;
+    int n;
+} emptyArray = { NULL , 0 };
 
 int ReadString(char **pointer)//legge una stringa è la salva nel puntatore che punta pointer
 {
@@ -36,51 +42,97 @@ void StringEditor(char **string,int len)
     }
 }
 
-void StringCopy(char *source, char *dest, int i, int j)//copia dall'elemento i all'elemento j dentro dest
+void StringCopy(char *source, char **dest,int *d, int i, int j)//copia dall'elemento i all'elemento j dentro dest
 {
+    if(j-i > *d)
+    {
+        *d = *d + j;
+        (*dest) = realloc((*dest),*d);//la riallocazione calzerebbe a pennello solo con j ma ci serve extra spazio per le future modifiche 
+        
+    }
+
     for( int f = 0,i ; i < j + 1 ; i++,f++ )
     {
-        dest[f] = source[i];
+        (*dest)[f] = source[i];
+        printf("\ndest %c ,source %c",(*dest)[f],source[i]);
     }
-    dest[3] = '\0';
+}
+void Stringclear(char *string, int len)
+{
+    for(int i = 0; i < len; i++)
+    {
+        string[i] = 0;
+    }
+}
+
+int StringLen(char *string)
+{
+    int i;
+    for(i = 0; string[i]!='\0';i++);
+
+    return i + 1; //in questo modo il risultato conta anche il carattere terminatore: "ciao\0" sarà lunga 5
+    
+}
+int SafeStrcat(char **dest, int *d, char*source)
+{
+    int dEnd = 0,sEnd = 0;
+    dEnd = StringLen((*dest));
+    sEnd = StringLen(source);
+    if((*d-dEnd) < sEnd)//se non ce spazio dentro l'array di destinazione
+    {
+        *d += sEnd;
+        (*dest) = realloc((*dest),*d);//viene riallocato( aggiungere controllo null per realloc)
+    }
+    strcat((*dest),source);
 }
 
 void SeparetorUnifier(char *string)
 {
     int i = 0;
     int j = 0;
-    char *string2;
-    char spacer = '\n';
-
+    struct Array string2;//array di lavoro
+    struct Array stringOut;//stringa finale
+    char *spacer = (char*)calloc(1,sizeof(char));
+    stringOut.n = StringLen(string);
+    stringOut.array = (char*)calloc(StringLen(string),sizeof(char));
+    string2.n = StringLen(string);
+    string2.array = (char*)calloc(StringLen(string),sizeof(char));
+    
     do
     {
-
-        if(string[i] != ' ' && isalpha(string[i]))//se non inclontriamo un carattere spaziatore
+        if(string[i] != '\0')
         {
-            
-            j = i;//salviamo l'inizio della prima parola
-            if(i>0)
-                spacer = string[i-1];//salviamo il carattere spaziatore
-            while (string[i] != ' ' && isalpha(string[i]) && string[i] != '\0')//avanziamo fino alla fine della parola o al carattere terminatore
+            if(string[i] != ' ' && isalpha(string[i]))//se non inclontriamo un carattere spaziatore
             {
+                
+                //dopo che l'if ha girato abbiamo raggiunto l'inizio della prima frase quindi salviamo
+                //l'inizio nella variabile j
+                j = i;
+                //a questo punto dobbiamo far avanzare la variabile i fino a quando non arriviamo alla fine della parola.
+                while(string[i] != ' ' && isalpha(string[i]) && string[i] != '\0')
+                {
+                    i++;
+                }
+                Stringclear(string2.array,string2.n);//la stringa viene ripulita da precedenti frasi
+                printf("\n here");
+                StringCopy(string,&(string2.array),&(string2.n),j,i);
+                //qua la stringa va modificata
+                SafeStrcat(&(stringOut.array),&(stringOut.n),spacer);
+                //una volta lavorata usiamo realloc per ingrandire la frase di output e ci mettiamo in fondo la frase modificata
+            }
+            else
+            {
+                
+                *spacer = string[i];//viene salvato il carattere spaziatore
+                SafeStrcat(&(stringOut.array),&(stringOut.n),spacer);//dovrebbe concatenare (da verificare se la riallocazione funziona su elementi di struct)
                 i++;
             }
-            if(i>0)
-            string2 = malloc(sizeof(char)*((i -1 ) - j));//quando il while finisce i si ferma 1 carattere oltre la parola per questo -1
-            StringCopy(string,string2,j,i);
-            printf("%d",i-j);
-            //StringEditor(&string2,i-j);
-            //stampa della stringa modificata
-            free(string2);
-
-        }
-        else{i++;}
-        
-       //separeates the phrases with !isalpha characters and white spaces 
-       //with the i counter take a portion of array an edit in an external funcion
-       //return the new phrase edited and concatenaite it to the final string 
+            
+        }  
     } 
     while (string[i] != '\0');
+
+    printf("stringa : %d , i : %d,j : %d, striga2 : %d",stringOut.n,i,j,string2.n);
 }
 
 void PhraseEditor1()
@@ -93,7 +145,5 @@ int main()
     char *string;
     ReadString(&string);
     SeparetorUnifier(string);
-    printf("programma terminato");
-    
 }  
 
