@@ -52,7 +52,7 @@ void StringCopy(char *source, char **dest,int *d, int i, int j)//copia dall'elem
         
     }
 
-    for( int f = 0,i ; i < j + 1 ; i++,f++ )
+    for( int f = 0,i ; i < j  ; i++,f++ )
     {
         (*dest)[f] = source[i];
         printf("\ndest %c ,source %c",(*dest)[f],source[i]);
