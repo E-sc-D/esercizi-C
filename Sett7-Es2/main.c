@@ -16,7 +16,7 @@ struct Studente
 
     int numero_esami;
     struct PianoStudi *ptrPianoStudi;   // Questo puntatore conterrà l'array di strutture PianoStudi con indice num_esami, che verrà generato all'aggiunta dello studente
-};
+} EmptyStudente = { 0, "", "", 0, 0, NULL };
 
 struct Insegnamento
 {
@@ -24,8 +24,7 @@ struct Insegnamento
     char descrizione[60];
     int anno_somministrazione;
     int crediti;
-
-};
+} EmptyInsegnamento = { 0, "", 0, 0 };
 
 struct PianoStudi // rivedere forse il nome di questa struct
 {
@@ -214,7 +213,7 @@ struct Insegnamento getInsegnamento(int numero_insegnamenti, struct Insegnamento
     for(i = 0; i < numero_insegnamenti; i++)
         if(insegnamenti[i].codice_insegnamento == codice_insegnamento)
             return insegnamenti[i];
-    return;
+    return EmptyInsegnamento;
 }
 
 double calcolaMediaVoti(int numero_studenti, struct Studente *studenti, int numero_insegnamenti, struct Insegnamento *insegnamenti)
@@ -240,7 +239,7 @@ double calcolaMediaVoti(int numero_studenti, struct Studente *studenti, int nume
 int main ()
 {
     const int numero_insegnamenti = 3;
-    struct Insegnamento insegnamenti[numero_insegnamenti] =
+    struct Insegnamento insegnamenti[3] =
     {
         { 1, "Analisi 1", 2022, 6 },
         { 2, "Programmazione", 2022, 6 },
@@ -265,6 +264,7 @@ int main ()
         printf("Scelta: ");
         scanf("%d", &choice);
 
+        int numero_matricola;
         switch(choice)
         {
             case 1:
@@ -272,18 +272,16 @@ int main ()
                 break;
             case 2:
                 printf("Inserire il numero di matricola:\n");
-                int numero_matricola;
                 scanf("%d", &numero_matricola);
                 mostraInfoStudente(cercaStudente(numero_studenti, studenti, numero_matricola));
                 break;
             case 3:
                 printf("Inserire il numero di matricola:\n");
-                int numero_matricola;
                 scanf("%d", &numero_matricola);
                 aggiungiVotoAPianoStudi(cercaStudente(numero_studenti, studenti, numero_matricola), numero_insegnamenti, insegnamenti);
                 break;
             case 4:
-                printf("La media pesata di tutti i voti e' %f", calcolaMediaVoti(numero_studenti, studenti, numero_insegnamenti, insegnamenti));
+                printf("La media pesata di tutti i voti e' %f\n", calcolaMediaVoti(numero_studenti, studenti, numero_insegnamenti, insegnamenti));
                 break;
         }
     }
