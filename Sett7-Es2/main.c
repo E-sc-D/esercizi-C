@@ -208,9 +208,39 @@ void azzeraStudenti(int numero_studenti, struct Studente *studenti)
         azzeraStudente(&(studenti[i]));
 }
 
+struct Insegnamento getInsegnamento(int numero_insegnamenti, struct Insegnamento *insegnamenti, int codice_insegnamento)
+{
+    int i;
+    for(i = 0; i < numero_insegnamenti; i++)
+        if(insegnamenti[i].codice_insegnamento == codice_insegnamento)
+            return insegnamenti[i];
+    return;
+}
+
+double calcolaMediaVoti(int numero_studenti, struct Studente *studenti, int numero_insegnamenti, struct Insegnamento *insegnamenti)
+{
+    int sommaPesiVoti = 0;
+    int sommaPesi = 0;
+
+    int i, j;
+    for(i = 0; i < numero_studenti; i++)
+    {
+        for(j = 0; j < studenti[i].numero_esami; j++)
+        {
+            int voto = studenti[i].ptrPianoStudi[j].voto;
+            int peso = getInsegnamento(numero_insegnamenti, insegnamenti, studenti[i].ptrPianoStudi[j].codice_insegnamento).crediti;
+            sommaPesiVoti += peso * voto;
+            sommaPesi += peso;
+        }
+    }
+
+    return sommaPesiVoti / sommaPesi;
+}
+
 int main ()
 {
-    struct Insegnamento insegnamenti[3] =
+    const int numero_insegnamenti = 3;
+    struct Insegnamento insegnamenti[numero_insegnamenti] =
     {
         { 1, "Analisi 1", 2022, 6 },
         { 2, "Programmazione", 2022, 6 },
@@ -222,10 +252,42 @@ int main ()
 
     azzeraStudenti(numero_studenti, studenti);
 
-    printf("%d\n", *studenti);
-    printf("%d\n", studenti);
+    int choice;
+    do
+    {
+        printf("Menu principale:\n");
+        printf("1) Aggiungi nuovo studente\n");
+        printf("2) Stampa informazioni studente\n");
+        printf("3) Modifica piano di studi\n");
+        printf("4) Calcola media voti\n");
+        printf("0) Esci\n");
 
-    aggiungiStudente(studenti, numero_studenti, sizeof(insegnamenti) / sizeof(struct Insegnamento), insegnamenti);
+        printf("Scelta: ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+                aggiungiStudente(studenti, numero_studenti, sizeof(insegnamenti) / sizeof(struct Insegnamento), insegnamenti);
+                break;
+            case 2:
+                printf("Inserire il numero di matricola:\n");
+                int numero_matricola;
+                scanf("%d", &numero_matricola);
+                mostraInfoStudente(cercaStudente(numero_studenti, studenti, numero_matricola));
+                break;
+            case 3:
+                printf("Inserire il numero di matricola:\n");
+                int numero_matricola;
+                scanf("%d", &numero_matricola);
+                aggiungiVotoAPianoStudi(cercaStudente(numero_studenti, studenti, numero_matricola), numero_insegnamenti, insegnamenti);
+                break;
+            case 4:
+                printf("La media pesata di tutti i voti e' %f", calcolaMediaVoti(numero_studenti, studenti, numero_insegnamenti, insegnamenti));
+                break;
+        }
+    }
+    while(choice != 0);
 
     return 0;
 }
