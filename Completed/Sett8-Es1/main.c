@@ -51,8 +51,8 @@ void StringCopy(char *source, char **dest,int *d, int i, int j)//copia dall'elem
         (*dest) = realloc((*dest),*d);//la riallocazione calzerebbe a pennello solo con j ma ci serve extra spazio per le future modifiche 
         
     }
-
-    for( int f = 0,i ; i < j  ; i++,f++ )
+    int f;
+    for( f = 0,i ; i < j  ; i++,f++ )
     {
         (*dest)[f] = source[i];
         printf("\ndest %c ,source %c",(*dest)[f],source[i]);
@@ -115,7 +115,7 @@ void SeparetorUnifier(char *string)
                     i++;
                 }
                 Stringclear(string2.array,string2.n);//la stringa viene ripulita da precedenti frasi
-                printf("\n here");
+                //printf("\n here");
                 StringCopy(string,&(string2.array),&(string2.n),j,i);
                 //qua la stringa va modificata
                 SafeStrcat(&(stringOut.array),&(stringOut.n),spacer);
