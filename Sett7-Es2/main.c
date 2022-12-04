@@ -203,7 +203,8 @@ void azzeraStudente(struct Studente *studente)
 
 void azzeraStudenti(int numero_studenti, struct Studente *studenti)
 {
-    for(int i = 0; i < numero_studenti; i++)
+    int i;
+    for(i = 0; i < numero_studenti; i++)
         azzeraStudente(&(studenti[i]));
 }
 
