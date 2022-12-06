@@ -4,6 +4,9 @@
 #include <ctype.h>
 #include <string.h>
 #include <string.h>
+
+int StringLen(char*);
+
 struct consoleBuffer
 {
     int count;
@@ -34,13 +37,40 @@ void ReadString(struct Array *string)//legge una stringa è la salva nel puntato
     }
     string->n = console.count;
 }
-
-void StringEditor(struct Array *string)
+void translateLeftString(struct Array *string,int n)
 {
-    for(int i = 0 ; i < string->n ; i++)
+    int i = 0;
+    for(i;i + n < (string->n);i++)
     {
-        printf("%c",(string->array)[i]);
+        string->array[i]=string->array[i+n];
     }
+}
+
+void StringEditor1(struct Array *string)
+{
+    char firstChar = string->array[0];
+    int lenOfstring = StringLen(string->array);
+    string->array[lenOfstring - 1] = firstChar;
+    if(string->array[1] >= 'A' && firstChar < 'A')
+    {
+        string->array[1] = tolower(string->array[1]);//se la nuova prima lettera non è minuscola....
+    }
+    if(string->array[1] < 'A' && firstChar > 'A')
+    {
+        string->array[1] = toupper(string->array[1]);//se la nuova prima lettera non è maiuscola...
+    }
+    if(lenOfstring - 1 <= 3)//le lettere
+    {
+        string->array[lenOfstring]='a';
+        string->array[lenOfstring + 1]='n';
+        string->array[lenOfstring + 2]='\0';
+    }
+    else
+    {
+        string->array[lenOfstring]='o';
+        string->array[lenOfstring + 1]='\0';   
+    }
+    translateLeftString(string,1);//sposta a sinistra tutta la stringa, cancellando il primo elemento
 }
 
 void StringCopy(struct Array *dest,struct Array *source, int i, int j)//copia dall'elemento i all'elemento j dentro dest
@@ -54,7 +84,7 @@ void StringCopy(struct Array *dest,struct Array *source, int i, int j)//copia da
     for( f = 0,i ; i < j  ; i++,f++ )
     {
         dest->array[f] = (source->array)[i];
-        printf("\ndest %s ,source %c",(dest->array),(source->array)[i]);
+        //printf("\ndest %s ,source %c",(dest->array),(source->array)[i]);
     }
 }
 
@@ -108,8 +138,7 @@ void SeparetorUnifier(struct Array *string)
         if((string->array)[i] != '\0')
         {
             if((string->array)[i] != ' ' && isalpha((string->array)[i]))//se non inclontriamo un carattere spaziatore
-            {
-                
+            {              
                 //dopo che l'if ha girato abbiamo raggiunto l'inizio della prima frase quindi salviamo
                 //l'inizio nella variabile j
                 j = i;
@@ -120,7 +149,7 @@ void SeparetorUnifier(struct Array *string)
                 }
                 Stringclear(&string2);//la stringa viene ripulita da precedenti frasi
                 StringCopy(&string2,string,j,i);
-                //qua la stringa va modificata
+                StringEditor1(&string2);
                 SafeStrcat(&string2,&stringOut);
                 //una volta lavorata usiamo realloc per ingrandire la frase di output e ci mettiamo in fondo la frase modificata
             }
@@ -136,12 +165,7 @@ void SeparetorUnifier(struct Array *string)
     } 
     while ((string->array)[i] != '\0');
 
-    printf("stringa : %s , i : %d,j : %d, striga2 : %d",stringOut.array,i,j,string2.n);
-}
-
-void PhraseEditor1()
-{
-
+    printf("stringa : %s ",stringOut.array);
 }
 
 int main()
