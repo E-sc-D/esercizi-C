@@ -104,3 +104,29 @@ int LevenshteinDistance(const char* string1, const char* string2)
 
     return levenshteinMatrix[length1][length2];
 }
+
+struct consoleBuffer
+{
+    int count;
+    char buffer[100];
+};
+
+int ReadString(char **pointer)//legge una stringa è la salva nel puntatore che punta pointer
+{
+    struct consoleBuffer console;
+    console.count = 0;
+    do
+    {
+        console.buffer[console.count] = getchar();
+        console.count++;
+    }
+    while(console.buffer[console.count - 1] != '\n'); //vengono salvati dentro un buffer di 100 elementi i char inseriti
+    console.buffer[console.count - 1] = '\0';//l'ultimo elemento sarà il terminatore
+    (*pointer) = (char*)malloc((sizeof(char) * console.count));//viene inizializzata la matrice in base al numero di elementi inseriti
+
+    for(int j = 0;j < console.count ; j++)
+    {
+        (*pointer)[j] = console.buffer[j];//viene riempita
+    }
+    return console.count ; //viene restituito il numero di char dentro il vettore
+}
