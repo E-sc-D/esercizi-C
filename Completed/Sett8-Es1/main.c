@@ -171,6 +171,7 @@ void SeparetorUnifier(struct Array *string)
 int main()
 {
     struct Array *string;
+    printf("inserisci una stringa\n");
     ReadString(string);
     SeparetorUnifier(string);
 }  
