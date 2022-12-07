@@ -4,6 +4,10 @@
 #include <unistd.h>
 #include <conio.h>
 #include <ctype.h>
+#include <time.h>
+
+void creaTabellone();
+void generaTabellone();
 
 struct Giocatore {
     int posizione; // posizione del giocatore sulla tabella
@@ -13,17 +17,41 @@ struct Giocatore {
 
 struct Casella {
     int numero; // numero della casella
-    int effetto; // L'effetto può essere andare avanti oppure indietro, per es (+6 posizioni oppure -10). Se è 0 indica che non ha nessun effetto
+    int effetto;
 };
 
-int main() {
+struct Ladder {
+    int posizione;
+    int proprieta;  // L'effetto può essere andare avanti oppure indietro, per es (+6 posizioni oppure -10). Se è 0 indica che non ha nessun effetto
+};
 
+struct Snake {
+
+};
+
+
+
+int main() {
+    srand(time(NULL));
 
 
     return 0;
 }
 
-void CreaTabellone() {
+void creaTabellone() {
+    int numero_caselle;
     struct Casella tabellone[100];
 
+}
+
+void generaTabellone(struct Casella *tabellone, int numero_caselle) {
+    int contatore = 1;
+    for(int i = 0; i < numero_caselle; i++) {
+        tabellone[i].numero = contatore;    // Assegno il numero a ogni casella
+        contatore++;
+
+        tabellone[i].effetto = rand() % 100;
+
+
+    }
 }
