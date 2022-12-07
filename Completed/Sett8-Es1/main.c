@@ -3,7 +3,6 @@
 #include <conio.h>
 #include <ctype.h>
 #include <string.h>
-#include <string.h>
 
 int StringLen(char*);
 
@@ -29,9 +28,9 @@ void ReadString(struct Array *string)//legge una stringa è la salva nel puntato
     }
     while(console.buffer[console.count - 1] != '\n'); //vengono salvati dentro un buffer di 100 elementi i char inseriti
     console.buffer[console.count - 1] = '\0';//l'ultimo elemento sarà il terminatore
-    string->array = (char*)malloc((sizeof(char) * console.count));//viene inizializzata la matrice in base al numero di elementi inseriti
-
-    for(int j = 0;j < console.count ; j++)
+    string->array = malloc(sizeof(char) * console.count);//viene inizializzata la matrice in base al numero di elementi inseriti
+    int j;
+    for( j = 0;j < console.count ; j++)
     {
         (string->array)[j] = console.buffer[j];//viene riempita
     }
@@ -154,8 +153,7 @@ void SeparetorUnifier(struct Array *string)
                 //una volta lavorata usiamo realloc per ingrandire la frase di output e ci mettiamo in fondo la frase modificata
             }
             else
-            {
-                
+            {          
                 spacer.array[0] = (string->array)[i];//viene salvato il carattere spaziatore
                 SafeStrcat(&spacer,&stringOut);//dovrebbe concatenare (da verificare se la riallocazione funziona su elementi di struct)
                 i++;
@@ -170,7 +168,7 @@ void SeparetorUnifier(struct Array *string)
 
 int main()
 {
-    struct Array *string;
+    struct Array *string = malloc(sizeof(struct Array));
     printf("inserisci una stringa\n");
     ReadString(string);
     SeparetorUnifier(string);
