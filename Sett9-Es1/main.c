@@ -6,12 +6,13 @@
 #include <ctype.h>
 #include <time.h>
 
-void crea_tabellone();
+struct Casella* crea_tabellone();
 void genera_tabellone();
 int genera_numero_in_range();
 void genera_serpenti();
 void genera_scale();
 void stampa_tabellone();
+void gioca_snakes_and_ladders();
 
 
 struct Giocatore {
@@ -28,18 +29,31 @@ struct Casella {
 int main() {
     srand(time(NULL));
 
-    crea_tabellone();
+    gioca_snakes_and_ladders(3);
 
     return 0;
 }
 
-void crea_tabellone() {
+void gioca_snakes_and_ladders(int numero_giocatori) {
+    struct Casella* tabellone = crea_tabellone();
+
+
+
+
+
+
+
+}
+
+struct Casella* crea_tabellone() {
     int numero_caselle = 100;
-    struct Casella tabellone[numero_caselle];
+    struct Casella* tabellone = (struct Casella*) malloc(numero_caselle * sizeof(struct Casella));
 
     genera_tabellone(tabellone, numero_caselle);
 
     stampa_tabellone(tabellone, numero_caselle);
+
+    return tabellone;
 
 }
 
