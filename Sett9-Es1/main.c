@@ -13,6 +13,7 @@ int genera_numero_in_range();
 void genera_serpenti();
 void genera_scale();
 void stampa_tabellone();
+struct Array* string_read();
 
 
 struct Giocatore 
@@ -29,8 +30,10 @@ struct Casella
 
 int main() 
 {
-    srand(time(NULL));
-    crea_tabellone();
+   /*  srand(time(NULL));
+    crea_tabellone(); */
+    string_read("./file.txt");
+    
     return 0;
 }
 
@@ -165,16 +168,38 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
 }
 struct Array* string_read(char *path)
 {
+    
     struct Array *stringArray;
-    struct Array buffer;
+    char array[1000];
     FILE *stream = fopen(path,"r");
-    if(stream == NULL)
-        return 1;
+    int count = 0;
+    char c;
 
-    while(fgets(buffer.array, buffer.n, stream))
+    if(stream == NULL)
     {
-        printf(buffer.array);
+        printf("can");
+        return;
     }
+
+     while(fgets(array, 1000, stream))
+    {
+        count++;
+    }  
+
+    stringArray = malloc(sizeof(struct Array)* count);
+    rewind(stream);
+    int i = 0;
+
+    while(fgets(array, 1000, stream))
+    {
+
+        (stringArray[i]).array = malloc(StringLen(array)*sizeof(char));
+        (stringArray[i]).n = StringLen(array);
+        strcpy((stringArray[i]).array,array);
+        i++;
+    }  
+
     fclose(stream);
+    return stringArray;
 
 }
