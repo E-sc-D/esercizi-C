@@ -173,8 +173,11 @@ void aggiungiVotoAPianoStudi(struct Studente *studente, int numero_insegnamenti,
     }
     while(voto < 0 || voto > 30);
 
-    int i = 0;
+    int i;
     
+    for(i = 0; i < studente->numero_esami; i++)
+        if(studente->ptrPianoStudi[i].codice_insegnamento == 0)
+            break;
 
     studente->ptrPianoStudi[i].codice_insegnamento = insegnamenti[scelta - 1].codice_insegnamento;
     studente->ptrPianoStudi[i].voto = voto;
