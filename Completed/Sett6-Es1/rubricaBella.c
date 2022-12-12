@@ -168,13 +168,13 @@ bool RemoveContatto(struct Rubrica *rubrica, const struct Contatto contatto)
     }
 }
 
-char* ContattoToString(const struct Contatto *contatto)
+char* ContattoToString(struct Contatto contatto)
 {
-    if(!IsContattoEmpty(*contatto))
+    if(!IsContattoEmpty(contatto))
     {
-        char* contattoString = (char*)malloc((strlen(contatto->Nome) + strlen(contatto->Cognome) + strlen(contatto->NumeroTelefonico) + 2 + 1) * sizeof(char));
+        char* contattoString = (char*)malloc((strlen(contatto.Nome) + strlen(contatto.Cognome) + strlen(contatto.NumeroTelefonico) + 2 + 1) * sizeof(char));
         //Lengths of all Contatto fields plus 2 (\n at the end of each stringified field except the last one) plus 1 (\0, the string terminator)
-        sprintf(contattoString, "%s\n%s\n%s", contatto->Nome, contatto->Cognome, contatto->NumeroTelefonico);
+        sprintf(contattoString, "%s\n%s\n%s", contatto.Nome, contatto.Cognome, contatto.NumeroTelefonico);
         return contattoString;
     }
     else
@@ -192,7 +192,7 @@ char* RubricaToString(const struct Rubrica *rubrica)
         //Precalculate sum of all ContattoToString lengths
         int lengthsSum = 0;
         for(int i = 0; i < rubricaLength; i++)
-            lengthsSum += strlen(ContattoToString(&rubrica->Contatti[i]));
+            lengthsSum += strlen(ContattoToString(rubrica->Contatti[i]));
 
         char *rubricaString = (char*)malloc((lengthsSum + (2 * rubricaLength) + 1) * sizeof(char));
         //lengthsSum, the sum of all the string lengths of the ContattoToString that will be called,
@@ -201,7 +201,7 @@ char* RubricaToString(const struct Rubrica *rubrica)
 
         char *ptr = rubricaString;
         for(int i = 0; i < rubricaLength; i++)
-            ptr += sprintf(ptr, "\n%s\n", ContattoToString(&rubrica->Contatti[i]));
+            ptr += sprintf(ptr, "\n%s\n", ContattoToString(rubrica->Contatti[i]));
 
         return rubricaString;
     }
