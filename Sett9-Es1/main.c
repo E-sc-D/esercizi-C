@@ -182,24 +182,23 @@ struct Array* string_read(char *path)
 
     if(stream == NULL)
     {
-        printf("can");
+        printf("file non trovato o path sbagliato");
         return;
     }
 
-     while(fgets(array, 1000, stream))
+     while(fgets(array, 1000, stream))//contiamo il numero di righe
     {
         count++;
     }  
 
-    stringArray = malloc(sizeof(struct Array)* count);
-    rewind(stream);
+    stringArray = malloc(sizeof(struct Array)* count);//allochiamo l'array di stringhe
+    rewind(stream);//riportiamo indietro il puntatore del lettore di file
     int i = 0;
 
-    while(fgets(array, 1000, stream))
+    while(fgets(array, 1000, stream))//ogni giro legge una riga e la salva dentro l'array di stringhe
     {
-
-        (stringArray[i]).array = malloc(StringLen(array)*sizeof(char));
-        (stringArray[i]).n = StringLen(array);
+        (stringArray[i]).array = malloc(StringLen(array)*sizeof(char));//malloca la stringa da salvare
+        (stringArray[i]).n = StringLen(array);//stringlen conta i caratteri fino a quando non trova \0
         strcpy((stringArray[i]).array,array);
         i++;
     }  
