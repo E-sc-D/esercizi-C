@@ -84,6 +84,12 @@ void generaPianoStudi(struct Studente *studente, int numero_insegnamenti, struct
         printf("(rimangono %d posti disponibili nel tuo piano di studi)\n\r", studente->numero_esami - i);
         scanf("%d", &uscita);
     }
+    int k;
+    for(k = i; k < studente->numero_esami; k++)
+    {
+        studente->ptrPianoStudi[k].voto = 0;
+        studente->ptrPianoStudi[k].codice_insegnamento = 0;
+    }
 }
 
 void aggiungiStudente(struct Studente *studenti, int numero_studenti, int numero_insegnamenti, struct Insegnamento *insegnamenti)
@@ -141,7 +147,7 @@ void aggiungiStudente(struct Studente *studenti, int numero_studenti, int numero
     generaPianoStudi(&s, numero_insegnamenti, insegnamenti);
 
     studenti[indiceStudente] = s;
-    printf("\nStudente aggiunto correttamente!");
+    printf("\nStudente aggiunto correttamente!\n\r");
 }
 
 void aggiungiVotoAPianoStudi(struct Studente *studente, int numero_insegnamenti, struct Insegnamento *insegnamenti)
@@ -185,6 +191,13 @@ void mostraInfoStudente(struct Studente *studente)
     printf("\nNome: %s", studente->nome);
     printf("\nCognome: %s", studente->cognome);
     printf("\nAnno di immatricolazione: %d", studente->anno_immatricolazione);
+    printf("\nPiano di studi:");
+    int i;
+    for(i = 0; i < studente->numero_esami; i++)
+        if(studente->ptrPianoStudi[i].codice_insegnamento != 0)
+            printf("\n\tInsegnamento %d, voto: %d", studente->ptrPianoStudi[i].codice_insegnamento, studente->ptrPianoStudi[i].voto);
+        else
+            printf("\n\tCampo vuoto");
 
     printf("\n\rPremi invio per tornare al menu principale\n\r");
     getch();
