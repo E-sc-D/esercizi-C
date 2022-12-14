@@ -1,14 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifndef DATA_TYPE
-#error DATA_TYPE not defined
-#else
+#include "variant.c"
 
 struct Node
 {
-    DATA_TYPE data;
-
+    var data;
     struct Node *next;
     struct Node *previous;
 };
@@ -17,14 +13,12 @@ struct Iterator
 {
     int current_index;
     struct Node *current_node;
-    //struct Node *next;
-    //struct Node *previous;
 };
 
 struct List
 {
     struct Node *head;
-    struct Iterator iterator;    
+    struct Iterator iterator;
 }
 typedef List;
 
@@ -33,6 +27,8 @@ List new_list()
 {
     List new_list;
     new_list.head = NULL;
+    new_list.iterator.current_index = -1;
+    new_list.iterator.current_node = NULL;
     return new_list;
 }
 
@@ -212,23 +208,25 @@ int get_length(List* list)
 
 // Gets the data value of an existing list node
 // Returns the index-nth element of list, if index is -1, returns the last one
-DATA_TYPE get_element(List* list, int index) 
+// Returns a ReturnValue struct containing the requested data and a flag which
+// tells if the data is valid or not.
+var get_element(List* list, int index) 
 {
+    var new_variant = var_null;
     struct Node* node = node_get(list, index);
     if(node != NULL)
-        return node->data;
-    else
-        return; // GCC returns a warning for this (find a better way to handle node being NULL)
+        new_variant = var_set_var(node->data);   
+    return new_variant;
 }
 
 // Sets the data value of an existing list node
 // Returns 1 if successful, 0 if not
-int set_element(List* list, int index, DATA_TYPE data) 
+int set_element(List* list, int index, var data) 
 {
     struct Node* node = node_get(list, index);
     if(node != NULL)
     {
-        node->data = data;
+        node->data = var_set_var(data);
         return 1;
     }
     else
@@ -240,12 +238,12 @@ int set_element(List* list, int index, DATA_TYPE data)
 // Creates a new node and assigns it the data to insert into the list, then the whole node gets inserted with node_insert()
 // A malloc is here
 // Returns 1 if successful, 0 if not
-int insert_element(List* list, int index, DATA_TYPE data)
+int insert_element(List* list, int index, var data)
 {
     struct Node* new_node = malloc(sizeof(struct Node));
     if(new_node == NULL) // malloc can return NULL if there's not memory available
         return 0;
-    new_node->data = data;
+    new_node->data = var_set_var(data);
     int returnValue = node_insert(list, index, new_node);
     if(!returnValue)
     {
@@ -261,12 +259,12 @@ int insert_element(List* list, int index, DATA_TYPE data)
 // Creates a new node and assigns it the data to add into the list, then the whole node gets added with node_add()
 // A malloc is here
 // Returns 1 if successful, 0 if not
-int add_element(List* list, DATA_TYPE data) 
+int add_element(List* list, var data) 
 {
     struct Node* new_node = malloc(sizeof(struct Node));
     if(new_node == NULL) // malloc can return NULL if there's not memory available
         return 0;
-    new_node->data = data;
+    new_node->data = var_set_var(data);
     node_add_back(list, new_node);
     // As specified in node_add_back and node_add_front, these methods cannot fail,
     return 1; // so the function immediately returns 1 without doing any checks.
@@ -274,63 +272,81 @@ int add_element(List* list, DATA_TYPE data)
 
 // Alias for add_element(), pushes data into the back of the list
 // Returns 1 if successful, 0 if not
-int push_back(List* list, DATA_TYPE data)
+int push_back(List* list, var data)
 {
     return add_element(list, data);
 }
 
 // Pushes data into the front of the list
 // Returns 1 if successful, 0 if not
-int push_front(List* list, DATA_TYPE data)
+int push_front(List* list, var data)
 {
     struct Node* new_node = malloc(sizeof(struct Node));
     if(new_node == NULL) // malloc can return NULL if there's not memory available
         return 0;
-    new_node->data = data;
+    new_node->data = var_set_var(data);
     node_add_front(list, new_node);
     // As specified in node_add_back and node_add_front, these methods cannot fail,
     return 1; // so the function immediately returns 1 without doing any checks.
 }
 
+int push_at(List* list, int index, var data)
+{
+    insert_element(list, index, data);
+}
+
 // Pops data from the back of the list, meaning the last item will be returned
 // and deleted from the list. Returns the DATA_TYPE
-DATA_TYPE pop_back(List* list)
+var pop_back(List* list)
 {
-    DATA_TYPE data = get_element(list, -1);
+    var data = get_element(list, -1);
     node_remove(list, -1);
     return data;
 }
 
 // Pops data from the front of the list, meaning the first item will be returned
 // and deleted from the list. Returns the DATA_TYPE
-DATA_TYPE pop_front(List* list)
+var pop_front(List* list)
 {
-    DATA_TYPE data = get_element(list, 0);
+    var data = get_element(list, 0);
     node_remove(list, 0);
     return data;
 }
 
-// Peeks data from the front of the list, meaning the first item will be returned
-// and NOT deleted from the list. Returns the DATA_TYPE
-DATA_TYPE peek_front(List* list)
+var pop_at(List* list, int index)
 {
-    DATA_TYPE data = get_element(list, 0);
+    var data = get_element(list, index);
+    node_remove(list, index);
     return data;
 }
 
 // Peeks data from the front of the list, meaning the first item will be returned
 // and NOT deleted from the list. Returns the DATA_TYPE
-DATA_TYPE peek_back(List* list)
+var peek_front(List* list)
 {
-    DATA_TYPE data = get_element(list, -1);
+    var data = get_element(list, 0);
+    return data;
+}
+
+// Peeks data from the front of the list, meaning the first item will be returned
+// and NOT deleted from the list. Returns the DATA_TYPE
+var peek_back(List* list)
+{
+    var data = get_element(list, -1);
+    return data;
+}
+
+var peek_at(List* list, int index)
+{
+    var data = get_element(list, index);
     return data;
 }
 
 // Converts the list to a dynamically allocated static array
 // Can return NULL
-DATA_TYPE * list_to_array(List* list)
+var * list_to_array(List* list)
 {
-    DATA_TYPE * array = malloc(sizeof(DATA_TYPE) * get_length(list));
+    var *array = malloc(sizeof(var) * get_length(list));
     iterator_init(list);
     while(iterator_forward(list))
         array[list->iterator.current_index] = list->iterator.current_node->data;
@@ -338,9 +354,9 @@ DATA_TYPE * list_to_array(List* list)
 }
 
 // Converts the list to a dynamically allocated static array
-List list_from_array(int length, DATA_TYPE * array)
+List list_from_array(int length, var *array, size_t size_of_data)
 {
-    List list = new_list();
+    List list = new_list(size_of_data);
     int i;
     for(i = 0; i < length; i++)
         push_back(&list, array[i]);
@@ -354,5 +370,3 @@ void clear(List* list)
     while(iterator_forward(list))
         node_remove(list, list->iterator.current_index);
 }
-
-#endif
