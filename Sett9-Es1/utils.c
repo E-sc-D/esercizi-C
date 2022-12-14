@@ -108,7 +108,7 @@ int LevenshteinDistance(const char* string1, const char* string2)
 struct consoleBuffer
 {
     int count;
-    char buffer[100];
+    char buffer[1000];
 };
 
 int ReadString(char **pointer)//legge una stringa è la salva nel puntatore che punta pointer
