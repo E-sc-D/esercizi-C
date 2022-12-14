@@ -1,7 +1,8 @@
 #include <stdio.h>
 
-#define DATA_TYPE int
 #include "list.c"
+#define DATA_TYPE int
+
 
 int main()
 {

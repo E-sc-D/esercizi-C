@@ -1,16 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DATA_TYPE2  struct Giocatore
+#define DATA_TYPE2  int
 
 #ifndef DATA_TYPE2
 #error DATA_TYPE not defined
 #else
-struct Giocatore
-{
-    int ciao;
-    char s;
-};
 
 struct Array
 {
