@@ -53,7 +53,8 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
 }
 
-struct Casella* crea_tabellone() {
+struct Casella* crea_tabellone()
+{
     int numero_caselle = 100;
     struct Casella* tabellone = (struct Casella*) malloc(numero_caselle * sizeof(struct Casella));
 
