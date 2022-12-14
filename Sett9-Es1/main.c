@@ -50,7 +50,7 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     int dado = 0;
 
 
-    print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
+    //print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
 }
 
 struct Casella* crea_tabellone()
@@ -228,7 +228,7 @@ int lancia_dado() {
     return dado;
 }
 
-/*void print_table(struct Casella* tabellone, int numero_caselle, struct Giocatore* giocatori, int numero_giocatori)
+void print_table(struct Casella* tabellone, int numero_caselle, struct Giocatore* giocatori, int numero_giocatori)
 {
     char cornersChar = '+', rowsChar = '-', columnsChar = '|';
     int innerCellWidth = 3, innerCellHeight = 3, tableWidth = 10, tableHeight = 10;
@@ -258,4 +258,4 @@ int lancia_dado() {
         }
         printf("\n");
     }
-}*/
+}
