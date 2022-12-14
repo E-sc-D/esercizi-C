@@ -12,6 +12,7 @@ void genera_tabellone();
 int genera_numero_in_range();
 void genera_serpenti();
 void genera_scale();
+struct Giocatore* istanzia_giocatori();
 void stampa_tabellone();
 struct Array* string_read();
 void gioca_snakes_and_ladders();
@@ -19,8 +20,8 @@ void gioca_snakes_and_ladders();
 
 struct Giocatore
 {
+    int id;
     int posizione; // posizione del giocatore sulla tabella
-
     char simbolo;   // simbolo con cui verrà identificato il giocatore sulla tavola
 };
 
@@ -39,13 +40,11 @@ int main()
     return 0;
 }
 
-void gioca_snakes_and_ladders(int numero_giocatori)
-{
-    struct Casella* tabellone = crea_tabellone();
+void gioca_snakes_and_ladders(int numero_giocatori) {
+    struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
+    struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
-
-
-
+    int dado = 0;
 
 
 
@@ -142,13 +141,24 @@ void genera_scale(struct Casella* tabellone, int numero_caselle, int numero_scal
     }
 }
 
-
 int genera_numero_in_range(int min, int max)
 {
     int numero = (rand() % (max - min + 1)) + min;
 
     return numero;
 }
+
+struct Giocatore* istanzia_giocatori(int numero_giocatori) {    //creo i giocatori e assegno la loro posizione a 0
+    struct Giocatore* giocatori = (struct Giocatore*) malloc(numero_giocatori * sizeof(struct Giocatore));
+
+    for(int i = 0; i < numero_giocatori; i++) {
+        giocatori[i].id = i;
+        giocatori[i].posizione = 0;
+    }
+
+    return giocatori;
+}
+
 
 void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
 {
@@ -185,7 +195,7 @@ struct Array* string_read(char *path)
     if(stream == NULL)
     {
         printf("file non trovato o path sbagliato");
-        return;
+        return NULL;
     }
 
      while(fgets(array, 1000, stream))//contiamo il numero di righe
