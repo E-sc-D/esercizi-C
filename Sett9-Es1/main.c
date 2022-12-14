@@ -16,6 +16,8 @@ struct Giocatore* istanzia_giocatori();
 void stampa_tabellone();
 struct Array* string_read();
 void gioca_snakes_and_ladders();
+int lancia_dado();
+void print_table();
 
 
 struct Giocatore
@@ -41,13 +43,14 @@ int main()
 }
 
 void gioca_snakes_and_ladders(int numero_giocatori) {
+    int numero_caselle = 100;
     struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
     int dado = 0;
 
 
-
+    print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
 }
 
 struct Casella* crea_tabellone() {
@@ -182,6 +185,7 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
         printf("[%03d]", tabellone[i].numero);
     }
 }
+
 struct Array* string_read(char *path)
 {
     
@@ -216,5 +220,41 @@ struct Array* string_read(char *path)
 
     fclose(stream);
     return stringArray;
-
 }
+
+int lancia_dado() {
+    int dado = genera_numero_in_range(1,6);
+    return dado;
+}
+
+/*void print_table(struct Casella* tabellone, int numero_caselle, struct Giocatore* giocatori, int numero_giocatori)
+{
+    char cornersChar = '+', rowsChar = '-', columnsChar = '|';
+    int innerCellWidth = 3, innerCellHeight = 3, tableWidth = 10, tableHeight = 10;
+    int cellWidth = innerCellWidth + 1;
+    int cellHeight = innerCellHeight + 1;
+
+    for(int y = 0; y <= (tableHeight * cellHeight); y++)
+    {
+        for(int x = 0; x <= (tableWidth * cellWidth); x++)
+        {
+            if(x % cellWidth == 0 && y % cellHeight == 0) // Cell corners
+            {
+                printf("%c", cornersChar);
+            }
+            else if(y % cellHeight == 0) // Rows
+            {
+                printf("%c", rowsChar);
+            }
+            else if(x % cellWidth == 0) // Columns
+            {
+                printf("%c", columnsChar);
+            }
+            else // Cell inside
+            {
+                printf("%d", tabellone[tableWidth*y+x]);
+            }
+        }
+        printf("\n");
+    }
+}*/
