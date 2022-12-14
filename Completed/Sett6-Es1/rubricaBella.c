@@ -90,21 +90,14 @@ int SearchContatto(const struct Rubrica *rubrica, const char searchKeyword[], co
     }
     else
     {
-        int deltaNome = LevenshteinDistance(rubrica->Contatti[0].Nome, searchKeyword);
-        int deltaCognome = LevenshteinDistance(rubrica->Contatti[0].Cognome, searchKeyword);
-        int deltaNumeroTelefonico = LevenshteinDistance(rubrica->Contatti[0].NumeroTelefonico, searchKeyword);
-        int minimumValue = FindMinimum(3, deltaNome, deltaCognome, deltaNumeroTelefonico);
+        int minimumValue = LevenshteinDistance(rubrica->Contatti[0].Nome, searchKeyword);
         int minimumIndex = 0;
         for(int i = 1; i < RUBRICA_MAX_LENGTH; i++)
         {
-            deltaNome = LevenshteinDistance(rubrica->Contatti[i].Nome, searchKeyword);
-            deltaCognome = LevenshteinDistance(rubrica->Contatti[i].Cognome, searchKeyword);
-            deltaNumeroTelefonico = LevenshteinDistance(rubrica->Contatti[i].NumeroTelefonico, searchKeyword);
-            int tempMinimum = FindMinimum(3, deltaNome, deltaCognome, deltaNumeroTelefonico);
-
-            if(tempMinimum < minimumValue)
+            int tempValue = LevenshteinDistance(rubrica->Contatti[i].Nome, searchKeyword);
+            if(tempValue < minimumValue)
             {
-                minimumValue = tempMinimum;
+                minimumValue = tempValue;
                 minimumIndex = i;
             }
         }

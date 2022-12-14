@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 // Un-comment for the alternate version with a jagged array instead of an array of structs
- #define RUBRICA_FRASTAGLIATA
+// #define RUBRICA_FRASTAGLIATA
 
 #ifdef RUBRICA_FRASTAGLIATA
     #include "rubricaFrastagliata.c"

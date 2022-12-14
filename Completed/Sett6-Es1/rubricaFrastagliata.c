@@ -72,20 +72,14 @@ int SearchContatto(struct Rubrica *rubrica, char searchKeyword[], bool exactMatc
     }
     else
     {
-        int deltas[CONTATTO_FIELDS_COUNT];
-        for(int i = 0; i < CONTATTO_FIELDS_COUNT; i++)
-            deltas[i] = LevenshteinDistance(rubrica->Contatti[0][i], searchKeyword);
-        int minimumValue = FindMinimumInArray(CONTATTO_FIELDS_COUNT, deltas);
+        int minimumValue = LevenshteinDistance(rubrica->Contatti[0][0], searchKeyword);
         int minimumIndex = 0;
         for(int i = 1; i < RUBRICA_MAX_LENGTH; i++)
         {
-            for(int j = 0; j < CONTATTO_FIELDS_COUNT; j++)
-                deltas[j] = LevenshteinDistance(rubrica->Contatti[i][j], searchKeyword);
-            int tempMinimum = FindMinimumInArray(CONTATTO_FIELDS_COUNT, deltas);
-
-            if(tempMinimum < minimumValue)
+            int tempValue = LevenshteinDistance(rubrica->Contatti[i][0], searchKeyword);
+            if(tempValue < minimumValue)
             {
-                minimumValue = tempMinimum;
+                minimumValue = tempValue;
                 minimumIndex = i;
             }
         }
