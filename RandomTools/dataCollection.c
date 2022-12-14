@@ -1,11 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DATA_TYPE2 int
+#define DATA_TYPE2  struct Giocatore
 
 #ifndef DATA_TYPE2
 #error DATA_TYPE not defined
 #else
+struct Giocatore
+{
+    int ciao;
+    char s;
+};
+
 struct Array
 {
     DATA_TYPE2 *self;
@@ -20,7 +26,7 @@ struct Array newArray(int size,struct Array **array)
     (*array)->elements = 0;
 }
 
-int pile_push(DATA_TYPE2 value,struct Array *Array)
+int stack_push(DATA_TYPE2 value,struct Array *Array)
 {
     
         if(Array->elements < Array->size)
@@ -33,7 +39,7 @@ int pile_push(DATA_TYPE2 value,struct Array *Array)
     return 0;
 }
 
-int pile_Fpush(DATA_TYPE2 value,struct Array **Array)
+int stack_Fpush(DATA_TYPE2 value,struct Array **Array)
 {
     
         if((*Array)->elements < (*Array)->size)
@@ -46,7 +52,9 @@ int pile_Fpush(DATA_TYPE2 value,struct Array **Array)
         {
             (*Array) =  realloc((*Array),(*Array) -> size + 1 );
             if(*Array == NULL)
-                return 
+            {
+                return 0 ;
+            }       
             (*Array)->self[(*Array)->elements] = value;
             (*Array)->elements++; 
         }
@@ -55,7 +63,7 @@ int pile_Fpush(DATA_TYPE2 value,struct Array **Array)
    
 }
 
-DATA_TYPE2 pile_pop(struct Array *Array)
+DATA_TYPE2 stack_pop(struct Array *Array)
 {
     if(Array->elements > 0)
     {
@@ -63,17 +71,17 @@ DATA_TYPE2 pile_pop(struct Array *Array)
         Array->elements--;
         return buffer;
     }
-    return 0    ;
+    return;
 }
 
-int que_push(int value,struct Array *array)
+int que_push(DATA_TYPE2 value,struct Array *array)
 {
-    return pile_push(value,array);
+    return stack_push(value,array);
 }
 
-int que_Fpush(int value , struct Array **array)
+int que_Fpush(DATA_TYPE2 value , struct Array **array)
 {
-    return pile_Fpush(value, array);
+    return stack_Fpush(value, array);
 }
 
 DATA_TYPE2 que_pop(struct Array *array)
@@ -93,8 +101,8 @@ int main()
 {
     struct Array *array;
     newArray(10,&array);
-    pile_Fpush(5,&array);
+    //stack_Fpush(5,&array);
     printf("\nvalori contenuti: %d",array->elements);
-    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d",array->elements,array->size,pile_pop(array));
+    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d",array->elements,array->size,stack_pop(array));
 }
 #endif

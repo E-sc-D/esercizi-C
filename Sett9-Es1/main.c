@@ -39,7 +39,8 @@ int main()
     return 0;
 }
 
-void gioca_snakes_and_ladders(int numero_giocatori) {
+void gioca_snakes_and_ladders(int numero_giocatori)
+{
     struct Casella* tabellone = crea_tabellone();
 
 
@@ -50,7 +51,8 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
 }
 
-struct Casella* crea_tabellone() {
+struct Casella* crea_tabellone()
+{
     int numero_caselle = 100;
     struct Casella* tabellone = (struct Casella*) malloc(numero_caselle * sizeof(struct Casella));
 
