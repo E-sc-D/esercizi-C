@@ -58,6 +58,17 @@ bool IsContattoEmpty(const struct Contatto contatto)
         return false;
 }
 
+int GetRubricaLength(const struct Rubrica *rubrica)
+{
+    int length = 0;
+
+    for(int i = 0; i < RUBRICA_MAX_LENGTH; i++)
+        if(!IsContattoEmpty(rubrica->Contatti[i]))
+            length++;
+    
+    return length;
+}
+
 int FindEmptyIndex(const struct Rubrica *rubrica) // Returns the index of the first empty place in Rubrica, if none returns -1
 {
     for(int i = 0; i < RUBRICA_MAX_LENGTH; i++)
@@ -76,9 +87,10 @@ int FindContatto(const struct Rubrica *rubrica, const struct Contatto contatto) 
 
 int SearchContatto(const struct Rubrica *rubrica, const char searchKeyword[], const bool exactMatch) // Returns the index of the first occurrence of searched Contatto in Rubrica, if none return -1
 {
+    int rubricaLength = GetRubricaLength(rubrica);
     if(exactMatch)
     {
-        for(int i = 0; i < RUBRICA_MAX_LENGTH; i++)
+        for(int i = 0; i < rubricaLength; i++)
             if(strcmp(rubrica->Contatti[i].Nome, searchKeyword) == 0)
                 return i;
             else if(strcmp(rubrica->Contatti[i].Cognome, searchKeyword) == 0)
@@ -90,31 +102,19 @@ int SearchContatto(const struct Rubrica *rubrica, const char searchKeyword[], co
     }
     else
     {
-        int minimumValue = LevenshteinDistance(rubrica->Contatti[0].Nome, searchKeyword);
+        int minimumValue = SimpleDistance(rubrica->Contatti[0].Nome, searchKeyword);
         int minimumIndex = 0;
-        for(int i = 1; i < RUBRICA_MAX_LENGTH; i++)
+        for(int i = 1; i < rubricaLength; i++)
         {
-            int tempValue = LevenshteinDistance(rubrica->Contatti[i].Nome, searchKeyword);
+            int tempValue = SimpleDistance(rubrica->Contatti[i].Nome, searchKeyword);
             if(tempValue < minimumValue)
             {
                 minimumValue = tempValue;
                 minimumIndex = i;
             }
         }
-
         return minimumIndex;
     }
-}
-
-int GetRubricaLength(const struct Rubrica *rubrica)
-{
-    int length = 0;
-
-    for(int i = 0; i < RUBRICA_MAX_LENGTH; i++)
-        if(!IsContattoEmpty(rubrica->Contatti[i]))
-            length++;
-    
-    return length;
 }
 
 bool IsRubricaFull(const struct Rubrica *rubrica)

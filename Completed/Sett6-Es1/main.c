@@ -67,7 +67,10 @@ void RicercaApprossimataContatto(struct Rubrica* rubrica)
     scanf("%s", &keyword);
 
     int index = SearchContatto(rubrica, keyword, false);
-    printf("Contatto trovato:\n%s\n", ContattoToString(rubrica->Contatti[index]));
+    if(index != -1)
+        printf("Contatto trovato:\n%s\n", ContattoToString(rubrica->Contatti[index]));
+    else
+        printf("Nessun risultato trovato\n");
 }
 
 void StampaCompletaRubrica(struct Rubrica* rubrica)
