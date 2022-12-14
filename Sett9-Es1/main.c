@@ -183,7 +183,7 @@ struct Array* string_read(char *path)
     if(stream == NULL)
     {
         printf("file non trovato o path sbagliato");
-        return;
+        return NULL;
     }
 
      while(fgets(array, 1000, stream))//contiamo il numero di righe
