@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "utils.c"
 
 struct Data
 {
@@ -36,7 +37,7 @@ struct Libro caricaLibriDaFile(char *percorso,List *lista)
 
     if(stream == NULL)
     {
-        printf("file non trovato o path sbagliato");
+        printf("file non trovato o path sbagliato\n");
         return;
     }
    
@@ -52,7 +53,7 @@ struct Libro caricaLibriDaFile(char *percorso,List *lista)
         add_element(lista,libro);  
     }
 
-    printf("libri caricati");
+    printf("libri caricati\n");
    
     fclose(stream);
 }
@@ -70,7 +71,7 @@ void inserisciLibro(List *lista)
         printf("libro correttamente inserito\n");
         return;
     }
-    printf("c'e stato un errore");
+    printf("c'e stato un errore\n");
     return;
 }
 
@@ -96,21 +97,24 @@ void stampa_libro_by_valutazione(struct Libro libro,int valutazione)
 
 void rimuovi_libro(List *lista)
 {
-    printf("inserisci il titolo del libro che vuoi rimuovere");
+    printf("inserisci il titolo del libro che vuoi rimuovere\n");
     char *titolo;
-    scanf("%s",&titolo);
-
-    iterator_init(lista);
+    ReadString(&titolo);
+    printf("titolo : %s",titolo);
+    /* iterator_init(lista);
     int lunghezza = get_length(lista);
     int i = 0;
+    
     for(i; i < lunghezza ; i++ )
     {
         if(strcmp(lista->iterator.current_node->data.titolo,titolo))
         {
-            node_remove(lista,i);
-            printf("libro rimosso");
+           /*  node_remove(lista,i); 
+            printf("libro rimosso\n");
         }
-    }
+        
+    } */
+    return;
 }
 
 void stampa_libri(List *lista)
@@ -135,7 +139,7 @@ void stampa_libri_by_valutazione(List *lista)
     int size = get_length(lista);
     int i = 0;
 
-    prinf("inserisci la valutazione che i libri devono avere\n");
+    printf("inserisci la valutazione che i libri devono avere\n");
     scanf("%d",&valutazione);
     
     for(i = 0; i < size ; i++)
@@ -159,6 +163,7 @@ int main()
             
     while(input != 0)
     {
+        printf("scegli dal menu:\n");
         scanf("%d",&input);
 
         switch (input)
