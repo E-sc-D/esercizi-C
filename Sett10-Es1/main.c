@@ -8,6 +8,7 @@ struct Data
     int mese;
     int anno;
 };
+
 struct Libro
 {
     struct Data data_di_lettura;
@@ -25,21 +26,10 @@ struct Libro
 
 
 
-struct Libro caricaLibroDaFile(char *percorso)
+struct Libro caricaLibriDaFile(char *percorso,List *lista)
 {
-    char *campi_libro[] = 
-    {
-        "data_di_lettura",
-        "anno_di_pubblicazione",
-        "titolo",
-        "autore",
-        "genere",
-        "casa_editrice",
-        "valutazione",
-        "id"
-    };
-
-    char array[1000];
+   
+    struct Libro libro;
     FILE *stream = fopen(percorso,"r");
     int campi = 8;
     int counter = 0;
@@ -52,24 +42,150 @@ struct Libro caricaLibroDaFile(char *percorso)
    
     int i = 0;
     int j = 0;
+    while(!feof(stream))//questo metodo legge un libro da ogni riga
+    {     
+        fscanf(stream,"%d-%d-%d %d-%d-%d %s %s %s %s %d %d",&libro.data_di_lettura.giorno,&libro.data_di_lettura.mese,&libro.data_di_lettura.anno,//questo legge la prima data
+        &libro.anno_di_pubblicazione.giorno,&libro.anno_di_pubblicazione.mese,&libro.anno_di_pubblicazione.anno,//questo la seconda
+        &libro.titolo,&libro.autore,&libro.genere,
+        &libro.casa_editrice,&libro.valutazione,&libro.id);//la stringa che legge deve essere formattata cosi:
+        //data_di_lettura(giorno-mese-anno) data_di_pubblicazione titolo autore genere casa_editrice valutazione id
+        add_element(lista,libro);  
+    }
 
-    while(fgets(array, 1000, stream))//fget aggiunge il terminatore
-    {
-        for(i ; i<8 ; i++)
-        {
-            if(strncmp(array, campi_libro[i], strlen(campi_libro[i]))) //se è stato trovato il nome del campo
-            {
-                
-            }  
-        }
-        
-    }  
-
+    printf("libri caricati");
+   
     fclose(stream);
-    return stringArray;
 }
+
+void inserisciLibro(List *lista)
+{
+    struct Libro libro;
+    printf("per inserire il libro segui precisamente la formattazione: data_di_lettura(giorno-mese-anno) data_di_pubblicazione(giorno-mese-anno) titolo autore genere casa_editrice valutazione id\n");
+    scanf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",&libro.data_di_lettura.giorno,&libro.data_di_lettura.mese,&libro.data_di_lettura.anno,//questo legge la prima data
+        &libro.anno_di_pubblicazione.giorno,&libro.anno_di_pubblicazione.mese,&libro.anno_di_pubblicazione.anno,//questo la seconda
+        &libro.titolo,&libro.autore,&libro.genere,
+        &libro.casa_editrice,&libro.valutazione,&libro.id);
+    if(add_element(lista,libro))
+    {
+        printf("libro correttamente inserito\n");
+        return;
+    }
+    printf("c'e stato un errore");
+    return;
+}
+
+void stampa_libro(struct Libro libro)
+{
+    printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
+        libro.anno_di_pubblicazione.giorno,libro.anno_di_pubblicazione.mese,libro.anno_di_pubblicazione.anno,
+        libro.titolo, libro.autore,libro.genere,
+        libro.casa_editrice,libro.valutazione,libro.id);
+}
+
+void stampa_libro_by_valutazione(struct Libro libro,int valutazione)
+{
+    if(libro.valutazione = valutazione)
+    {
+     printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
+        libro.anno_di_pubblicazione.giorno,libro.anno_di_pubblicazione.mese,libro.anno_di_pubblicazione.anno,
+        libro.titolo, libro.autore,libro.genere,
+        libro.casa_editrice,libro.valutazione,libro.id);   
+    }
+    return;
+}
+
+void rimuovi_libro(List *lista)
+{
+    printf("inserisci il titolo del libro che vuoi rimuovere");
+    char *titolo;
+    scanf("%s",&titolo);
+
+    iterator_init(lista);
+    int lunghezza = get_length(lista);
+    int i = 0;
+    for(i; i < lunghezza ; i++ )
+    {
+        if(strcmp(lista->iterator.current_node->data.titolo,titolo))
+        {
+            node_remove(lista,i);
+            printf("libro rimosso");
+        }
+    }
+}
+
+void stampa_libri(List *lista)
+{
+    struct Libro *libri = list_to_array(lista);
+    int size = get_length(lista);
+    int i = 0;
+    
+    for(i = 0; i < size ; i++)
+    {
+        printf("libro n.%d ",i);
+        stampa_libro(libri[i]);
+        printf("\n");
+    }
+
+}
+
+void stampa_libri_by_valutazione(List *lista)
+{
+    int valutazione = 0;
+    struct Libro *libri = list_to_array(lista);
+    int size = get_length(lista);
+    int i = 0;
+
+    prinf("inserisci la valutazione che i libri devono avere\n");
+    scanf("%d",&valutazione);
+    
+    for(i = 0; i < size ; i++)
+    {
+        printf("libro n.%d ",i);
+        stampa_libro_by_valutazione(libri[i],valutazione);
+        printf("\n");
+    }
+
+}
+
 
 int main()
 {
+    List lista_di_libri = new_list();
+    
+    /* stampa_libri(&lista_di_libri);
+    printf("fatto"); */
+    int input = 1;
+    printf("[0] per uscire dal programma\n [1] per caricare i libri dal file libri.txt\n [2] per visualizzare tutti i libri\n [3] per inserire un libro\n [4] per rimuovere un libro\n [5] filtra libri per valutazione\n");
+            
+    while(input != 0)
+    {
+        scanf("%d",&input);
 
+        switch (input)
+        {
+
+            case 1:
+                caricaLibriDaFile("./libri.txt",&lista_di_libri);
+            break;
+            
+            case 2:
+                stampa_libri(&lista_di_libri);
+            break;
+
+            case 3:
+                inserisciLibro(&lista_di_libri);
+            break;
+
+            case 4:
+                rimuovi_libro(&lista_di_libri);
+            break;
+
+            case 5:
+                stampa_libri_by_valutazione(&lista_di_libri);
+            break;
+
+            default:
+                break;
+        }
+    }
 }
