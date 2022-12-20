@@ -101,19 +101,23 @@ int SearchContatto(const struct Rubrica *rubrica, const char searchKeyword[], co
         return -1;
     }
     else
-    {
-        int minimumValue = SimpleDistance(rubrica->Contatti[0].Nome, searchKeyword);
-        int minimumIndex = 0;
+    { 
+        int maximumValue = SimpleStringSimilarity(rubrica->Contatti[0].Nome, searchKeyword);
+        int maximumIndex = 0;
         for(int i = 1; i < rubricaLength; i++)
         {
-            int tempValue = SimpleDistance(rubrica->Contatti[i].Nome, searchKeyword);
-            if(tempValue < minimumValue)
+            int tempValue = SimpleStringSimilarity(rubrica->Contatti[i].Nome, searchKeyword);
+            if(tempValue > maximumValue)
             {
-                minimumValue = tempValue;
-                minimumIndex = i;
+                maximumValue = tempValue;
+                maximumIndex = i;
             }
         }
-        return minimumIndex;
+
+        if(maximumValue == 0)
+            return -1;
+        else
+            return maximumIndex;
     }
 }
 

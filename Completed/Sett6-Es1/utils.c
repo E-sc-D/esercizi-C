@@ -73,7 +73,7 @@ int FindMaximum(const int numbersCount, ... )
     return maximumNumber;
 }
 
-int LevenshteinDistance(const char* string1, const char* string2)
+int LevenshteinStringDistance(const char* string1, const char* string2)
 {
     int length1 = strlen(string1);
     int length2 = strlen(string2);
@@ -105,28 +105,27 @@ int LevenshteinDistance(const char* string1, const char* string2)
     return levenshteinMatrix[length1][length2];
 }
 
-int SimpleDistance(const char* string1, const char* string2)
+int SimpleStringSimilarity(const char* string1, const char* string2)
 {
     int length1 = strlen(string1);
     int length2 = strlen(string2);
 
-    char* ptrStringMag, ptrStringMin;
+    int similarity = 0;
     if(length1 >= length2)
     {
-        int simpleDistance = length1;
         for(int i = 0; i < length2; i++)
             if(string1[i] == string2[i])
-                simpleDistance--;
+                similarity++;
             else
                 break;
     }
     else
     {
-        int simpleDistance = length2;
         for(int i = 0; i < length1; i++)
             if(string1[i] == string2[i])
-                simpleDistance--;
+                similarity++;
             else
                 break;
     }
+    return similarity;
 }
