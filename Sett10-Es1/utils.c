@@ -73,7 +73,7 @@ int FindMaximum(const int numbersCount, ... )
     return maximumNumber;
 }
 
-int LevenshteinStringDistance(const char* string1, const char* string2)
+int LevenshteinDistance(const char* string1, const char* string2)
 {
     int length1 = strlen(string1);
     int length2 = strlen(string2);
@@ -105,27 +105,46 @@ int LevenshteinStringDistance(const char* string1, const char* string2)
     return levenshteinMatrix[length1][length2];
 }
 
-int SimpleStringSimilarity(const char* string1, const char* string2)
+struct consoleBuffer
 {
-    int length1 = strlen(string1);
-    int length2 = strlen(string2);
+    int count;
+    char buffer[100];
+};
 
-    int similarity = 0;
-    if(length1 >= length2)
+int ReadString(char **pointer)//legge una stringa è la salva nel puntatore che punta pointer
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);//serve a pulire il buffer;
+
+    struct consoleBuffer console;
+    console.count = 0;
+    do
     {
-        for(int i = 0; i < length2; i++)
-            if(string1[i] == string2[i])
-                similarity++;
-            else
-                break;
+        console.buffer[console.count] = getchar();
+        console.count++;
     }
-    else
+    while(console.buffer[console.count - 1] != '\n'); //vengono salvati dentro un buffer di 100 elementi i char inseriti
+    console.buffer[console.count - 1] = '\0';//l'ultimo elemento sarà il terminatore
+    (*pointer) = (char*)malloc((sizeof(char) * console.count));//viene inizializzata la matrice in base al numero di elementi inseriti
+
+    for(int j = 0;j < console.count ; j++)
     {
-        for(int i = 0; i < length1; i++)
-            if(string1[i] == string2[i])
-                similarity++;
-            else
-                break;
+        (*pointer)[j] = console.buffer[j];//viene riempita
     }
-    return similarity;
+    return console.count ; //viene restituito il numero di char dentro il vettore
+}
+
+struct Array
+{
+    char* array;
+    int n;//dimensione array
+} emptyArray = { NULL , 0 };
+
+int StringLen(char *string)
+{
+    int i;
+    for(i = 0; string[i]!='\0';i++);
+
+    return i + 1; //in questo modo il risultato conta anche il carattere terminatore: "ciao\0" sarà lunga 5
+    
 }
