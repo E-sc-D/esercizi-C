@@ -131,7 +131,7 @@ int ReadString(char **pointer)//legge una stringa è la salva nel puntatore che 
     return console.count ; //viene restituito il numero di char dentro il vettore
 }
 
-struct Array
+struct StringArray
 {
     char* array;
     int n;//dimensione array

@@ -72,19 +72,22 @@ int SearchContatto(struct Rubrica *rubrica, char searchKeyword[], bool exactMatc
     }
     else
     {
-        int minimumValue = LevenshteinDistance(rubrica->Contatti[0][0], searchKeyword);
-        int minimumIndex = 0;
+        int maximumValue = SimpleStringSimilarity(rubrica->Contatti[0][0], searchKeyword);
+        int maximumIndex = 0;
         for(int i = 1; i < RUBRICA_MAX_LENGTH; i++)
         {
-            int tempValue = LevenshteinDistance(rubrica->Contatti[i][0], searchKeyword);
-            if(tempValue < minimumValue)
+            int tempValue = SimpleStringSimilarity(rubrica->Contatti[i][0], searchKeyword);
+            if(tempValue > maximumValue)
             {
-                minimumValue = tempValue;
-                minimumIndex = i;
+                maximumValue = tempValue;
+                maximumIndex = i;
             }
         }
 
-        return minimumIndex;
+        if(maximumValue == 0)
+            return -1;
+        else
+            return maximumIndex;
     }
 }
 

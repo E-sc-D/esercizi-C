@@ -1,17 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DATA_TYPE2  struct Giocatore
+#define DATA_TYPE2  int
 
 #ifndef DATA_TYPE2
 #error DATA_TYPE not defined
 #else
-struct Giocatore
-{
-    int id;
-    int posizione; // posizione del giocatore sulla tabella
-    char simbolo;   // simbolo con cui verrà identificato il giocatore sulla tavola
-};
+
+
+/*
+ * Bisogna verificare che la coda non sia vuota prima di fare POP POP OPOPOPOPOPO
+ * */
+
 
 struct Array
 {
@@ -98,12 +98,12 @@ DATA_TYPE2 que_pop(struct Array *array)
     return returnVal;
 
 }
-int main()
+/*int main()
 {
     struct Array *array;
     newArray(10,&array);
     //stack_Fpush(5,&array);
     printf("\nvalori contenuti: %d",array->elements);
     printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d",array->elements,array->size,stack_pop(array));
-}
+}*/
 #endif
