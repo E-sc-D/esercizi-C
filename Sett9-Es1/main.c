@@ -58,20 +58,22 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
         que_push(i, coda_giocatori);  // Inserisco i giocatori nella coda
     }
 
-    struct Giocatore giocatore_attuale;
     // Turno
-    giocatore_attuale.id = que_pop(coda_giocatori);
-    giocatore_attuale.id = que_pop(coda_giocatori);
-    printf("\ngiocatore attuale id %d", giocatore_attuale.id);
+    int indice_giocatore_attuale = 0;
+    struct Giocatore* giocatore_attuale = NULL;
+    indice_giocatore_attuale = que_pop(coda_giocatori); // ottengo l'indice del giocatore facendo pop della coda
+    giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale il puntatore del giocatore in turno
 
     dado = lancia_dado();
-    giocatore_attuale.posizione += dado;    // aumento la posizione del giocatore
+    giocatore_attuale->posizione += dado;    // aumento la posizione del giocatore di dado posti
 
-    if (tabellone[giocatore_attuale.posizione].effetto > 0) {
+    if (tabellone[giocatore_attuale->posizione].effetto > 0) {
         // chiedi domanda
     } else {
-        giocatore_attuale.posizione += tabellone[giocatore_attuale.posizione].effetto;
+        giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
     }
+
+
 
 
 
