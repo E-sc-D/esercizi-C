@@ -100,20 +100,17 @@ void rimuovi_libro(List *lista)
     printf("inserisci il titolo del libro che vuoi rimuovere\n");
     char *titolo;
     ReadString(&titolo);
-    printf("titolo : %s",titolo);
-    /* iterator_init(lista);
-    int lunghezza = get_length(lista);
-    int i = 0;
+    iterator_init(lista);
     
-    for(i; i < lunghezza ; i++ )
+    while(iterator_forward(lista))
     {
-        if(strcmp(lista->iterator.current_node->data.titolo,titolo))
+        if(strcmp(lista->iterator.current_node->data.titolo,titolo) == 0)
         {
-           /*  node_remove(lista,i); 
+            node_remove(lista,lista->iterator.current_index); 
             printf("libro rimosso\n");
         }
         
-    } */
+    } 
     return;
 }
 
