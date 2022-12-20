@@ -6,6 +6,8 @@
 #include <ctype.h>
 #include <time.h>
 #include "utils.c"
+#include "dataCollection.c"
+
 
 struct Casella* crea_tabellone();
 void genera_tabellone();
@@ -14,7 +16,7 @@ void genera_serpenti();
 void genera_scale();
 struct Giocatore* istanzia_giocatori();
 void stampa_tabellone();
-struct Array* string_read();
+struct StringArray* string_read();
 void gioca_snakes_and_ladders();
 int lancia_dado();
 void print_table();
@@ -48,6 +50,32 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
     int dado = 0;
+
+    struct Array *coda_giocatori = NULL;
+    newArray(numero_giocatori, &coda_giocatori); // istanzio la coda
+
+    for (int i = 0; i < numero_giocatori; i++) {
+        que_push(i, coda_giocatori);  // Inserisco i giocatori nella coda
+    }
+
+    struct Giocatore giocatore_attuale;
+    // Turno
+    giocatore_attuale.id = que_pop(coda_giocatori);
+    giocatore_attuale.id = que_pop(coda_giocatori);
+    printf("\ngiocatore attuale id %d", giocatore_attuale.id);
+
+    dado = lancia_dado();
+    giocatore_attuale.posizione += dado;    // aumento la posizione del giocatore
+
+    if (tabellone[giocatore_attuale.posizione].effetto > 0) {
+        // chiedi domanda
+    } else {
+        giocatore_attuale.posizione += tabellone[giocatore_attuale.posizione].effetto;
+    }
+
+
+
+
 
 
     //print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
@@ -156,6 +184,7 @@ struct Giocatore* istanzia_giocatori(int numero_giocatori) {    //creo i giocato
 
     for(int i = 0; i < numero_giocatori; i++) {
         giocatori[i].id = i;
+        printf("\nIDDD%d", giocatori[i].id);
         giocatori[i].posizione = 0;
     }
 
@@ -187,10 +216,10 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
     }
 }
 
-struct Array* string_read(char *path)
+struct StringArray* string_read(char *path)
 {
     
-    struct Array *stringArray;
+    struct StringArray *stringArray;
     char array[1000];
     FILE *stream = fopen(path,"r");
     int count = 0;
@@ -207,7 +236,7 @@ struct Array* string_read(char *path)
         count++;
     }  
 
-    stringArray = malloc(sizeof(struct Array)* count);//allochiamo l'array di stringhe
+    stringArray = malloc(sizeof(struct StringArray) * count);//allochiamo l'array di stringhe
     rewind(stream);//riportiamo indietro il puntatore del lettore di file
     int i = 0;
 
