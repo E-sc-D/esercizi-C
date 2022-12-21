@@ -58,21 +58,43 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
         que_push(i, coda_giocatori);  // Inserisco i giocatori nella coda
     }
 
-    struct Giocatore giocatore_attuale;
-    // Turno
-    giocatore_attuale.id = que_pop(coda_giocatori);
-    giocatore_attuale.id = que_pop(coda_giocatori);
-    printf("\ngiocatore attuale id %d", giocatore_attuale.id);
+    int indice_giocatore_attuale = 0;
+    struct Giocatore* giocatore_attuale = NULL;
+int c;
+    //  Turno
+    do {
+        indice_giocatore_attuale = que_pop(coda_giocatori); // ottengo l'indice del giocatore facendo pop della coda
+        giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale l'indirizzo del giocatore in turno nella struttura giocatori
+        printf("\n\ndIndice giocatore attuale: %d", indice_giocatore_attuale);
+        printf("\nId Giocatore Attuale: %d", giocatore_attuale->id);
+        printf("\n  Posizione vecchia: %d", giocatore_attuale->posizione);
 
-    dado = lancia_dado();
-    giocatore_attuale.posizione += dado;    // aumento la posizione del giocatore
 
-    if (tabellone[giocatore_attuale.posizione].effetto > 0) {
-        // chiedi domanda
-    } else {
-        giocatore_attuale.posizione += tabellone[giocatore_attuale.posizione].effetto;
+        printf("\nInserisci 'd' per lanciare il dado");
+        while ( (c = getchar()) != '\n' && c != EOF ) { }
+        dado = lancia_dado();
+
+        if ((giocatore_attuale->posizione + dado) >= 99) {
+            //il giocatore ha vinto
+            giocatore_attuale-> posizione = 99;
+            break;
+        }
+
+        giocatore_attuale->posizione += dado;    // aumento la posizione del giocatore di dado posti
+
+        if (tabellone[giocatore_attuale->posizione].effetto > 0) {
+            // chiedi domanda
+        } else {
+            giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
+        }
+
+        printf("\n  Posizione nuova: %d", giocatore_attuale->posizione);
+        que_push(indice_giocatore_attuale, coda_giocatori); // rimetto il giocatore nella coda
+    } while (giocatore_attuale->posizione != 99);
+
+    if (giocatore_attuale->posizione == 99) {   // Verifico la vincita
+        // Vinto
     }
-
 
 
 
