@@ -64,8 +64,8 @@ int c;
     //  Turno
     do {
         indice_giocatore_attuale = que_pop(coda_giocatori); // ottengo l'indice del giocatore facendo pop della coda
-        giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale il puntatore del giocatore in turno
-        printf("\nIndice giocatore attuale: %d", indice_giocatore_attuale);
+        giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale l'indirizzo del giocatore in turno nella struttura giocatori
+        printf("\n\ndIndice giocatore attuale: %d", indice_giocatore_attuale);
         printf("\nId Giocatore Attuale: %d", giocatore_attuale->id);
         printf("\n  Posizione vecchia: %d", giocatore_attuale->posizione);
 
