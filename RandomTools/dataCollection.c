@@ -14,56 +14,58 @@ struct Array
     int elements;
 };
 
-struct Array newArray(int size,struct Array **array)
+struct Array newArray(int size)
 {
-    (*array ) = malloc(sizeof(DATA_TYPE2)*size);
-    (*array)->size = size;
-    (*array)->elements = 0;
+    struct Array array;
+    array.self = malloc(sizeof(DATA_TYPE2)*size);
+    array.size = size;
+    array.elements = 0;
+    return array;
 }
 
-int stack_push(DATA_TYPE2 value,struct Array *Array)
+int stack_push(DATA_TYPE2 value,struct Array *array)
 {
     
-        if(Array->elements < Array->size)
+        if(array->elements < array->size)
         {
-            Array->self[Array->elements] = value;
-            Array->elements++; 
+            array->self[array->elements] = value;
+            array->elements++; 
             return 1; 
         }
     
     return 0;
 }
 
-int stack_Fpush(DATA_TYPE2 value,struct Array **Array)
+int stack_Fpush(DATA_TYPE2 value,struct Array *array)
 {
     
-        if((*Array)->elements < (*Array)->size)
+        if(array->elements < array->size)
         {
-            (*Array)->self[(*Array)->elements] = value;
-            (*Array)->elements++; 
+            array->self[array->elements] = value;
+            array->elements++; 
             
         }
         else
         {
-            (*Array) =  realloc((*Array),(*Array) -> size + 1 );
-            if(*Array == NULL)
+            array->self =  realloc(array->self,(array->size) + 1  );
+            if(array->self == NULL)
             {
                 return 0 ;
             }       
-            (*Array)->self[(*Array)->elements] = value;
-            (*Array)->elements++; 
+            array->self[array->elements] = value;
+            array->elements++; 
         }
         return 1; 
     
    
 }
 
-DATA_TYPE2 stack_pop(struct Array *Array)
+DATA_TYPE2 stack_pop(struct Array *array)
 {
-    if(Array->elements > 0)
+    if(array->elements > 0)
     {
-        DATA_TYPE2 buffer = Array->self[Array->elements - 1];
-        Array->elements--;
+        DATA_TYPE2 buffer = array->self[array->elements - 1];
+        array->elements--;
         return buffer;
     }
     return;
@@ -74,30 +76,44 @@ int que_push(DATA_TYPE2 value,struct Array *array)
     return stack_push(value,array);
 }
 
-int que_Fpush(DATA_TYPE2 value , struct Array **array)
+int que_Fpush(DATA_TYPE2 value , struct Array *array)
 {
     return stack_Fpush(value, array);
-}
+}   
 
 DATA_TYPE2 que_pop(struct Array *array)
 {
     int i;
-    DATA_TYPE2 returnVal = array->self[0];
-
-    for( i = 1 ; i < array->size; i++)
+    DATA_TYPE2 returnVal;
+    if(array->elements > 0)
     {
-        array->self[i-1] = array ->self[i];
+        returnVal = array->self[0];
+
+        for( i = 1 ; i < array->size; i++)
+        {
+            array->self[i-1] = array ->self[i];
+        }
+
+        array->elements--;
+
     }
-
+   
     return returnVal;
-
 }
 int main()
 {
-    struct Array *array;
-    newArray(10,&array);
-    //stack_Fpush(5,&array);
-    printf("\nvalori contenuti: %d",array->elements);
-    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d",array->elements,array->size,stack_pop(array));
+    struct Array array;
+    array = newArray(10);
+    
+    que_Fpush(5,&array);
+    que_Fpush(4,&array);
+    que_Fpush(3,&array);
+    que_Fpush(2,&array);
+    printf("\nvalori contenuti: %d\n",array.elements);
+    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
+    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
+    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
+    printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
+    free(array.self);
 }
 #endif
