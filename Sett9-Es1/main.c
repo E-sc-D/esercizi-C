@@ -51,6 +51,11 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
+    char path[] = "C:\\Moje stvari\\Universita\\Progetti Programmazione\\Sett9-Es1\\FileDomande.txt";
+    struct StringArray* domande = string_read(path);
+    strcpy(path, "C:\\Moje stvari\\Universita\\Progetti Programmazione\\Sett9-Es1\\FileDomande.txt");
+    struct StringArray* risposte = string_read(path);
+
     int dado = 0;
 
     //struct Array *coda_giocatori = NULL;
