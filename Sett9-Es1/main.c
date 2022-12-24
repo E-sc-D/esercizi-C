@@ -7,6 +7,7 @@
 #include <time.h>
 #include "utils.c"
 #include "dataCollection.c"
+#include "list.c"
 
 
 struct Casella* crea_tabellone();
@@ -20,6 +21,7 @@ struct StringArray* string_read();
 void gioca_snakes_and_ladders();
 int lancia_dado();
 void print_table();
+
 
 
 struct Giocatore
@@ -51,29 +53,28 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
     int dado = 0;
 
-    struct Array *coda_giocatori = NULL;
-    newArray(numero_giocatori, &coda_giocatori); // istanzio la coda
+    //struct Array *coda_giocatori = NULL;
+    List coda_giocatori;
+    coda_giocatori = list_new(); // istanzio la coda
 
     for (int i = 0; i < numero_giocatori; i++) {
-        que_push(i, coda_giocatori);  // Inserisco i giocatori nella coda
+        var indice;
+        indice = var_set_int(i);
+        list_push_back(&coda_giocatori, indice);    // Inserisco l'indice dei giocatori nella coda
     }
 
     int indice_giocatore_attuale = 0;
     struct Giocatore* giocatore_attuale = NULL;
-int c;
+    int c;
     //  Turno
     do {
-        indice_giocatore_attuale = que_pop(coda_giocatori); // ottengo l'indice del giocatore facendo pop della coda
+        indice_giocatore_attuale = var_get_int(list_pop_front(&coda_giocatori)); // ottengo l'indice del giocatore facendo pop della coda
         giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale l'indirizzo del giocatore in turno nella struttura giocatori
-        printf("\n\ndIndice giocatore attuale: %d", indice_giocatore_attuale);
-        printf("\nId Giocatore Attuale: %d", giocatore_attuale->id);
-        printf("\n  Posizione vecchia: %d", giocatore_attuale->posizione);
-
 
         printf("\nInserisci 'd' per lanciare il dado");
         while ( (c = getchar()) != '\n' && c != EOF ) { }
         dado = lancia_dado();
-
+        //print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
         if ((giocatore_attuale->posizione + dado) >= 99) {
             //il giocatore ha vinto
             giocatore_attuale-> posizione = 99;
@@ -88,8 +89,7 @@ int c;
             giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
         }
 
-        printf("\n  Posizione nuova: %d", giocatore_attuale->posizione);
-        que_push(indice_giocatore_attuale, coda_giocatori); // rimetto il giocatore nella coda
+        list_push_back(&coda_giocatori, var_set_int(indice_giocatore_attuale)); // rimetto il giocatore nella coda
     } while (giocatore_attuale->posizione != 99);
 
     if (giocatore_attuale->posizione == 99) {   // Verifico la vincita
@@ -100,7 +100,7 @@ int c;
 
 
 
-    //print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
+
 }
 
 struct Casella* crea_tabellone()
@@ -110,7 +110,7 @@ struct Casella* crea_tabellone()
 
     genera_tabellone(tabellone, numero_caselle);
 
-    stampa_tabellone(tabellone, numero_caselle);
+    //stampa_tabellone(tabellone, numero_caselle);
 
     return tabellone;
 
@@ -206,7 +206,6 @@ struct Giocatore* istanzia_giocatori(int numero_giocatori) {    //creo i giocato
 
     for(int i = 0; i < numero_giocatori; i++) {
         giocatori[i].id = i;
-        printf("\nIDDD%d", giocatori[i].id);
         giocatori[i].posizione = 0;
     }
 
@@ -228,7 +227,7 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
     printf("\n\n");
 
     printf("\nTabellone con numeri delle caselle");
-    for(int i = 0; i < numero_caselle; i++)    // Stampo il tabellone con partenza che corrisonde a t[0][0] e fine t[10][10]
+    for(int i = 0; i < numero_caselle; i++)    // Stampo il tabellone con partenza che corrisonde a t[0][0] e fine t[9][9]
     {
         if ((i % 10) == 0)
         {
@@ -285,6 +284,7 @@ void print_table(struct Casella* tabellone, int numero_caselle, struct Giocatore
     int innerCellWidth = 3, innerCellHeight = 3, tableWidth = 10, tableHeight = 10;
     int cellWidth = innerCellWidth + 1;
     int cellHeight = innerCellHeight + 1;
+    int cont = 0;
 
     for(int y = 0; y <= (tableHeight * cellHeight); y++)
     {
@@ -304,7 +304,8 @@ void print_table(struct Casella* tabellone, int numero_caselle, struct Giocatore
             }
             else // Cell inside
             {
-                printf("%d", tabellone[tableWidth*y+x]);
+                printf("%d", tabellone[cont]);
+                cont++;
             }
         }
         printf("\n");
