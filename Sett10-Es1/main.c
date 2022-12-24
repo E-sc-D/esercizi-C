@@ -61,11 +61,34 @@ struct Libro caricaLibriDaFile(char *percorso,List *lista)
 void inserisciLibro(List *lista)
 {
     struct Libro libro;
-    printf("per inserire il libro segui precisamente la formattazione: data_di_lettura(giorno-mese-anno) data_di_pubblicazione(giorno-mese-anno) titolo autore genere casa_editrice valutazione id\n");
-    scanf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",&libro.data_di_lettura.giorno,&libro.data_di_lettura.mese,&libro.data_di_lettura.anno,//questo legge la prima data
-        &libro.anno_di_pubblicazione.giorno,&libro.anno_di_pubblicazione.mese,&libro.anno_di_pubblicazione.anno,//questo la seconda
-        &libro.titolo,&libro.autore,&libro.genere,
-        &libro.casa_editrice,&libro.valutazione,&libro.id);
+    
+    printf("inserisci il giorno di lettura del libro\n");
+    scanf("%d\n",&libro.data_di_lettura.giorno);
+    printf("inserisci il mese di lettura del libro\n");
+    scanf("%d\n",&libro.data_di_lettura.mese);
+    printf("inserisci l'anno di lettura del libro\n");
+    scanf("%d\n",&libro.data_di_lettura.anno);
+
+    printf("inserisci il giorno di pubblicazione del libro\n");
+    scanf(" %d\n",&libro.anno_di_pubblicazione.giorno);
+    printf("inserisci il mese di pubblicazione del libro\n");
+    scanf(" %d\n",&libro.anno_di_pubblicazione.mese);
+    printf("inserisci l'anno di pubblicazione del libro\n");
+    scanf(" %d\n",&libro.data_di_lettura.anno);
+
+    printf("inserisci il titolo del libro\n");
+    scanf(" %s\n",&libro.titolo);
+    printf("inserisci l'autore del libro\n");
+    scanf(" %s\n",&libro.autore);
+    printf("inserisci il genere del libro\n");
+    scanf(" %s\n",&libro.genere);
+    printf("inserisci la casa editrice del libro del libro\n");
+    scanf(" %s\n",&libro.autore);
+    printf("inserisci la valutazione del libro");
+    scanf(" %d\n",&libro.valutazione);
+    printf("inserisci l'id del libro");
+    scanf(" %s\n",&libro.id);
+
     if(add_element(lista,libro))
     {
         printf("libro correttamente inserito\n");

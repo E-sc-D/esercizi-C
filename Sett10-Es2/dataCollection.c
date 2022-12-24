@@ -96,7 +96,7 @@ var que_pop(struct Array *array)
    
     return returnVal;
 }
-/* int main()
+int main()
 {
     struct Array array;
     array = newArray(10);
@@ -111,4 +111,4 @@ var que_pop(struct Array *array)
     printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
     printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
     free(array.self);
-} */
+}
