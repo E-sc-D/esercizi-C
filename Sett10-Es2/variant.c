@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#define VARIANT_C
 struct Variant
 {
     void* data;

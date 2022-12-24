@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "variant.c"
-
+#ifndef VARIANT_C
+#define "variant.c"
+#endif
+#define DATACOLLECTION_C
 
 struct Array
 {
@@ -13,7 +15,7 @@ struct Array
 struct Array newArray(int size)
 {
     struct Array array;
-    array.self = malloc(sizeof(var)*size);
+    array.self = calloc(size,sizeof(var));
     array.size = size;
     array.elements = 0;
     return array;
@@ -96,7 +98,19 @@ var que_pop(struct Array *array)
    
     return returnVal;
 }
-int main()
+//visualizza la coda/pila contente elementi di tipo decimale
+void que_print_int(struct Array *array)
+{
+    printf("\n stampa della coda:");
+    int i = 0;
+    for(i ; i < array->elements; i++)
+    {
+        printf("[%d]:%d  ",i,var_get_int((array->self[i])));
+    }
+    printf("\n\n");
+}
+
+/* int main()
 {
     struct Array array;
     array = newArray(10);
@@ -111,4 +125,5 @@ int main()
     printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
     printf("valori contenuti : %d , dimensioni dell'array %d, valore di pop %d\n",array.elements,array.size,que_pop(&array));
     free(array.self);
-}
+} */
+
