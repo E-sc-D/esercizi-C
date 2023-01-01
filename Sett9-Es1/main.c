@@ -26,6 +26,7 @@ void stampa_posizione_giocatori();
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
 
 
 
@@ -56,9 +57,11 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
-    char path[] = "C:\\Moje stvari\\Universita\\Progetti Programmazione\\Sett9-Es1\\FileDomande.txt";
+    char path[] = "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileDomande.txt";
     struct StringArray* domande = string_read(path);
-    strcpy(path, "C:\\Moje stvari\\Universita\\Progetti Programmazione\\Sett9-Es1\\FileDomande.txt");
+    printf("numero domande %d", domande[0].n/sizeof(domande));
+    printf("domanda 1 %s", domande[0].array);
+    strcpy(path, "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileRisposte.txt");
     struct StringArray* risposte = string_read(path);
 
     int dado = 0;
@@ -76,6 +79,8 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     int indice_giocatore_attuale = 0;
     struct Giocatore* giocatore_attuale = NULL;
     int c;
+    int indice_domanda = 0;
+    char risposta[15];
     //  Turno
     do {
         //system("cls");
@@ -85,8 +90,9 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
         indice_giocatore_attuale = var_get_int(list_pop_front(&coda_giocatori)); // ottengo l'indice del giocatore facendo pop della coda
         giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale l'indirizzo del giocatore in turno nella struttura giocatori
 
-        printf("\nInserisci 'd' per lanciare il dado");
-        while ( (c = getchar()) != '\n' && c != EOF ) { }
+        printf("\n\nGiocatore in turno: %d", giocatore_attuale->id);
+        printf("\nInserisci invio per lanciare il dado");
+        while( getchar() != '\n' );
         dado = lancia_dado();
         //print_table(tabellone, numero_caselle, giocatori, numero_giocatori);
         if ((giocatore_attuale->posizione + dado) >= 99) {
@@ -97,9 +103,41 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
         giocatore_attuale->posizione += dado;    // aumento la posizione del giocatore di dado posti
 
-        if (tabellone[giocatore_attuale->posizione].effetto > 0) {
-            // chiedi domanda
-        } else {
+        system("cls");
+        if(tabellone[giocatore_attuale->posizione].effetto == 0) {
+            printf(ANSI_COLOR_YELLOW "Lanciando il dado il giocatore %d e salito di %d posti", giocatore_attuale->id, dado);
+            printf(ANSI_COLOR_RESET);
+            printf("\nInserisci invio per continuare");
+            while( getchar() != '\n' );
+        }
+        else if (tabellone[giocatore_attuale->posizione].effetto > 0) {
+            printf(ANSI_COLOR_GREEN "Lanciando il dado il giocatore %d si muove di %d posti e arriva a una scala", giocatore_attuale->id, dado);
+            printf(ANSI_COLOR_RESET);
+
+            printf("\nRispondi correttamente a questa domanda per salire di %d posti", tabellone[giocatore_attuale->posizione].effetto);
+            indice_domanda = 0;
+            printf("\n%s", domande[indice_domanda].array);
+            scanf("%s", &risposta);
+
+            if(strcmp(risposte[indice_domanda].array, risposta) == 0) { // Se la risposta data equivale a quella salvata nel testo
+                printf(ANSI_COLOR_GREEN "Complimenti, hai risposto bene. Il giocatore %d sale di %d posti", giocatore_attuale->id, tabellone[giocatore_attuale->posizione].effetto);
+                printf(ANSI_COLOR_RESET);
+                giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
+            } else {
+                printf(ANSI_COLOR_YELLOW "Mi dispiace hai risposto male. Il giocatore %d rimane sulla posizione %d", giocatore_attuale->id, giocatore_attuale->posizione);
+                printf(ANSI_COLOR_RESET);
+            }
+
+            printf("\nInserisci invio per continuare");
+            while( getchar() != '\n' );
+
+        } else if (tabellone[giocatore_attuale->posizione].effetto < 0){
+            printf(ANSI_COLOR_RED "Lanciando il dado il giocatore %d e entrato nella bocca di un serpente e sceso di %d posti", giocatore_attuale->id, tabellone[giocatore_attuale->posizione].effetto);
+            printf(ANSI_COLOR_RESET);
+
+            printf("\nInserisci invio per continuare");
+            while( getchar() != '\n' );
+
             giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
         }
 
@@ -252,7 +290,7 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
             printf(ANSI_COLOR_GREEN);
         else if (tabellone[i].effetto < 0)
             printf(ANSI_COLOR_RED);
-        printf("[%03d]", tabellone[i].numero);
+        printf("[%03d]", i);
         printf(ANSI_COLOR_RESET);
     }
 }
