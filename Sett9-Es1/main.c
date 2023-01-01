@@ -21,6 +21,11 @@ struct StringArray* string_read();
 void gioca_snakes_and_ladders();
 int lancia_dado();
 void print_table();
+void stampa_posizione_giocatori();
+
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 
 
@@ -73,6 +78,10 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     int c;
     //  Turno
     do {
+        //system("cls");
+        stampa_tabellone(tabellone, numero_caselle);
+        stampa_posizione_giocatori(giocatori, numero_giocatori);
+
         indice_giocatore_attuale = var_get_int(list_pop_front(&coda_giocatori)); // ottengo l'indice del giocatore facendo pop della coda
         giocatore_attuale = &giocatori[indice_giocatore_attuale]; // assegno a giocatore_attuale l'indirizzo del giocatore in turno nella struttura giocatori
 
@@ -142,7 +151,7 @@ void genera_tabellone(struct Casella *tabellone, int numero_caselle) // Questo m
     int max_scale = 10; // numero massimo di scale
     int min_scale = 4;  // numero minimo di scale
     int num_scale = genera_numero_in_range(min_scale, max_scale); // genero randomicamente un numero di scale tra min_scale e max_scale
-    printf("\nNumero scale: %d\r\n", num_serpenti);
+    printf("\nNumero scale: %d\r\n", num_scale);
 
     genera_scale(tabellone, numero_caselle, num_scale);
 }
@@ -220,7 +229,7 @@ struct Giocatore* istanzia_giocatori(int numero_giocatori) {    //creo i giocato
 
 void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
 {
-    printf("\nTabellone effetti");
+   /*printf("\nTabellone effetti");
     for(int i = 0; i < numero_caselle; i++)    // Stampo il tabellone con partenza che corrisonde a t[0][0] e fine t[10][10]
     {
         if ((i % 10) == 0)
@@ -230,7 +239,7 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
         printf("[%03+d]", tabellone[i].effetto);
     }
     printf("\n\n");
-
+    */
     printf("\nTabellone con numeri delle caselle");
     for(int i = 0; i < numero_caselle; i++)    // Stampo il tabellone con partenza che corrisonde a t[0][0] e fine t[9][9]
     {
@@ -238,7 +247,21 @@ void stampa_tabellone(struct Casella* tabellone, int numero_caselle)
         {
             printf("\n");
         }
+
+        if(tabellone[i].effetto > 0)
+            printf(ANSI_COLOR_GREEN);
+        else if (tabellone[i].effetto < 0)
+            printf(ANSI_COLOR_RED);
         printf("[%03d]", tabellone[i].numero);
+        printf(ANSI_COLOR_RESET);
+    }
+}
+
+void stampa_posizione_giocatori(struct Giocatore* giocatori, int numero_giocatori) {
+
+    printf("\n-------- Posizione giocatori --------");
+    for(int i = 0; i < numero_giocatori; i++) {
+        printf("\nGiocatore %d: %d", giocatori[i].id, giocatori[i].posizione);
     }
 }
 
