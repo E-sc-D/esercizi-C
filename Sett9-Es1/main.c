@@ -59,8 +59,8 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
     char path[] = "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileDomande.txt";
     struct StringArray* domande = string_read(path);
+    printf("%d", domande[1].n);
     printf("numero domande %d", domande[0].n/sizeof(domande));
-    printf("domanda 1 %s", domande[0].array);
     strcpy(path, "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileRisposte.txt");
     struct StringArray* risposte = string_read(path);
 
@@ -98,6 +98,11 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
         if ((giocatore_attuale->posizione + dado) >= 99) {
             //il giocatore ha vinto
             giocatore_attuale-> posizione = 99;
+
+            printf(ANSI_COLOR_GREEN "Lanciando il dado il giocatore %d si muove di %d posti e arriva alla fine e VINCE", giocatore_attuale->id, dado);
+            printf(ANSI_COLOR_RESET);
+
+            exit(0);
             break;
         }
 
@@ -117,7 +122,7 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
             printf("\nRispondi correttamente a questa domanda per salire di %d posti", tabellone[giocatore_attuale->posizione].effetto);
             indice_domanda = 0;
             printf("\n%s", domande[indice_domanda].array);
-            scanf("%s", &risposta);
+            fgets(risposta, sizeof(risposta), stdin);
 
             if(strcmp(risposte[indice_domanda].array, risposta) == 0) { // Se la risposta data equivale a quella salvata nel testo
                 printf(ANSI_COLOR_GREEN "Complimenti, hai risposto bene. Il giocatore %d sale di %d posti", giocatore_attuale->id, tabellone[giocatore_attuale->posizione].effetto);
@@ -143,16 +148,6 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
         list_push_back(&coda_giocatori, var_set_int(indice_giocatore_attuale)); // rimetto il giocatore nella coda
     } while (giocatore_attuale->posizione != 99);
-
-    if (giocatore_attuale->posizione == 99) {   // Verifico la vincita
-        // Vinto
-    }
-
-
-
-
-
-
 }
 
 struct Casella* crea_tabellone()
