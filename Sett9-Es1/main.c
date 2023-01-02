@@ -51,6 +51,7 @@ struct Casella
 int main() 
 {
     srand(time(NULL));
+    rand(); rand(); rand(); // serve per scaldare rand
 
     gioca_snakes_and_ladders(3);
 
@@ -62,11 +63,10 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
-    char path[] = ".\\FileDomande.txt";
+    char path[] = "FileDomande.txt";
     struct RigaDiTesto domande = string_read(path);
-    printf("%d", domande.len);
     
-    strcpy(path, ".\\FileRisposte.txt");
+    strcpy(path, "FileRisposte.txt");
     struct RigaDiTesto risposte = string_read(path);
 
     int dado = 0;
@@ -125,7 +125,8 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
             printf(ANSI_COLOR_RESET);
 
             printf("\nRispondi correttamente a questa domanda per salire di %d posti", tabellone[giocatore_attuale->posizione].effetto);
-            indice_domanda = 0;
+            indice_domanda = genera_numero_in_range(0, domande.len - 1);
+            printf("Indice domanda generato: %d\n", indice_domanda);
             printf("\n%s", domande.array[indice_domanda].array);
             fgets(risposta, sizeof(risposta), stdin);
 
@@ -183,6 +184,7 @@ void genera_tabellone(struct Casella *tabellone, int numero_caselle) // Questo m
     int min_serpenti = 4;  // numero minimo di serpenti
     int num_serpenti;
     num_serpenti = genera_numero_in_range(min_serpenti, max_serpenti);  // genero randomicamente un numero di serpenti tra min_serpenti e max_serpenti
+    //num_serpenti = genera_numero_in_range(min_serpenti, max_serpenti);
     printf("Numero serpenti: %d", num_serpenti);
 
     genera_serpenti(tabellone, numero_caselle, num_serpenti);  // Genero i serpenti sul tabellone
@@ -211,7 +213,6 @@ void genera_serpenti(struct Casella* tabellone, int numero_caselle, int numero_s
             max_effetto = -1;   // L'effetto serpente per esistere deve far scendere i giocatori di almeno 1 posizione
             min_effetto = -indice_casella;  // Il serpente non può sforare inferiormente il tabellone
 
-
             effetto = genera_numero_in_range(min_effetto, max_effetto); // genero randomicamente il valore dell'effetto tra min_effetto e max_effetto
 
             indice_coda = indice_casella - abs(effetto); // ottengo l'indice della casella della coda del serpente; uso abs(x) perché l'effetto è negativo
@@ -232,7 +233,7 @@ void genera_scale(struct Casella* tabellone, int numero_caselle, int numero_scal
         do {
             do {
                 indice_casella = genera_numero_in_range(1,  numero_caselle - 2);  // genero un indice_casella randomico compreso tra 1 e numero_caselle - 2 (perché la prima casella è la partenza e l'ultima è la vincita)
-            } while (tabellone[indice_casella].effetto == 0);   // Genera finché non trovi un posto non occupato da serpenti o scale
+            } while (tabellone[indice_casella].effetto != 0);   // Genera finché non trovi un posto non occupato da serpenti o scale
 
             max_effetto = numero_caselle - indice_casella;   // La scala non può sforare superiormente la tabella
             min_effetto = 1;  // La scala per esistere deve avere grandezza almeno 1
@@ -250,8 +251,7 @@ void genera_scale(struct Casella* tabellone, int numero_caselle, int numero_scal
 
 int genera_numero_in_range(int min, int max)
 {
-    int numero = (rand() % (max - min + 1)) + min;
-
+    int numero = min + rand() / (RAND_MAX / (max - min + 1) + 1);
     return numero;
 }
 
