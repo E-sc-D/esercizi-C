@@ -63,31 +63,31 @@ void inserisciLibro(List *lista)
     struct Libro libro;
     
     printf("inserisci il giorno di lettura del libro\n");
-    scanf("%d\n",&libro.data_di_lettura.giorno);
-    printf("inserisci il mese di lettura del libro\n");
-    scanf("%d\n",&libro.data_di_lettura.mese);
+    scanf("%d",&libro.data_di_lettura.giorno);
+    printf("inserisci il mese di lettura del libro");
+    scanf("%d",&libro.data_di_lettura.mese);
     printf("inserisci l'anno di lettura del libro\n");
-    scanf("%d\n",&libro.data_di_lettura.anno);
+    scanf("%d",&libro.data_di_lettura.anno);
 
     printf("inserisci il giorno di pubblicazione del libro\n");
-    scanf(" %d\n",&libro.anno_di_pubblicazione.giorno);
+    scanf("%d",&libro.anno_di_pubblicazione.giorno);
     printf("inserisci il mese di pubblicazione del libro\n");
-    scanf(" %d\n",&libro.anno_di_pubblicazione.mese);
+    scanf("%d",&libro.anno_di_pubblicazione.mese);
     printf("inserisci l'anno di pubblicazione del libro\n");
-    scanf(" %d\n",&libro.data_di_lettura.anno);
+    scanf("%d",&libro.data_di_lettura.anno);
 
     printf("inserisci il titolo del libro\n");
-    scanf(" %s\n",&libro.titolo);
+    scanf(" %s",&libro.titolo);
     printf("inserisci l'autore del libro\n");
-    scanf(" %s\n",&libro.autore);
+    scanf(" %s",&libro.autore);
     printf("inserisci il genere del libro\n");
-    scanf(" %s\n",&libro.genere);
+    scanf(" %s",&libro.genere);
     printf("inserisci la casa editrice del libro del libro\n");
-    scanf(" %s\n",&libro.autore);
-    printf("inserisci la valutazione del libro");
-    scanf(" %d\n",&libro.valutazione);
-    printf("inserisci l'id del libro");
-    scanf(" %s\n",&libro.id);
+    scanf(" %s",&libro.autore);
+    printf("inserisci la valutazione del libro\n");
+    scanf("%d",&libro.valutazione);
+    printf("inserisci l'id del libro\n");
+    scanf(" %s",&libro.id);
 
     if(add_element(lista,libro))
     {

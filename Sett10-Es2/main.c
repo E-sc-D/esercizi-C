@@ -9,7 +9,7 @@ int main()
     printf("il testing della pila avviene tramite valori interi\n\n");
     while (input != 0)
     {
-       printf("Scegli La base della pila/coda\n[1] per array\n[2] per coda\n\n");
+       printf("Scegli La base della pila\n[1] per array\n[2] per lista\n\n");
        scanf("%d",&input);
        if(input == 1)
        {
@@ -50,7 +50,7 @@ int main()
        }
        else
        {
-            printf("modalita coda scelta\n\n");
+            printf("modalita lista scelta\n\n");
             int j = 1;
             int i;
             int inp;
@@ -79,7 +79,14 @@ int main()
                     break;
 
                     case 3:
-                        printf("elemento restituito: %d\n",var_get_int(list_pop_back(&lista)));
+                        var buffer = list_pop_back(&lista);
+                        if(buffer.data == NULL)
+                        {
+                            printf("la coda è vuota\n");
+                            break;
+                        }
+                        printf("here");
+                        //printf("elemento restituito: %d\n",var_get_int(buffer));
                     break;
                     
                     default:
