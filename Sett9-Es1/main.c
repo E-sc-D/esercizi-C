@@ -17,7 +17,7 @@ void genera_serpenti();
 void genera_scale();
 struct Giocatore* istanzia_giocatori();
 void stampa_tabellone();
-struct StringArray* string_read();
+struct RigaDiTesto string_read();
 void gioca_snakes_and_ladders();
 int lancia_dado();
 void print_table();
@@ -29,6 +29,11 @@ void stampa_posizione_giocatori();
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 
 
+struct RigaDiTesto
+{
+    struct StringArray* array;
+    int len;
+};
 
 struct Giocatore
 {
@@ -57,12 +62,12 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
     struct Casella* tabellone = crea_tabellone();   // creo un tabellone e lo riempio di snakes and ladders
     struct Giocatore* giocatori = istanzia_giocatori(numero_giocatori); // creo i giocatori e assegno la loro posizione a 0
 
-    char path[] = "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileDomande.txt";
-    struct StringArray* domande = string_read(path);
-    printf("%d", domande[1].n);
-    printf("numero domande %d", domande[0].n/sizeof(domande));
-    strcpy(path, "C:\\Users\\leona\\CLionProjects\\unibo\\Sett9-Es1\\FileRisposte.txt");
-    struct StringArray* risposte = string_read(path);
+    char path[] = ".\\FileDomande.txt";
+    struct RigaDiTesto domande = string_read(path);
+    printf("%d", domande.len);
+    
+    strcpy(path, ".\\FileRisposte.txt");
+    struct RigaDiTesto risposte = string_read(path);
 
     int dado = 0;
 
@@ -121,10 +126,10 @@ void gioca_snakes_and_ladders(int numero_giocatori) {
 
             printf("\nRispondi correttamente a questa domanda per salire di %d posti", tabellone[giocatore_attuale->posizione].effetto);
             indice_domanda = 0;
-            printf("\n%s", domande[indice_domanda].array);
+            printf("\n%s", domande.array[indice_domanda].array);
             fgets(risposta, sizeof(risposta), stdin);
 
-            if(strcmp(risposte[indice_domanda].array, risposta) == 0) { // Se la risposta data equivale a quella salvata nel testo
+            if(strcmp(risposte.array[indice_domanda].array, risposta) == 0) { // Se la risposta data equivale a quella salvata nel testo
                 printf(ANSI_COLOR_GREEN "Complimenti, hai risposto bene. Il giocatore %d sale di %d posti", giocatore_attuale->id, tabellone[giocatore_attuale->posizione].effetto);
                 printf(ANSI_COLOR_RESET);
                 giocatore_attuale->posizione += tabellone[giocatore_attuale->posizione].effetto;
@@ -300,10 +305,9 @@ void stampa_posizione_giocatori(struct Giocatore* giocatori, int numero_giocator
     }
 }
 
-struct StringArray* string_read(char *path)
+struct RigaDiTesto string_read(char *path)
 {
-    
-    struct StringArray *stringArray;
+    struct RigaDiTesto rigaditesto;
     char array[1000];
     FILE *stream = fopen(path,"r");
     int count = 0;
@@ -312,7 +316,7 @@ struct StringArray* string_read(char *path)
     if(stream == NULL)
     {
         printf("file non trovato o path sbagliato");
-        return NULL;
+        return;
     }
 
      while(fgets(array, 1000, stream))//contiamo il numero di righe
@@ -320,20 +324,20 @@ struct StringArray* string_read(char *path)
         count++;
     }  
 
-    stringArray = malloc(sizeof(struct StringArray) * count);//allochiamo l'array di stringhe
+    rigaditesto.array = malloc(sizeof(struct StringArray) * count);//allochiamo l'array di stringhe
     rewind(stream);//riportiamo indietro il puntatore del lettore di file
     int i = 0;
 
     while(fgets(array, 1000, stream))//ogni giro legge una riga e la salva dentro l'array di stringhe
     {
-        (stringArray[i]).array = malloc(StringLen(array)*sizeof(char));//malloca la stringa da salvare
-        (stringArray[i]).n = StringLen(array);//stringlen conta i caratteri fino a quando non trova \0
-        strcpy((stringArray[i]).array,array);
+        (rigaditesto.array[i]).array = malloc(StringLen(array)*sizeof(char));//malloca la stringa da salvare
+        (rigaditesto.array[i]).n = StringLen(array);//stringlen conta i caratteri fino a quando non trova \0
+        strcpy((rigaditesto.array[i]).array,array);
         i++;
     }  
-
+    rigaditesto.len = count;
     fclose(stream);
-    return stringArray;
+    return rigaditesto;
 }
 
 int lancia_dado() {
