@@ -176,14 +176,16 @@ void genera_tabellone(struct Casella *tabellone, int numero_caselle) // Questo m
 
     int max_serpenti = 10; //  numero massimo di serpenti
     int min_serpenti = 4;  // numero minimo di serpenti
-    int num_serpenti = genera_numero_in_range(min_serpenti, max_serpenti);  // genero randomicamente un numero di serpenti tra min_serpenti e max_serpenti
+    int num_serpenti;
+    num_serpenti = genera_numero_in_range(min_serpenti, max_serpenti);  // genero randomicamente un numero di serpenti tra min_serpenti e max_serpenti
     printf("Numero serpenti: %d", num_serpenti);
 
     genera_serpenti(tabellone, numero_caselle, num_serpenti);  // Genero i serpenti sul tabellone
 
     int max_scale = 10; // numero massimo di scale
     int min_scale = 4;  // numero minimo di scale
-    int num_scale = genera_numero_in_range(min_scale, max_scale); // genero randomicamente un numero di scale tra min_scale e max_scale
+    int num_scale;
+    num_scale = genera_numero_in_range(min_scale, max_scale); // genero randomicamente un numero di scale tra min_scale e max_scale
     printf("\nNumero scale: %d\r\n", num_scale);
 
     genera_scale(tabellone, numero_caselle, num_scale);
