@@ -179,11 +179,12 @@ int main()
     /* stampa_libri(&lista_di_libri);
     printf("fatto"); */
     int input = 1;
-    printf("[0] per uscire dal programma\n [1] per caricare i libri dal file libri.txt\n [2] per visualizzare tutti i libri\n [3] per inserire un libro\n [4] per rimuovere un libro\n [5] filtra libri per valutazione\n");
             
     while(input != 0)
     {
+        fflush(stdin);
         printf("scegli dal menu:\n");
+        printf("[0] per uscire dal programma\n [1] per caricare i libri dal file libri.txt\n [2] per visualizzare tutti i libri\n [3] per inserire un libro\n [4] per rimuovere un libro\n [5] filtra libri per valutazione\n");
         scanf("%d",&input);
 
         switch (input)
