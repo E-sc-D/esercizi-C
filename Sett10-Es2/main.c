@@ -79,14 +79,12 @@ int main()
                     break;
 
                     case 3:
-                        var buffer = list_pop_back(&lista);
-                        if(buffer.data == NULL)
+                        if(list_length_get(&lista) == 0) 
                         {
-                            printf("la coda è vuota\n");
+                            printf("la lista e' vuota\n");
                             break;
                         }
-                        printf("here");
-                        //printf("elemento restituito: %d\n",var_get_int(buffer));
+                        printf("elemento restituito: %d\n",var_get_int(list_pop_back(&lista)));
                     break;
                     
                     default:
