@@ -100,7 +100,7 @@ void inserisciLibro(List *lista)
 
 void stampa_libro(struct Libro libro)
 {
-    printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
+    printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d\n",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
         libro.anno_di_pubblicazione.giorno,libro.anno_di_pubblicazione.mese,libro.anno_di_pubblicazione.anno,
         libro.titolo, libro.autore,libro.genere,
         libro.casa_editrice,libro.valutazione,libro.id);
@@ -108,9 +108,9 @@ void stampa_libro(struct Libro libro)
 
 void stampa_libro_by_valutazione(struct Libro libro,int valutazione)
 {
-    if(libro.valutazione = valutazione)
+    if(libro.valutazione == valutazione)
     {
-     printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
+     printf("%d-%d-%d %d-%d-%d %s %s %s %s %d %d\n",libro.data_di_lettura.giorno,libro.data_di_lettura.mese,libro.data_di_lettura.anno,
         libro.anno_di_pubblicazione.giorno,libro.anno_di_pubblicazione.mese,libro.anno_di_pubblicazione.anno,
         libro.titolo, libro.autore,libro.genere,
         libro.casa_editrice,libro.valutazione,libro.id);   
@@ -143,11 +143,10 @@ void stampa_libri(List *lista)
     int size = get_length(lista);
     int i = 0;
     
-    for(i = 0; i < size ; i++)
+    for(i = 0; i < size; i++)
     {
         printf("libro n.%d ",i);
         stampa_libro(libri[i]);
-        printf("\n");
     }
 
 }
@@ -164,9 +163,7 @@ void stampa_libri_by_valutazione(List *lista)
     
     for(i = 0; i < size ; i++)
     {
-        printf("libro n.%d ",i);
         stampa_libro_by_valutazione(libri[i],valutazione);
-        printf("\n");
     }
 
 }
