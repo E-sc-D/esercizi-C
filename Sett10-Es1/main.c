@@ -58,7 +58,7 @@ struct Libro caricaLibriDaFile(char *percorso,List *lista)
     fclose(stream);
 }
 
-void inserisciLibro(List *lista)
+void inserisciLibro(List *lista,char *percorso)
 {
     struct Libro libro;
     
@@ -91,6 +91,11 @@ void inserisciLibro(List *lista)
 
     if(add_element(lista,libro))
     {
+        FILE *stream = fopen(percorso,"w");
+        fprintf(stream,"%d-%d-%d %d-%d-%d %s %s %s %s %d %d",&libro.data_di_lettura.giorno,&libro.data_di_lettura.mese,&libro.data_di_lettura.anno,//questo legge la prima data
+        &libro.anno_di_pubblicazione.giorno,&libro.anno_di_pubblicazione.mese,&libro.anno_di_pubblicazione.anno,//questo la seconda
+        &libro.titolo,&libro.autore,&libro.genere,
+        &libro.casa_editrice,&libro.valutazione,&libro.id);
         printf("libro correttamente inserito\n");
         return;
     }
@@ -196,7 +201,7 @@ int main()
             break;
 
             case 3:
-                inserisciLibro(&lista_di_libri);
+                inserisciLibro(&lista_di_libri,"./libri.txt");
             break;
 
             case 4:

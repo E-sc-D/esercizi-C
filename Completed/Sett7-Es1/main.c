@@ -134,7 +134,7 @@ void aggiungiStanza(struct Stanza *ptrStanza, int numero_stanze) {
     printf("Inserisci il nome della stanza\n\r");
     scanf("%s", &s.nome);
 
-    if (verificaDuplicato(*ptrStanza, numero_stanze, s.nome) == 1){
+    if (verificaDuplicato(ptrStanza, numero_stanze, s.nome) == 1){
         printf("\nErrore: la stanza inserita e gia presente!");
         return;
     }
